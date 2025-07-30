@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌟 Kids Talent Adventure 🌟</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Floating Background Elements -->
+    <div class="floating-shapes">
+        <div class="floating-shape">🌟</div>
+        <div class="floating-shape">🎨</div>
+        <div class="floating-shape">🧩</div>
+        <div class="floating-shape">🎯</div>
+        <div class="floating-shape">🔍</div>
+        <div class="floating-shape">💡</div>
+        <div class="floating-shape">🎵</div>
+        <div class="floating-shape">🌈</div>
+    </div>
+
+    <div class="container">
+        <!-- Welcome Screen -->
+        <div id="welcome-screen" class="screen active">
+            <div class="welcome-content">
+                <h1 class="title">🌟 Kids Talent Adventure 🌟</h1>
+                <p class="subtitle">🎮 Discover your amazing talents in this magical journey! 🎮</p>
+                <div class="player-setup">
+                    <input type="text" id="player-name" placeholder="✨ Enter your magical name ✨" maxlength="20">
+                    <button id="start-game" class="btn btn-primary">🚀 Start Your Adventure! 🚀</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="screen">
+            <div class="game-header">
+                <div class="player-info">
+                    <span id="current-player">🌟 Player</span>
+                    <div class="progress-bar">
+                        <div id="progress-fill"></div>
+                    </div>
+                </div>
+                <div class="score-display">
+                    <span>🏆 Score: <span id="current-score">0</span> 🏆</span>
+                </div>
+            </div>
+
+            <div class="game-content">
+                <div id="challenge-container">
+                    <h2 id="challenge-title">🎯 Ready to start your adventure?</h2>
+                    <div id="challenge-description"></div>
+                    <div id="challenge-content"></div>
+                    <div id="challenge-options"></div>
+                </div>
+            </div>
+
+            <div class="game-controls">
+                <button id="next-challenge" class="btn btn-secondary">⏭️ Next Challenge</button>
+                <button id="restart-game" class="btn btn-secondary">🔄 Restart Adventure</button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="results-screen" class="screen">
+            <div class="results-content">
+                <h2>🎉 Congratulations, Champion! 🎉</h2>
+                <p id="final-score"></p>
+                <div id="talent-results"></div>
+                <div class="results-actions">
+                    <button id="play-again" class="btn btn-primary">🎮 Play Again</button>
+                    <button id="back-to-welcome" class="btn btn-secondary">🏠 New Player</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
