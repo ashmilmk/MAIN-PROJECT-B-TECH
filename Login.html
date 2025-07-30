@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login Page</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background: #f5f5f5;
+    }
+
+    .container {
+      display: flex;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .left {
+      flex: 1;
+      text-align: center;
+    }
+
+    .left img {
+      max-width: 90%;
+      height: auto;
+    }
+
+    .right {
+      flex: 1;
+      max-width: 400px;
+      background: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+
+    .toggle-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .toggle-buttons button {
+      padding: 8px 20px;
+      border: none;
+      background: #e0e0e0;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .toggle-buttons .active {
+      background-color: #5a46f9;
+      color: white;
+    }
+
+    .login-box {
+      display: none;
+    }
+
+    .login-box.active {
+      display: block;
+    }
+
+    .login-box h2 {
+      color: #5a46f9;
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    .password-wrapper {
+      position: relative;
+    }
+
+    .password-wrapper span {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+    }
+
+    a {
+      display: block;
+      margin-top: 10px;
+      font-size: 0.9em;
+      color: #777;
+      text-decoration: none;
+    }
+
+    .login-btn {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      background-color: #5a46f9;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="left">
+    <img src="Image/login_bg.jpg" alt="Education Illustration" />
+  </div>
+
+  <div class="right">
+    <div class="toggle-buttons">
+      <button id="studentBtn" class="active" onclick="showForm('student')">Student</button>
+      <button id="teacherBtn" onclick="showForm('teacher')">Teacher</button>
+    </div>
+
+    <!-- Student Login -->
+    <div id="studentForm" class="login-box active">
+      <h2>Student Login</h2>
+      <label>Email Address</label>
+      <input type="email" placeholder="Enter email" value="student@example.com" />
+
+      <label>Password</label>
+      <div class="password-wrapper">
+        <input type="password" id="studentPassword" value="password123" />
+        <span onclick="togglePassword('studentPassword')">👁️</span>
+      </div>
+
+      <a href="#">Forgot Password?</a>
+      <button class="login-btn">Log in</button>
+    </div>
+
+    <!-- Teacher Login -->
+    <div id="teacherForm" class="login-box">
+      <h2>Teacher Login</h2>
+      <label>Email Address</label>
+      <input type="email" placeholder="Enter email" value="teacher@example.com" />
+
+      <label>Password</label>
+      <div class="password-wrapper">
+        <input type="password" id="teacherPassword" value="teachme123" />
+        <span onclick="togglePassword('teacherPassword')">👁️</span>
+      </div>
+
+      <a href="#">Forgot Password?</a>
+      <button class="login-btn">Log in</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function showForm(role) {
+    const studentForm = document.getElementById("studentForm");
+    const teacherForm = document.getElementById("teacherForm");
+    const studentBtn = document.getElementById("studentBtn");
+    const teacherBtn = document.getElementById("teacherBtn");
+
+    if (role === "student") {
+      studentForm.classList.add("active");
+      teacherForm.classList.remove("active");
+      studentBtn.classList.add("active");
+      teacherBtn.classList.remove("active");
+    } else {
+      teacherForm.classList.add("active");
+      studentForm.classList.remove("active");
+      teacherBtn.classList.add("active");
+      studentBtn.classList.remove("active");
+    }
+  }
+
+  function togglePassword(id) {
+    const field = document.getElementById(id);
+    field.type = field.type === "password" ? "text" : "password";
+  }
+</script>
+
+</body>
+</html>
