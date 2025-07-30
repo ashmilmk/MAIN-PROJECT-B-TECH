@@ -13,9 +13,11 @@
         }
 
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #fbc2eb 0%, #a1c4fd 40%, #f9d423 80%, #ff4e50 100%);
             min-height: 100vh;
             position: relative;
+            /* Add playful background shapes */
+            overflow-x: hidden;
         }
 
         body::before {
@@ -23,12 +25,13 @@
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+            width: 100vw;
+            height: 100vh;
+            background-image:
+                radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.2) 0%, transparent 60%),
+                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.2) 0%, transparent 60%),
+                radial-gradient(circle at 50% 50%, #ffe29f 0%, transparent 70%),
+                radial-gradient(circle at 70% 70%, #ffb347 0%, transparent 70%);
             pointer-events: none;
             z-index: -1;
         }
@@ -95,20 +98,19 @@
         .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            gap: 2.5rem;
             margin-top: 2rem;
         }
 
         .dashboard-card {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
+            border-radius: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            border: 3px solid #fffbe7;
             position: relative;
             overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-bottom: 1.5rem;
         }
 
         .dashboard-card::before {
@@ -132,15 +134,16 @@
         }
 
         .dashboard-card h3 {
-            color: #ff6b6b;
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            font-size: 2rem;
+            color: #ff4e50;
+            margin-bottom: 0.5rem;
+            text-shadow: 1px 1px 0 #fffbe7;
         }
 
         .dashboard-card p {
-            color: #666;
-            line-height: 1.6;
+            color: #6a0572;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
         }
 
         .feature-list {
@@ -213,8 +216,29 @@
             font-size: 0.9rem;
         }
     </style>
+    <style>
+        #insect-animations {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .insect {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            opacity: 0.85;
+            will-change: transform;
+            z-index: 1;
+            filter: drop-shadow(0 2px 8px rgba(0,0,0,0.15));
+            transition: opacity 0.5s;
+        }
+    </style>
 </head>
 <body>
+    <div id="insect-animations"></div>
     <div class="header">
         <h1>🎓 Fun Learning Hub 🎓</h1>
         <div class="user-info">
@@ -227,73 +251,19 @@
         <div class="welcome-section">
             <h2>🌟 Welcome to Your Fun Learning Dashboard! 🌟</h2>
             <p>You have successfully logged into the Fun Learning Hub. Ready for an amazing adventure?</p>
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="stat-number" id="totalStudents">0</div>
-                    <div class="stat-label">Total Students</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number" id="totalTeachers">0</div>
-                    <div class="stat-label">Total Teachers</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number" id="totalCourses">0</div>
-                    <div class="stat-label">Total Courses</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number" id="activeUsers">0</div>
-                    <div class="stat-label">Active Users</div>
-                </div>
-            </div>
         </div>
 
         <div class="dashboard-grid">
             <div class="dashboard-card">
-                <h3>Student Management</h3>
-                <p>Manage student information, enrollments, and academic records.</p>
-                <ul class="feature-list">
-                    <li>Add new students</li>
-                    <li>View student profiles</li>
-                    <li>Update academic records</li>
-                    <li>Generate reports</li>
-                </ul>
-                <a href="#" class="btn">Manage Students</a>
+                <h3>🎉 HAVE FUN 🎉</h3>
+                <p>Explore exciting activities and learning adventures!</p>
+                <a href="#" class="btn">Start Adventure</a>
             </div>
 
             <div class="dashboard-card">
-                <h3>Teacher Management</h3>
-                <p>Handle teacher profiles, assignments, and performance tracking.</p>
-                <ul class="feature-list">
-                    <li>Add new teachers</li>
-                    <li>Assign courses</li>
-                    <li>Track performance</li>
-                    <li>Manage schedules</li>
-                </ul>
-                <a href="#" class="btn">Manage Teachers</a>
-            </div>
-
-            <div class="dashboard-card">
-                <h3>Course Management</h3>
-                <p>Create and manage courses, curriculum, and class schedules.</p>
-                <ul class="feature-list">
-                    <li>Create new courses</li>
-                    <li>Set curriculum</li>
-                    <li>Manage schedules</li>
-                    <li>Track attendance</li>
-                </ul>
-                <a href="#" class="btn">Manage Courses</a>
-            </div>
-
-            <div class="dashboard-card">
-                <h3>Reports & Analytics</h3>
-                <p>Generate comprehensive reports and view system analytics.</p>
-                <ul class="feature-list">
-                    <li>Academic reports</li>
-                    <li>Attendance reports</li>
-                    <li>Performance analytics</li>
-                    <li>System statistics</li>
-                </ul>
-                <a href="#" class="btn">View Reports</a>
+                <h3>🏆 Achievements</h3>
+                <p>See your badges and accomplishments!</p>
+                <a href="#" class="btn">View Achievements</a>
             </div>
         </div>
     </div>
@@ -316,19 +286,9 @@
                         <a href="#" class="btn">Start Adventure</a>
                     </div>
                     <div class="dashboard-card">
-                        <h3>Assignments</h3>
-                        <p>Submit assignments and view feedback.</p>
-                        <a href="#" class="btn">View Assignments</a>
-                    </div>
-                    <div class="dashboard-card">
                         <h3>🏆 Achievements</h3>
                         <p>See your badges and accomplishments!</p>
                         <a href="#" class="btn">View Achievements</a>
-                    </div>
-                    <div class="dashboard-card">
-                        <h3>🎨 Creative Corner</h3>
-                        <p>Express yourself through art and creativity!</p>
-                        <a href="#" class="btn">Get Creative</a>
                     </div>
                 `;
             } else if (userRole === 'teacher') {
@@ -337,11 +297,6 @@
                         <h3>👨‍🏫 My Classes</h3>
                         <p>Manage your assigned classes and students.</p>
                         <a href="#" class="btn">Manage Classes</a>
-                    </div>
-                    <div class="dashboard-card">
-                        <h3>Assignments</h3>
-                        <p>Create and grade assignments.</p>
-                        <a href="#" class="btn">Manage Assignments</a>
                     </div>
                     <div class="dashboard-card">
                         <h3>📊 Reports</h3>
@@ -379,6 +334,84 @@
             getUserInfo();
             loadMockData();
         };
+
+        // --- Animated Insects ---
+        const insectSVGs = [
+          // Butterfly
+          `<svg viewBox="0 0 60 60" class="insect" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="30" cy="30" rx="8" ry="18" fill="#ffb6f9"/>
+            <ellipse cx="15" cy="30" rx="12" ry="18" fill="#f9d423"/>
+            <ellipse cx="45" cy="30" rx="12" ry="18" fill="#a6c1ee"/>
+            <ellipse cx="30" cy="40" rx="4" ry="8" fill="#ff4e50"/>
+            <circle cx="30" cy="30" r="4" fill="#6a0572"/>
+          </svg>`,
+          // Bee
+          `<svg viewBox="0 0 60 60" class="insect" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="30" cy="35" rx="12" ry="18" fill="#ffe29f"/>
+            <ellipse cx="30" cy="30" rx="10" ry="14" fill="#ffb347"/>
+            <ellipse cx="30" cy="30" rx="8" ry="10" fill="#ff4e50"/>
+            <ellipse cx="22" cy="20" rx="6" ry="10" fill="#b2f7ef" opacity="0.7"/>
+            <ellipse cx="38" cy="20" rx="6" ry="10" fill="#b2f7ef" opacity="0.7"/>
+            <circle cx="30" cy="30" r="4" fill="#6a0572"/>
+          </svg>`,
+          // Ladybug
+          `<svg viewBox="0 0 60 60" class="insect" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="30" cy="38" rx="14" ry="16" fill="#ff4e50"/>
+            <ellipse cx="30" cy="38" rx="10" ry="12" fill="#222"/>
+            <ellipse cx="30" cy="30" rx="8" ry="8" fill="#ffb6b6"/>
+            <circle cx="30" cy="38" r="4" fill="#fffbe7"/>
+            <ellipse cx="30" cy="22" rx="6" ry="6" fill="#222"/>
+          </svg>`
+        ];
+
+        function randomBetween(a, b) {
+          return a + Math.random() * (b - a);
+        }
+
+        function animateInsect(insect, duration, path, onEnd) {
+          let start = null;
+          function step(ts) {
+            if (!start) start = ts;
+            const progress = Math.min((ts - start) / duration, 1);
+            const x = path.x(progress);
+            const y = path.y(progress);
+            // Reduce vibration: less rotation and less vertical wave
+            insect.style.transform = `translate(${x}px, ${y}px) rotate(${Math.sin(progress * 6.28) * 5}deg)`;
+            if (progress < 1) {
+              requestAnimationFrame(step);
+            } else {
+              if (onEnd) onEnd();
+            }
+          }
+          requestAnimationFrame(step);
+        }
+
+        function spawnInsect() {
+          const svg = document.createElement('div');
+          svg.innerHTML = insectSVGs[Math.floor(Math.random() * insectSVGs.length)];
+          const insect = svg.firstChild;
+          insect.classList.add('insect');
+          const startY = randomBetween(20, window.innerHeight - 80);
+          const endY = startY + randomBetween(-30, 30); // less vertical movement
+          const startX = -60;
+          const endX = window.innerWidth + 60;
+          insect.style.top = `${startY}px`;
+          insect.style.left = `${startX}px`;
+          document.getElementById('insect-animations').appendChild(insect);
+          const duration = randomBetween(9000, 16000);
+          animateInsect(insect, duration, {
+            x: t => startX + (endX - startX) * t,
+            y: t => startY + (endY - startY) * t + Math.sin(t * 6.28 * randomBetween(0.5, 1.2)) * randomBetween(5, 15)
+          }, () => {
+            insect.remove();
+            // Loop: respawn a new insect of the same type
+            setTimeout(spawnInsect, randomBetween(500, 2000));
+          });
+        }
+
+        // Start with several insects
+        for (let i = 0; i < 5; i++) setTimeout(spawnInsect, i * 1200);
+        // --- End Animated Insects ---
     </script>
 </body>
 </html> 
