@@ -1,6 +1,7 @@
 // Game State
 let gameState = {
     playerName: '',
+    ageGroup: 'young', // young, middle, older
     currentChallenge: 0,
     score: 0,
     talentScores: {
@@ -8,93 +9,247 @@ let gameState = {
         logic: 0,
         memory: 0,
         observation: 0,
-        problemSolving: 0
+        problemSolving: 0,
+        // New learning disorder-specific categories
+        dyscalculia: 0,
+        dysphasia: 0,
+        dysgraphia: 0
     },
-    challenges: []
+    challenges: [],
+    accessibility: {
+        largeFont: false,
+        highContrast: false,
+        dyslexiaFont: false,
+        readingGuide: false
+    },
+    speechSynthesis: null,
+    // Add disorder assessment tracking
+    disorderAssessment: {
+        dyscalculiaScore: 0,
+        dysphasiaScore: 0,
+        dysgraphiaScore: 0,
+        totalDyscalculiaChallenges: 0,
+        totalDysphasiaChallenges: 0,
+        totalDysgraphiaChallenges: 0
+    }
 };
 
-// Challenge Data with more engaging content
-const challenges = [
-    {
-        id: 1,
-        title: "🎨 Creative Drawing Adventure",
-        description: "Look at this magical shape and draw what you think it could be! Use your imagination! ✨",
-        type: "creativity",
-        content: "🎨 Draw something creative based on this magical shape: ⭐",
-        options: null,
-        maxScore: 10
-    },
-    {
-        id: 2,
-        title: "🧩 Pattern Recognition Quest",
-        description: "What comes next in this magical pattern? Look carefully! 🔍",
-        type: "logic",
-        content: "🔴 🔵 🔴 🔵 🔴 ?",
-        options: ["🔵", "🔴", "🟡", "🟢"],
-        correctAnswer: 0,
-        maxScore: 10
-    },
-    {
-        id: 3,
-        title: "🎯 Memory Magic Test",
-        description: "Remember these magical items for 3 seconds, then tell me what you saw! 🧠",
-        type: "memory",
-        content: "🍎 🚗 🌟 🎈 🐱",
-        options: ["🍎 🚗 🌟", "🍎 🚗 🌟 🎈", "🍎 🚗 🌟 🎈 🐱", "🍎 🚗 🌟 🎈 🐱 🎨"],
-        correctAnswer: 2,
-        maxScore: 10
-    },
-    {
-        id: 4,
-        title: "🔍 Spot the Difference Challenge",
-        description: "Find what's different between these two magical pictures! Look very carefully! 👀",
-        type: "observation",
-        content: "Look carefully at these patterns:\n🔴🔵🔴 vs 🔴🔵🟡",
-        options: ["The first pattern", "The second pattern", "The third circle", "Nothing"],
-        correctAnswer: 2,
-        maxScore: 10
-    },
-    {
-        id: 5,
-        title: "🧩 Puzzle Time Adventure",
-        description: "Solve this magical puzzle! Think carefully! 💭",
-        type: "problemSolving",
-        content: "If you have 3 magical apples and give away 1, how many do you have left? 🍎",
-        options: ["1", "2", "3", "4"],
-        correctAnswer: 1,
-        maxScore: 10
-    },
-    {
-        id: 6,
-        title: "🎨 Color Mixing Magic",
-        description: "What color do you get when you mix blue and yellow? It's like magic! ✨",
-        type: "creativity",
-        content: "🔵 + 🟡 = ?",
-        options: ["🔴", "🟢", "🟣", "⚫"],
-        correctAnswer: 1,
-        maxScore: 10
-    },
-    {
-        id: 7,
-        title: "📊 Number Sequence Quest",
-        description: "What number comes next in this magical sequence? Count carefully! 🔢",
-        type: "logic",
-        content: "2, 4, 6, 8, ?",
-        options: ["9", "10", "11", "12"],
-        correctAnswer: 1,
-        maxScore: 10
-    },
-    {
-        id: 8,
-        title: "🎵 Sound Patterns Adventure",
-        description: "Listen to this magical rhythm pattern! Can you follow along? 🎶",
-        type: "memory",
-        content: "Tap: tap-tap-tap, tap-tap-tap, tap-tap-tap, ?",
-        options: ["tap", "tap-tap", "tap-tap-tap", "tap-tap-tap-tap"],
-        correctAnswer: 2,
-        maxScore: 10
-    }
-];
+// Age-appropriate challenge data with learning disorder focus
+const challengesByAge = {
+    young: [
+        // Dyscalculia Challenges (Math difficulties)
+        {
+            id: 1,
+            title: "🔢 Number Recognition Challenge",
+            description: "Look at these numbers and tell me which one is the largest!",
+            type: "dyscalculia",
+            content: "Which number is the largest?\n\n🔢 7  🔢 12  🔢 5  🔢 9",
+            options: ["7", "12", "5", "9"],
+            correctAnswer: 1,
+            maxScore: 10,
+            typeLabel: "Dyscalculia Support"
+        },
+        {
+            id: 2,
+            title: "🧮 Simple Addition Puzzle",
+            description: "Count the objects and add them together!",
+            type: "dyscalculia",
+            content: "🍎🍎🍎 + 🍌🍌 = ?\n\nHow many fruits are there in total?",
+            options: ["3", "4", "5", "6"],
+            correctAnswer: 2,
+            maxScore: 10,
+            typeLabel: "Dyscalculia Support"
+        },
+        // Dysphasia Challenges (Language difficulties)
+        {
+            id: 3,
+            title: "🗣️ Word Association Game",
+            description: "Find the word that goes best with the picture!",
+            type: "dysphasia",
+            content: "🐕 What word best describes this animal?",
+            options: ["Cat", "Dog", "Bird", "Fish"],
+            correctAnswer: 1,
+            maxScore: 10,
+            typeLabel: "Dysphasia Support"
+        },
+        {
+            id: 4,
+            title: "📝 Sentence Completion",
+            description: "Complete the sentence with the right word!",
+            type: "dysphasia",
+            content: "The sky is _____ today.\n\nWhat color is the sky usually?",
+            options: ["Green", "Blue", "Red", "Yellow"],
+            correctAnswer: 1,
+            maxScore: 10,
+            typeLabel: "Dysphasia Support"
+        },
+        // Dysgraphia Challenges (Writing difficulties)
+        {
+            id: 5,
+            title: "✏️ Letter Recognition",
+            description: "Find the letter that matches the sound!",
+            type: "dysgraphia",
+            content: "Which letter makes the 'sss' sound?\n\n🔤 A  🔤 B  🔤 C  🔤 S",
+            options: ["A", "B", "C", "S"],
+            correctAnswer: 3,
+            maxScore: 10,
+            typeLabel: "Dysgraphia Support"
+        },
+        {
+            id: 6,
+            title: "📖 Word Building",
+            description: "Put the letters together to make a word!",
+            type: "dysgraphia",
+            content: "C + A + T = ?\n\nWhat word do these letters spell?",
+            options: ["Dog", "Cat", "Hat", "Bat"],
+            correctAnswer: 1,
+            maxScore: 10,
+            typeLabel: "Dysgraphia Support"
+        }
+    ],
+    middle: [
+        // Dyscalculia Challenges (Harder)
+        {
+            id: 1,
+            title: "🧮 Multi-Step Math Problem",
+            description: "Solve this step-by-step math problem!",
+            type: "dyscalculia",
+            content: "If you have 15 apples and give away 3, then buy 7 more, how many do you have?",
+            options: ["16", "19", "22", "25"],
+            correctAnswer: 1,
+            maxScore: 15,
+            typeLabel: "Dyscalculia Support"
+        },
+        {
+            id: 2,
+            title: "⏰ Time Calculation Challenge",
+            description: "Calculate the time difference!",
+            type: "dyscalculia",
+            content: "If it's 2:30 PM now, what time will it be in 2 hours and 45 minutes?",
+            options: ["4:15 PM", "5:15 PM", "5:30 PM", "6:15 PM"],
+            correctAnswer: 1,
+            maxScore: 15,
+            typeLabel: "Dyscalculia Support"
+        },
+        // Dysphasia Challenges (Harder)
+        {
+            id: 3,
+            title: "📚 Complex Word Meanings",
+            description: "Choose the word that means the opposite!",
+            type: "dysphasia",
+            content: "What is the opposite of 'happy'?",
+            options: ["Joyful", "Sad", "Excited", "Calm"],
+            correctAnswer: 1,
+            maxScore: 15,
+            typeLabel: "Dysphasia Support"
+        },
+        {
+            id: 4,
+            title: "🔤 Grammar Challenge",
+            description: "Complete the sentence with the correct grammar!",
+            type: "dysphasia",
+            content: "She _____ to the store yesterday.\n\nWhich word fits best?",
+            options: ["go", "goes", "went", "going"],
+            correctAnswer: 2,
+            maxScore: 15,
+            typeLabel: "Dysphasia Support"
+        },
+        // Dysgraphia Challenges (Harder)
+        {
+            id: 5,
+            title: "📝 Spelling Challenge",
+            description: "Choose the correctly spelled word!",
+            type: "dysgraphia",
+            content: "Which word is spelled correctly?",
+            options: ["Recieve", "Receive", "Receeve", "Receve"],
+            correctAnswer: 1,
+            maxScore: 15,
+            typeLabel: "Dysgraphia Support"
+        },
+        {
+            id: 6,
+            title: "🔤 Word Pattern Recognition",
+            description: "Find the word that follows the same pattern!",
+            type: "dysgraphia",
+            content: "If 'run' becomes 'running', what does 'jump' become?",
+            options: ["Jumping", "Jumpping", "Jumped", "Jumps"],
+            correctAnswer: 0,
+            maxScore: 15,
+            typeLabel: "Dysgraphia Support"
+        }
+    ],
+    older: [
+        // Dyscalculia Challenges (Advanced)
+        {
+            id: 1,
+            title: "🧮 Fraction and Decimal Challenge",
+            description: "Convert between fractions and decimals!",
+            type: "dyscalculia",
+            content: "What is 3/4 as a decimal?",
+            options: ["0.25", "0.5", "0.75", "0.8"],
+            correctAnswer: 2,
+            maxScore: 20,
+            typeLabel: "Dyscalculia Support"
+        },
+        {
+            id: 2,
+            title: "📊 Percentage Problem",
+            description: "Calculate the percentage!",
+            type: "dyscalculia",
+            content: "If 20% of a number is 40, what is the number?",
+            options: ["80", "100", "200", "400"],
+            correctAnswer: 2,
+            maxScore: 20,
+            typeLabel: "Dyscalculia Support"
+        },
+        // Dysphasia Challenges (Advanced)
+        {
+            id: 3,
+            title: "📖 Reading Comprehension",
+            description: "Read the passage and answer the question!",
+            type: "dysphasia",
+            content: "The weather was cold and rainy. Sarah decided to stay inside and read a book. She made hot chocolate and curled up on the couch.\n\nWhat did Sarah do because of the weather?",
+            options: ["Went outside", "Stayed inside", "Went shopping", "Called friends"],
+            correctAnswer: 1,
+            maxScore: 20,
+            typeLabel: "Dysphasia Support"
+        },
+        {
+            id: 4,
+            title: "🔤 Vocabulary Challenge",
+            description: "Choose the word that best fits the context!",
+            type: "dysphasia",
+            content: "The mountain was so _____ that it took hours to climb to the top.",
+            options: ["Small", "Steep", "Wide", "Short"],
+            correctAnswer: 1,
+            maxScore: 20,
+            typeLabel: "Dysphasia Support"
+        },
+        // Dysgraphia Challenges (Advanced)
+        {
+            id: 5,
+            title: "📝 Complex Spelling",
+            description: "Identify the misspelled word!",
+            type: "dysgraphia",
+            content: "Which word is misspelled?\n\nBeautiful, Neccessary, Important, Different",
+            options: ["Beautiful", "Neccessary", "Important", "Different"],
+            correctAnswer: 1,
+            maxScore: 20,
+            typeLabel: "Dysgraphia Support"
+        },
+        {
+            id: 6,
+            title: "🔤 Word Formation",
+            description: "Create a new word from the given letters!",
+            type: "dysgraphia",
+            content: "Using the letters in 'EDUCATION', can you make the word 'CAT'?",
+            options: ["Yes", "No", "Maybe", "I don't know"],
+            correctAnswer: 0,
+            maxScore: 20,
+            typeLabel: "Dysgraphia Support"
+        }
+    ]
+};
 
 // DOM Elements
 const elements = {
@@ -110,18 +265,28 @@ const elements = {
     challengeDescription: document.getElementById('challenge-description'),
     challengeContent: document.getElementById('challenge-content'),
     challengeOptions: document.getElementById('challenge-options'),
+    challengeType: document.getElementById('challenge-type'),
     nextChallenge: document.getElementById('next-challenge'),
     restartGame: document.getElementById('restart-game'),
     finalScore: document.getElementById('final-score'),
     talentResults: document.getElementById('talent-results'),
     playAgain: document.getElementById('play-again'),
-    backToWelcome: document.getElementById('back-to-welcome')
+    backToWelcome: document.getElementById('back-to-welcome'),
+    // Accessibility elements
+    fontSizeToggle: document.getElementById('font-size-toggle'),
+    highContrastToggle: document.getElementById('high-contrast-toggle'),
+    dyslexiaFontToggle: document.getElementById('dyslexia-font-toggle'),
+    readingGuideToggle: document.getElementById('reading-guide-toggle'),
+    readingGuide: document.getElementById('reading-guide')
 };
 
 // Initialize Game
 function initGame() {
-    // Shuffle challenges for variety
-    gameState.challenges = [...challenges].sort(() => Math.random() - 0.5);
+    // Initialize challenges based on default age group
+    gameState.challenges = [...challengesByAge[gameState.ageGroup]].sort(() => Math.random() - 0.5);
+    
+    // Initialize speech synthesis
+    initSpeechSynthesis();
     
     // Event Listeners
     elements.startGame.addEventListener('click', startGame);
@@ -130,6 +295,22 @@ function initGame() {
     elements.playAgain.addEventListener('click', playAgain);
     elements.backToWelcome.addEventListener('click', backToWelcome);
     
+    // Age group selection
+    document.querySelectorAll('.age-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            document.querySelectorAll('.age-btn').forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            gameState.ageGroup = e.target.dataset.age;
+            gameState.challenges = [...challengesByAge[gameState.ageGroup]].sort(() => Math.random() - 0.5);
+        });
+    });
+    
+    // Accessibility controls
+    elements.fontSizeToggle.addEventListener('click', toggleLargeFont);
+    elements.highContrastToggle.addEventListener('click', toggleHighContrast);
+    elements.dyslexiaFontToggle.addEventListener('click', toggleDyslexiaFont);
+    elements.readingGuideToggle.addEventListener('click', toggleReadingGuide);
+    
     // Enter key for player name
     elements.playerName.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
@@ -137,74 +318,168 @@ function initGame() {
         }
     });
     
-    // Add sparkle effects
-    addSparkleEffects();
+    // Add student background animations
+    addStudentBackgroundAnimations();
     
-    // Add floating shapes animation
-    addFloatingShapes();
+    // Initialize accessibility features
+    initAccessibility();
 }
 
-// Add sparkle effects to the welcome screen
-function addSparkleEffects() {
-    const welcomeContent = document.querySelector('.welcome-content');
-    
-    setInterval(() => {
-        const sparkle = document.createElement('div');
-        sparkle.className = 'sparkle';
-        sparkle.style.left = Math.random() * 100 + '%';
-        sparkle.style.top = Math.random() * 100 + '%';
-        welcomeContent.appendChild(sparkle);
+// Initialize speech synthesis
+function initSpeechSynthesis() {
+    if ('speechSynthesis' in window) {
+        gameState.speechSynthesis = window.speechSynthesis;
+    } else {
+        console.log('Speech synthesis not supported');
+    }
+}
+
+// Speak text function
+function speakText(text, rate = 0.8, pitch = 1) {
+    if (gameState.speechSynthesis) {
+        // Cancel any ongoing speech
+        gameState.speechSynthesis.cancel();
         
-        setTimeout(() => {
-            sparkle.remove();
-        }, 2000);
-    }, 300);
-}
-
-// Add floating shapes animation
-function addFloatingShapes() {
-    const shapes = ['🌟', '🎨', '🧩', '🎯', '🔍', '💡', '🎵', '🌈', '⭐', '🎪', '🎭', '🎪'];
-    const container = document.querySelector('.container');
-    
-    setInterval(() => {
-        const shape = document.createElement('div');
-        shape.textContent = shapes[Math.floor(Math.random() * shapes.length)];
-        shape.style.cssText = `
-            position: absolute;
-            left: ${Math.random() * 100}%;
-            top: ${Math.random() * 100}%;
-            font-size: ${Math.random() * 2 + 1}rem;
-            opacity: 0.3;
-            pointer-events: none;
-            animation: float 4s ease-in-out infinite;
-            z-index: -1;
-        `;
-        container.appendChild(shape);
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = rate; // Slower rate for better comprehension
+        utterance.pitch = pitch;
+        utterance.volume = 1; // Maximum volume
+        utterance.lang = 'en-US';
         
-        setTimeout(() => {
-            shape.remove();
-        }, 4000);
-    }, 2000);
+        // Use a clear voice if available
+        const voices = gameState.speechSynthesis.getVoices();
+        const preferredVoice = voices.find(voice => 
+            voice.name.includes('Google') || 
+            voice.name.includes('Natural') || 
+            voice.name.includes('Enhanced')
+        );
+        if (preferredVoice) {
+            utterance.voice = preferredVoice;
+        }
+        
+        gameState.speechSynthesis.speak(utterance);
+    }
 }
 
-// Create confetti effect
-function createConfetti() {
-    const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3'];
+// Initialize accessibility features
+function initAccessibility() {
+    // Check for saved preferences
+    const savedPrefs = localStorage.getItem('studentGameAccessibility');
+    if (savedPrefs) {
+        const prefs = JSON.parse(savedPrefs);
+        gameState.accessibility = { ...gameState.accessibility, ...prefs };
+        applyAccessibilitySettings();
+    }
+}
+
+// Apply accessibility settings
+function applyAccessibilitySettings() {
+    const body = document.body;
     
-    for (let i = 0; i < 50; i++) {
+    // Large font
+    if (gameState.accessibility.largeFont) {
+        body.classList.add('large-font');
+        elements.fontSizeToggle.classList.add('active');
+    } else {
+        body.classList.remove('large-font');
+        elements.fontSizeToggle.classList.remove('active');
+    }
+    
+    // High contrast
+    if (gameState.accessibility.highContrast) {
+        body.classList.add('high-contrast');
+        elements.highContrastToggle.classList.add('active');
+    } else {
+        body.classList.remove('high-contrast');
+        elements.highContrastToggle.classList.remove('active');
+    }
+    
+    // Dyslexia font
+    if (gameState.accessibility.dyslexiaFont) {
+        body.classList.add('dyslexia-font');
+        elements.dyslexiaFontToggle.classList.add('active');
+    } else {
+        body.classList.remove('dyslexia-font');
+        elements.dyslexiaFontToggle.classList.remove('active');
+    }
+    
+    // Reading guide
+    if (gameState.accessibility.readingGuide) {
+        elements.readingGuide.classList.add('active');
+        elements.readingGuideToggle.classList.add('active');
+    } else {
+        elements.readingGuide.classList.remove('active');
+        elements.readingGuideToggle.classList.remove('active');
+    }
+    
+    // Save preferences
+    localStorage.setItem('studentGameAccessibility', JSON.stringify(gameState.accessibility));
+}
+
+// Toggle large font
+function toggleLargeFont() {
+    gameState.accessibility.largeFont = !gameState.accessibility.largeFont;
+    applyAccessibilitySettings();
+}
+
+// Toggle high contrast
+function toggleHighContrast() {
+    gameState.accessibility.highContrast = !gameState.accessibility.highContrast;
+    applyAccessibilitySettings();
+}
+
+// Toggle dyslexia font
+function toggleDyslexiaFont() {
+    gameState.accessibility.dyslexiaFont = !gameState.accessibility.dyslexiaFont;
+    applyAccessibilitySettings();
+}
+
+// Toggle reading guide with speech
+function toggleReadingGuide() {
+    gameState.accessibility.readingGuide = !gameState.accessibility.readingGuide;
+    applyAccessibilitySettings();
+    
+    // If reading guide is activated, speak the current challenge
+    if (gameState.accessibility.readingGuide && gameState.currentChallenge < gameState.challenges.length) {
+        const challenge = gameState.challenges[gameState.currentChallenge];
+        const textToSpeak = `${challenge.title}. ${challenge.description}. ${challenge.content}`;
+        speakText(textToSpeak, 0.7, 1); // Slower rate for better comprehension
+    }
+}
+
+// Add student background animations
+function addStudentBackgroundAnimations() {
+    const studentIcons = document.querySelectorAll('.floating-student-icon');
+    
+    studentIcons.forEach((icon, index) => {
+        icon.style.animationDelay = `${index * 0.5}s`;
+    });
+}
+
+// Create celebration effect
+function createCelebration() {
+    const colors = ['#2563eb', '#10b981', '#f59e0b', '#8b5cf6'];
+    
+    for (let i = 0; i < 30; i++) {
         const confetti = document.createElement('div');
-        confetti.className = 'confetti';
         confetti.style.cssText = `
-            left: ${Math.random() * 100}%;
+            position: fixed;
+            width: 10px;
+            height: 10px;
             background: ${colors[Math.floor(Math.random() * colors.length)]};
-            animation-delay: ${Math.random() * 3}s;
-            animation-duration: ${Math.random() * 2 + 2}s;
+            left: ${Math.random() * 100}%;
+            top: -10px;
+            border-radius: 50%;
+            animation: confetti-fall 3s linear infinite;
+            z-index: 1000;
+            pointer-events: none;
         `;
+        confetti.style.animationDelay = `${Math.random() * 3}s`;
         document.body.appendChild(confetti);
         
         setTimeout(() => {
             confetti.remove();
-        }, 5000);
+        }, 6000);
     }
 }
 
@@ -212,7 +487,7 @@ function createConfetti() {
 function startGame() {
     const playerName = elements.playerName.value.trim();
     if (!playerName) {
-        showMessage('✨ Please enter your magical name! ✨', 'warning');
+        showMessage('Please enter your name to start your learning adventure!', 'warning');
         return;
     }
     
@@ -224,15 +499,31 @@ function startGame() {
         logic: 0,
         memory: 0,
         observation: 0,
-        problemSolving: 0
+        problemSolving: 0,
+        dyscalculia: 0,
+        dysphasia: 0,
+        dysgraphia: 0
     };
+    
+    // Reset disorder assessment
+    gameState.disorderAssessment = {
+        dyscalculiaScore: 0,
+        dysphasiaScore: 0,
+        dysgraphiaScore: 0,
+        totalDyscalculiaChallenges: 0,
+        totalDysphasiaChallenges: 0,
+        totalDysgraphiaChallenges: 0
+    };
+    
+    // Shuffle challenges for this session
+    gameState.challenges = [...challengesByAge[gameState.ageGroup]].sort(() => Math.random() - 0.5);
     
     showScreen('game-screen');
     updateGameUI();
     displayChallenge();
     
-    // Create confetti for starting
-    createConfetti();
+    // Create celebration for starting
+    createCelebration();
 }
 
 // Show Screen
@@ -248,7 +539,7 @@ function showScreen(screenId) {
 
 // Update Game UI
 function updateGameUI() {
-    elements.currentPlayer.textContent = `🌟 ${gameState.playerName}`;
+    elements.currentPlayer.textContent = gameState.playerName;
     elements.currentScore.textContent = gameState.score;
     
     const progress = ((gameState.currentChallenge + 1) / gameState.challenges.length) * 100;
@@ -267,6 +558,7 @@ function displayChallenge() {
     elements.challengeTitle.textContent = challenge.title;
     elements.challengeDescription.textContent = challenge.description;
     elements.challengeContent.innerHTML = challenge.content;
+    elements.challengeType.textContent = challenge.typeLabel;
     
     // Clear previous options
     elements.challengeOptions.innerHTML = '';
@@ -282,40 +574,39 @@ function displayChallenge() {
     } else {
         // For creativity challenges without options - Dyslexia-friendly textarea
         const input = document.createElement('textarea');
-        input.placeholder = '✨ Describe what you see or draw something magical... ✨';
+        input.placeholder = 'Describe your creative answer here...';
         input.style.cssText = `
             width: 100%;
-            height: 200px; /* Much taller for dyslexia */
-            padding: 25px; /* More padding */
-            border-radius: 20px;
-            border: 4px solid #4a90e2; /* Thicker border */
-            font-family: 'Comic Neue', 'Open Sans', 'Arial', sans-serif;
-            font-size: 1.8rem; /* Much larger font for dyslexia */
+            height: 150px;
+            padding: 20px;
+            border-radius: 15px;
+            border: 3px solid var(--border-light);
+            font-family: inherit;
+            font-size: 1.1rem;
             resize: none;
-            background: rgba(255, 255, 255, 0.95);
-            box-shadow: 0 10px 30px rgba(74, 144, 226, 0.3);
-            /* Dyslexia-friendly settings */
-            line-height: 1.6;
-            letter-spacing: 0.05em;
-            word-spacing: 0.1em;
-            font-weight: 500;
-            color: #333; /* Higher contrast */
+            background: white;
+            box-shadow: 0 5px 15px var(--shadow-light);
+            line-height: 1.5;
+            letter-spacing: 0.02em;
+            color: var(--text-dark);
         `;
         elements.challengeOptions.appendChild(input);
         
         const submitBtn = document.createElement('button');
         submitBtn.className = 'option-btn';
-        submitBtn.textContent = '✨ Submit Your Creative Answer ✨';
-        submitBtn.style.cssText = `
-            font-size: 2.2rem; /* Larger button text */
-            padding: 35px 40px; /* More padding */
-            margin-top: 20px; /* More spacing */
-        `;
+        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Your Answer';
+        submitBtn.style.marginTop = '15px';
         submitBtn.addEventListener('click', () => submitCreativeAnswer(input.value));
         elements.challengeOptions.appendChild(submitBtn);
     }
     
     updateGameUI();
+    
+    // If reading guide is active, speak the challenge
+    if (gameState.accessibility.readingGuide) {
+        const textToSpeak = `${challenge.title}. ${challenge.description}. ${challenge.content}`;
+        speakText(textToSpeak, 0.7, 1);
+    }
 }
 
 // Select Answer
@@ -326,20 +617,48 @@ function selectAnswer(selectedIndex) {
     // Disable all buttons
     buttons.forEach(btn => btn.disabled = true);
     
+    // Track disorder-specific performance
+    if (challenge.type === 'dyscalculia') {
+        gameState.disorderAssessment.totalDyscalculiaChallenges++;
+        if (selectedIndex === challenge.correctAnswer) {
+            gameState.disorderAssessment.dyscalculiaScore += challenge.maxScore;
+        }
+    } else if (challenge.type === 'dysphasia') {
+        gameState.disorderAssessment.totalDysphasiaChallenges++;
+        if (selectedIndex === challenge.correctAnswer) {
+            gameState.disorderAssessment.dysphasiaScore += challenge.maxScore;
+        }
+    } else if (challenge.type === 'dysgraphia') {
+        gameState.disorderAssessment.totalDysgraphiaChallenges++;
+        if (selectedIndex === challenge.correctAnswer) {
+            gameState.disorderAssessment.dysgraphiaScore += challenge.maxScore;
+        }
+    }
+    
     if (selectedIndex === challenge.correctAnswer) {
         buttons[selectedIndex].classList.add('correct');
         gameState.score += challenge.maxScore;
         gameState.talentScores[challenge.type] += challenge.maxScore;
         
-        // Show success message with confetti
-        showMessage('🎉 Correct! Amazing job, champion! 🎉', 'success');
-        createConfetti();
+        // Show success message with celebration
+        showMessage('🎉 Correct! Excellent work! 🎉', 'success');
+        createCelebration();
+        
+        // Speak success message
+        if (gameState.accessibility.readingGuide) {
+            speakText('Correct! Excellent work!', 0.8, 1.2);
+        }
     } else {
         buttons[selectedIndex].classList.add('incorrect');
         buttons[challenge.correctAnswer].classList.add('correct');
         
         // Show encouraging feedback
         showMessage('💡 Great try! The correct answer was highlighted. Keep going! 💪', 'info');
+        
+        // Speak feedback
+        if (gameState.accessibility.readingGuide) {
+            speakText('Great try! The correct answer was highlighted. Keep going!', 0.8, 1);
+        }
     }
     
     // Enable next challenge button
@@ -351,15 +670,25 @@ function submitCreativeAnswer(answer) {
     const challenge = gameState.challenges[gameState.currentChallenge];
     
     if (answer.trim()) {
-        // For creativity challenges, give points for participation
-        const score = Math.min(challenge.maxScore, Math.floor(answer.length / 5) + 5);
+        // For creativity challenges, give points for participation and effort
+        const score = Math.min(challenge.maxScore, Math.floor(answer.length / 10) + 5);
         gameState.score += score;
         gameState.talentScores[challenge.type] += score;
         
-        showMessage(`🎨 Creative answer! You earned ${score} magical points! ✨`, 'success');
-        createConfetti();
+        showMessage(`🎨 Creative answer! You earned ${score} points! ✨`, 'success');
+        createCelebration();
+        
+        // Speak success message
+        if (gameState.accessibility.readingGuide) {
+            speakText(`Creative answer! You earned ${score} points!`, 0.8, 1.2);
+        }
     } else {
-        showMessage('✨ Please write something creative and magical! ✨', 'warning');
+        showMessage('Please write something creative and thoughtful!', 'warning');
+        
+        // Speak warning
+        if (gameState.accessibility.readingGuide) {
+            speakText('Please write something creative and thoughtful!', 0.8, 1);
+        }
         return;
     }
     
@@ -373,31 +702,29 @@ function showMessage(message, type) {
         position: fixed;
         top: 30px;
         right: 30px;
-        padding: 25px 30px; /* More padding */
-        border-radius: 20px;
+        padding: 20px 25px;
+        border-radius: 15px;
         color: white;
-        font-weight: bold;
-        font-size: 1.4rem; /* Larger font */
+        font-weight: 600;
+        font-size: 1.1rem;
         z-index: 1000;
         animation: slideInRight 0.6s ease;
-        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-        max-width: 500px; /* Wider */
+        box-shadow: 0 10px 30px var(--shadow-medium);
+        max-width: 400px;
         text-align: center;
-        /* Dyslexia-friendly settings */
-        line-height: 1.5;
-        letter-spacing: 0.05em;
-        word-spacing: 0.1em;
+        line-height: 1.4;
+        letter-spacing: 0.02em;
     `;
     
     switch (type) {
         case 'success':
-            messageDiv.style.background = 'linear-gradient(45deg, #96ceb4, #4ecdc4)';
+            messageDiv.style.background = 'linear-gradient(45deg, var(--accent-green), var(--accent-purple))';
             break;
         case 'info':
-            messageDiv.style.background = 'linear-gradient(45deg, #45b7d1, #96ceb4)';
+            messageDiv.style.background = 'linear-gradient(45deg, var(--primary-blue), var(--secondary-blue))';
             break;
         case 'warning':
-            messageDiv.style.background = 'linear-gradient(45deg, #feca57, #ff9ff3)';
+            messageDiv.style.background = 'linear-gradient(45deg, var(--accent-orange), #f97316)';
             break;
     }
     
@@ -409,7 +736,7 @@ function showMessage(message, type) {
         setTimeout(() => {
             messageDiv.remove();
         }, 600);
-    }, 4000); // Longer display time for dyslexia
+    }, 4000);
 }
 
 // Next Challenge
@@ -419,36 +746,281 @@ function nextChallenge() {
     displayChallenge();
 }
 
+// Assess learning disorders
+function assessLearningDisorders() {
+    const assessment = gameState.disorderAssessment;
+    const disorders = [];
+    
+    // Calculate percentages for each disorder type
+    const dyscalculiaPercentage = assessment.totalDyscalculiaChallenges > 0 ? 
+        (assessment.dyscalculiaScore / (assessment.totalDyscalculiaChallenges * 15)) * 100 : 0;
+    
+    const dysphasiaPercentage = assessment.totalDysphasiaChallenges > 0 ? 
+        (assessment.dysphasiaScore / (assessment.totalDysphasiaChallenges * 15)) * 100 : 0;
+    
+    const dysgraphiaPercentage = assessment.totalDysgraphiaChallenges > 0 ? 
+        (assessment.dysgraphiaScore / (assessment.totalDysgraphiaChallenges * 15)) * 100 : 0;
+    
+    // Determine potential disorders based on performance thresholds
+    if (dyscalculiaPercentage < 60 && assessment.totalDyscalculiaChallenges >= 2) {
+        disorders.push({
+            name: 'Dyscalculia',
+            description: 'Difficulty with numbers and mathematical concepts',
+            percentage: Math.round(dyscalculiaPercentage),
+            severity: dyscalculiaPercentage < 40 ? 'High' : 'Moderate',
+            icon: '🔢'
+        });
+    }
+    
+    if (dysphasiaPercentage < 60 && assessment.totalDysphasiaChallenges >= 2) {
+        disorders.push({
+            name: 'Dysphasia',
+            description: 'Language processing and communication difficulties',
+            percentage: Math.round(dysphasiaPercentage),
+            severity: dysphasiaPercentage < 40 ? 'High' : 'Moderate',
+            icon: '🗣️'
+        });
+    }
+    
+    if (dysgraphiaPercentage < 60 && assessment.totalDysgraphiaChallenges >= 2) {
+        disorders.push({
+            name: 'Dysgraphia',
+            description: 'Writing and spelling difficulties',
+            percentage: Math.round(dysgraphiaPercentage),
+            severity: dysgraphiaPercentage < 40 ? 'High' : 'Moderate',
+            icon: '✏️'
+        });
+    }
+    
+    return disorders;
+}
+
 // Show Results
 function showResults() {
-    const totalPossible = gameState.challenges.length * 10;
+    const totalPossible = gameState.challenges.length * 15; // Average score across new difficulties
     const percentage = Math.round((gameState.score / totalPossible) * 100);
     
     // Create celebration effect
-    createConfetti();
+    createCelebration();
     
-    elements.finalScore.textContent = `🏆 Final Score: ${gameState.score}/${totalPossible} (${percentage}%) 🏆`;
+    elements.finalScore.textContent = `Final Score: ${gameState.score}/${totalPossible} (${percentage}%)`;
     
-    // Display talent breakdown with emojis
+    // Display talent breakdown
     elements.talentResults.innerHTML = '';
     Object.entries(gameState.talentScores).forEach(([talent, score]) => {
-        const talentItem = document.createElement('div');
-        talentItem.className = 'talent-item';
-        
-        const talentName = document.createElement('span');
-        talentName.className = 'talent-name';
-        talentName.textContent = getTalentDisplayName(talent);
-        
-        const talentScore = document.createElement('span');
-        talentScore.className = 'talent-score';
-        talentScore.textContent = `${score}/20`;
-        
-        talentItem.appendChild(talentName);
-        talentItem.appendChild(talentScore);
-        elements.talentResults.appendChild(talentItem);
+        if (score > 0) { // Only show categories with scores
+            const talentItem = document.createElement('div');
+            talentItem.className = 'talent-item';
+            
+            const talentName = document.createElement('span');
+            talentName.className = 'talent-name';
+            talentName.textContent = getTalentDisplayName(talent);
+            
+            const talentScore = document.createElement('span');
+            talentScore.className = 'talent-score';
+            talentScore.textContent = `${score} points`;
+            
+            talentItem.appendChild(talentName);
+            talentItem.appendChild(talentScore);
+            elements.talentResults.appendChild(talentItem);
+        }
     });
     
+    // Add learning disorder assessment
+    const disorders = assessLearningDisorders();
+    if (disorders.length > 0) {
+        const disorderSection = document.createElement('div');
+        disorderSection.className = 'disorder-assessment';
+        disorderSection.style.cssText = `
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(45deg, #fef3c7, #fde68a);
+            border-radius: 20px;
+            border: 2px solid #f59e0b;
+        `;
+        
+        const disorderTitle = document.createElement('h3');
+        disorderTitle.textContent = '🎯 Learning Assessment Results';
+        disorderTitle.style.cssText = `
+            color: #92400e;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+        `;
+        disorderSection.appendChild(disorderTitle);
+        
+        const disorderDescription = document.createElement('p');
+        disorderDescription.textContent = 'Based on your performance, you may benefit from additional support in these areas:';
+        disorderDescription.style.cssText = `
+            color: #92400e;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        `;
+        disorderSection.appendChild(disorderDescription);
+        
+        disorders.forEach(disorder => {
+            const disorderCard = document.createElement('div');
+            disorderCard.style.cssText = `
+                background: white;
+                padding: 20px;
+                border-radius: 15px;
+                margin: 15px 0;
+                border: 2px solid #f59e0b;
+                box-shadow: 0 5px 15px rgba(245, 158, 11, 0.2);
+            `;
+            
+            const disorderHeader = document.createElement('div');
+            disorderHeader.style.cssText = `
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                margin-bottom: 10px;
+            `;
+            
+            const disorderIcon = document.createElement('span');
+            disorderIcon.textContent = disorder.icon;
+            disorderIcon.style.fontSize = '2rem';
+            
+            const disorderName = document.createElement('h4');
+            disorderName.textContent = disorder.name;
+            disorderName.style.cssText = `
+                color: #92400e;
+                font-size: 1.3rem;
+                margin: 0;
+            `;
+            
+            const severityBadge = document.createElement('span');
+            severityBadge.textContent = disorder.severity;
+            severityBadge.style.cssText = `
+                background: ${disorder.severity === 'High' ? '#ef4444' : '#f59e0b'};
+                color: white;
+                padding: 5px 10px;
+                border-radius: 10px;
+                font-size: 0.9rem;
+                font-weight: 600;
+                margin-left: auto;
+            `;
+            
+            disorderHeader.appendChild(disorderIcon);
+            disorderHeader.appendChild(disorderName);
+            disorderHeader.appendChild(severityBadge);
+            disorderCard.appendChild(disorderHeader);
+            
+            const disorderDesc = document.createElement('p');
+            disorderDesc.textContent = disorder.description;
+            disorderDesc.style.cssText = `
+                color: #6b7280;
+                margin: 10px 0;
+                font-size: 1rem;
+            `;
+            disorderCard.appendChild(disorderDesc);
+            
+            const performanceBar = document.createElement('div');
+            performanceBar.style.cssText = `
+                background: #e5e7eb;
+                height: 10px;
+                border-radius: 5px;
+                overflow: hidden;
+                margin: 10px 0;
+            `;
+            
+            const performanceFill = document.createElement('div');
+            performanceFill.style.cssText = `
+                background: linear-gradient(45deg, #f59e0b, #ef4444);
+                height: 100%;
+                width: ${disorder.percentage}%;
+                transition: width 1s ease;
+            `;
+            
+            performanceBar.appendChild(performanceFill);
+            disorderCard.appendChild(performanceBar);
+            
+            const performanceText = document.createElement('p');
+            performanceText.textContent = `Performance: ${disorder.percentage}%`;
+            performanceText.style.cssText = `
+                color: #92400e;
+                font-weight: 600;
+                margin: 5px 0 0 0;
+                font-size: 0.9rem;
+            `;
+            disorderCard.appendChild(performanceText);
+            
+            disorderSection.appendChild(disorderCard);
+        });
+        
+        const recommendation = document.createElement('div');
+        recommendation.style.cssText = `
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border: 2px solid #10b981;
+        `;
+        
+        const recommendationText = document.createElement('p');
+        recommendationText.innerHTML = `<strong>💡 Recommendation:</strong> Consider consulting with an educational specialist for a comprehensive assessment. This game is designed for educational purposes and should not replace professional diagnosis.`;
+        recommendationText.style.cssText = `
+            color: #065f46;
+            margin: 0;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        `;
+        
+        recommendation.appendChild(recommendationText);
+        disorderSection.appendChild(recommendation);
+        
+        elements.talentResults.appendChild(disorderSection);
+    }
+    
+    // Save game results automatically
+    saveGameResults(totalPossible, percentage, disorders);
+    
     showScreen('results-screen');
+    
+    // Speak results if reading guide is active
+    if (gameState.accessibility.readingGuide) {
+        let resultsText = `Congratulations! You completed your learning adventure with a score of ${gameState.score} out of ${totalPossible}. That's ${percentage} percent!`;
+        
+        if (disorders.length > 0) {
+            resultsText += ` Based on your performance, you may benefit from additional support in ${disorders.length} area${disorders.length > 1 ? 's' : ''}. Please consult with an educational specialist for a comprehensive assessment.`;
+        }
+        
+        speakText(resultsText, 0.7, 1);
+    }
+}
+
+// Save game results to localStorage
+function saveGameResults(totalPossible, percentage, disorders) {
+    const gameResult = {
+        id: Date.now(),
+        date: new Date().toISOString(),
+        playerName: gameState.playerName,
+        ageGroup: gameState.ageGroup,
+        score: gameState.score,
+        totalPossible: totalPossible,
+        percentage: percentage,
+        talentScores: { ...gameState.talentScores },
+        disorders: disorders,
+        challengesCompleted: gameState.challenges.length,
+        accessibility: { ...gameState.accessibility }
+    };
+    
+    // Get existing results or create new array
+    const existingResults = JSON.parse(localStorage.getItem('gameResults') || '[]');
+    
+    // Add new result
+    existingResults.push(gameResult);
+    
+    // Keep only last 50 results to prevent localStorage overflow
+    if (existingResults.length > 50) {
+        existingResults.splice(0, existingResults.length - 50);
+    }
+    
+    // Save back to localStorage
+    localStorage.setItem('gameResults', JSON.stringify(existingResults));
+    
+    console.log('Game results saved:', gameResult);
 }
 
 // Get Talent Display Name
@@ -458,14 +1030,17 @@ function getTalentDisplayName(talent) {
         logic: '🧩 Logic',
         memory: '🧠 Memory',
         observation: '🔍 Observation',
-        problemSolving: '💡 Problem Solving'
+        problemSolving: '💡 Problem Solving',
+        dyscalculia: '🔢 Dyscalculia Support',
+        dysphasia: '🗣️ Dysphasia Support',
+        dysgraphia: '✏️ Dysgraphia Support'
     };
     return names[talent] || talent;
 }
 
 // Restart Game
 function restartGame() {
-    if (confirm('🔄 Are you sure you want to restart your magical adventure?')) {
+    if (confirm('Are you sure you want to restart your learning adventure?')) {
         gameState.currentChallenge = 0;
         gameState.score = 0;
         gameState.talentScores = {
@@ -473,7 +1048,20 @@ function restartGame() {
             logic: 0,
             memory: 0,
             observation: 0,
-            problemSolving: 0
+            problemSolving: 0,
+            dyscalculia: 0,
+            dysphasia: 0,
+            dysgraphia: 0
+        };
+        
+        // Reset disorder assessment
+        gameState.disorderAssessment = {
+            dyscalculiaScore: 0,
+            dysphasiaScore: 0,
+            dysgraphiaScore: 0,
+            totalDyscalculiaChallenges: 0,
+            totalDysphasiaChallenges: 0,
+            totalDysgraphiaChallenges: 0
         };
         
         updateGameUI();
@@ -490,18 +1078,31 @@ function playAgain() {
         logic: 0,
         memory: 0,
         observation: 0,
-        problemSolving: 0
+        problemSolving: 0,
+        dyscalculia: 0,
+        dysphasia: 0,
+        dysgraphia: 0
+    };
+    
+    // Reset disorder assessment
+    gameState.disorderAssessment = {
+        dyscalculiaScore: 0,
+        dysphasiaScore: 0,
+        dysgraphiaScore: 0,
+        totalDyscalculiaChallenges: 0,
+        totalDysphasiaChallenges: 0,
+        totalDysgraphiaChallenges: 0
     };
     
     // Shuffle challenges again
-    gameState.challenges = [...challenges].sort(() => Math.random() - 0.5);
+    gameState.challenges = [...challengesByAge[gameState.ageGroup]].sort(() => Math.random() - 0.5);
     
     showScreen('game-screen');
     updateGameUI();
     displayChallenge();
     
-    // Create confetti for new game
-    createConfetti();
+    // Create celebration for new game
+    createCelebration();
 }
 
 // Back to Welcome
@@ -535,12 +1136,14 @@ style.textContent = `
         }
     }
     
-    @keyframes float {
-        0%, 100% {
-            transform: translateY(0px) rotate(0deg);
+    @keyframes confetti-fall {
+        0% {
+            transform: translateY(-10px) rotate(0deg);
+            opacity: 1;
         }
-        50% {
-            transform: translateY(-20px) rotate(180deg);
+        100% {
+            transform: translateY(100vh) rotate(720deg);
+            opacity: 0;
         }
     }
 `;
