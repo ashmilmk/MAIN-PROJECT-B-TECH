@@ -23,6 +23,7 @@ let gameState = {
         readingGuide: false
     },
     speechSynthesis: null,
+    preferredVoice: null,
     // Add disorder assessment tracking
     disorderAssessment: {
         dyscalculiaScore: 0,
@@ -33,6 +34,31 @@ let gameState = {
         totalDysgraphiaChallenges: 0
     }
 };
+
+// Cached handlers for reading guide events
+let readingGuideMouseMoveHandler = null;
+let readingGuideFocusHandler = null;
+
+// Try to pick a friendly female English voice that kids enjoy
+function selectPreferredVoice(voices) {
+    if (!voices || voices.length === 0) return null;
+    const priorityNames = [
+        'Microsoft Aria',
+        'Microsoft Jenny',
+        'Microsoft Zira',
+        'Google UK English Female',
+        'Google US English',
+        'Samantha',
+        'Karen',
+        'Victoria'
+    ];
+    for (const name of priorityNames) {
+        const match = voices.find(v => v.name && v.name.toLowerCase().includes(name.toLowerCase()));
+        if (match) return match;
+    }
+    const englishVoices = voices.filter(v => v.lang && v.lang.toLowerCase().startsWith('en'));
+    return englishVoices[0] || voices[0] || null;
+}
 
 // Age-appropriate challenge data with learning disorder focus
 const challengesByAge = {
@@ -272,6 +298,7 @@ const elements = {
     talentResults: document.getElementById('talent-results'),
     playAgain: document.getElementById('play-again'),
     backToWelcome: document.getElementById('back-to-welcome'),
+    viewProgress: document.getElementById('view-progress'),
     // Accessibility elements
     fontSizeToggle: document.getElementById('font-size-toggle'),
     highContrastToggle: document.getElementById('high-contrast-toggle'),
@@ -294,6 +321,9 @@ function initGame() {
     elements.restartGame.addEventListener('click', restartGame);
     elements.playAgain.addEventListener('click', playAgain);
     elements.backToWelcome.addEventListener('click', backToWelcome);
+    if (elements.viewProgress) {
+        elements.viewProgress.addEventListener('click', viewProgress);
+    }
     
     // Age group selection
     document.querySelectorAll('.age-btn').forEach(btn => {
@@ -325,40 +355,64 @@ function initGame() {
     initAccessibility();
 }
 
+// Navigate to Progress Page
+function viewProgress() {
+    try {
+        // Ensure the latest player name is stored for filtering on progress page
+        if (gameState.playerName && typeof gameState.playerName === 'string') {
+            localStorage.setItem('userName', gameState.playerName);
+        }
+    } catch (e) {
+        console.warn('Unable to sync userName to localStorage before navigating to progress page.', e);
+    }
+    window.location.href = '../progress.html';
+}
+
 // Initialize speech synthesis
 function initSpeechSynthesis() {
     if ('speechSynthesis' in window) {
         gameState.speechSynthesis = window.speechSynthesis;
+        const assignVoices = () => {
+            const voices = window.speechSynthesis.getVoices();
+            if (voices && voices.length) {
+                gameState.preferredVoice = selectPreferredVoice(voices);
+            }
+        };
+        // Some browsers load voices asynchronously
+        window.speechSynthesis.onvoiceschanged = assignVoices;
+        assignVoices();
     } else {
         console.log('Speech synthesis not supported');
     }
 }
 
 // Speak text function
-function speakText(text, rate = 0.8, pitch = 1) {
-    if (gameState.speechSynthesis) {
-        // Cancel any ongoing speech
-        gameState.speechSynthesis.cancel();
-        
+function speakText(text, rate = 0.9, pitch = 1.1) {
+    if (!gameState.speechSynthesis) return;
+    // Cancel any ongoing speech
+    gameState.speechSynthesis.cancel();
+
+    const attemptSpeak = (retriesLeft = 3) => {
         const utterance = new SpeechSynthesisUtterance(text);
-        utterance.rate = rate; // Slower rate for better comprehension
+        utterance.rate = rate;
         utterance.pitch = pitch;
-        utterance.volume = 1; // Maximum volume
+        utterance.volume = 1;
         utterance.lang = 'en-US';
-        
-        // Use a clear voice if available
+
         const voices = gameState.speechSynthesis.getVoices();
-        const preferredVoice = voices.find(voice => 
-            voice.name.includes('Google') || 
-            voice.name.includes('Natural') || 
-            voice.name.includes('Enhanced')
-        );
-        if (preferredVoice) {
-            utterance.voice = preferredVoice;
+        if ((!voices || voices.length === 0) && retriesLeft > 0) {
+            setTimeout(() => attemptSpeak(retriesLeft - 1), 300);
+            return;
         }
-        
+        if (!gameState.preferredVoice && voices && voices.length) {
+            gameState.preferredVoice = selectPreferredVoice(voices);
+        }
+        if (gameState.preferredVoice) {
+            utterance.voice = gameState.preferredVoice;
+        }
         gameState.speechSynthesis.speak(utterance);
-    }
+    };
+    attemptSpeak(3);
 }
 
 // Initialize accessibility features
@@ -443,7 +497,35 @@ function toggleReadingGuide() {
     if (gameState.accessibility.readingGuide && gameState.currentChallenge < gameState.challenges.length) {
         const challenge = gameState.challenges[gameState.currentChallenge];
         const textToSpeak = `${challenge.title}. ${challenge.description}. ${challenge.content}`;
-        speakText(textToSpeak, 0.7, 1); // Slower rate for better comprehension
+        speakText(textToSpeak, 0.9, 1.1);
+        
+        // Enable reading guide line with focus only (no mouse tracking)
+        if (!readingGuideFocusHandler) {
+            readingGuideFocusHandler = (e) => {
+                if (!e || !e.target || !elements.readingGuide) return;
+                const rect = e.target.getBoundingClientRect?.();
+                if (rect) {
+                    const midY = rect.top + rect.height / 2;
+                    elements.readingGuide.style.top = `${Math.max(0, midY)}px`;
+                }
+            };
+        }
+        document.addEventListener('focusin', readingGuideFocusHandler, true);
+        // Allow quick toggle off with Escape key
+        const onEsc = (e) => {
+            if (e.key === 'Escape') {
+                gameState.accessibility.readingGuide = false;
+                applyAccessibilitySettings();
+                document.removeEventListener('focusin', readingGuideFocusHandler, true);
+                document.removeEventListener('keydown', onEsc, true);
+            }
+        };
+        document.addEventListener('keydown', onEsc, true);
+    } else {
+        // Disable movement listeners when guide is off
+        if (readingGuideFocusHandler) {
+            document.removeEventListener('focusin', readingGuideFocusHandler, true);
+        }
     }
 }
 
