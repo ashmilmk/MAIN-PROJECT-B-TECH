@@ -40,15 +40,12 @@ class DyslexiaDetectionTool {
         // Set canvas properties
         this.ctx.lineCap = 'round';
         this.ctx.lineJoin = 'round';
-        this.ctx.lineWidth = 4;
-        this.ctx.strokeStyle = '#2563eb'; // Blue color for drawing instead of red
-        this.ctx.globalAlpha = 0.9; // More opaque for better visibility
+        this.ctx.lineWidth = 20; // Much larger pen size to match text size
+        this.ctx.strokeStyle = '#e53e3e'; // Red color for drawing
+        this.ctx.globalAlpha = 0.8; // Semi-transparent
         
-        // Make canvas transparent - clear any existing content
+        // Make canvas transparent
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        
-        // Ensure canvas background is transparent
-        this.canvas.style.backgroundColor = 'transparent';
     }
 
     setupEventListeners() {
@@ -97,23 +94,12 @@ class DyslexiaDetectionTool {
         const textDisplay = this.originalTextDisplay;
         const rect = textDisplay.getBoundingClientRect();
         
-        // Set canvas size to match text display exactly
+        // Set canvas size to match text display
         this.canvas.width = rect.width;
         this.canvas.height = rect.height;
         
-        // Set CSS size to match as well
-        this.canvas.style.width = rect.width + 'px';
-        this.canvas.style.height = rect.height + 'px';
-        
         // Reset canvas properties after resize
         this.setupCanvas();
-        
-        // Ensure canvas is positioned correctly over the text
-        this.canvas.style.position = 'absolute';
-        this.canvas.style.top = '0';
-        this.canvas.style.left = '0';
-        this.canvas.style.pointerEvents = 'auto';
-        this.canvas.style.zIndex = '10';
     }
 
     getMousePos(e) {
@@ -139,7 +125,6 @@ class DyslexiaDetectionTool {
     }
 
     startDrawing(e) {
-        e.preventDefault();
         this.isDrawing = true;
         const pos = e.type.includes('touch') ? this.getTouchPos(e) : this.getMousePos(e);
         this.lastX = pos.x;
@@ -156,8 +141,6 @@ class DyslexiaDetectionTool {
             y: this.lastY,
             timestamp: Date.now()
         });
-        
-        console.log('Started drawing at:', this.lastX, this.lastY);
     }
 
     draw(e) {
@@ -179,8 +162,6 @@ class DyslexiaDetectionTool {
         
         this.lastX = pos.x;
         this.lastY = pos.y;
-        
-        console.log('Drawing to:', pos.x, pos.y);
     }
 
     stopDrawing() {
