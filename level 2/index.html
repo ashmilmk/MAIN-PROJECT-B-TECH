@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dyslexia Detection Tool</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Dyslexia Detection Tool</h1>
+            <p>Help detect signs of dyslexia through text reproduction analysis</p>
+        </header>
+
+        <div class="main-content">
+            <!-- Text Input Section -->
+            <section class="input-section">
+                <h2>Step 1: Enter Text</h2>
+                <div class="input-group">
+                    <label for="textInput">Enter the text for the child to reproduce:</label>
+                    <textarea id="textInput" placeholder="Enter a short text here... (e.g., 'The quick brown fox jumps over the lazy dog')"></textarea>
+                    <button id="startTest" class="btn btn-primary">Start Test</button>
+                </div>
+            </section>
+
+            <!-- Display and Drawing Section -->
+            <section class="test-section" id="testSection" style="display: none;">
+                <h2>Step 2: Text Reproduction</h2>
+                <div class="test-container">
+                    <div class="drawing-overlay-container">
+                        <h3>Draw over the text below:</h3>
+                        <div class="text-overlay-wrapper">
+                            <div id="originalTextDisplay" class="text-display-overlay"></div>
+                            <canvas id="drawingCanvas" class="drawing-canvas-overlay"></canvas>
+                        </div>
+                        <div class="drawing-controls">
+                            <button id="clearCanvas" class="btn btn-secondary">Clear Drawing</button>
+                            <button id="analyzeText" class="btn btn-primary">Analyze</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section" id="resultsSection" style="display: none;">
+                <h2>Analysis Results</h2>
+                <div class="results-container">
+                    <div class="score-display">
+                        <h3>Accuracy Score</h3>
+                        <div class="score-circle">
+                            <span id="accuracyScore">0%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="analysis-details">
+                        <h3>Detailed Analysis</h3>
+                        <div id="analysisResults" class="analysis-content"></div>
+                    </div>
+                    
+                    <div class="dyslexia-indicators">
+                        <h3>Potential Dyslexia Indicators</h3>
+                        <div id="dyslexiaIndicators" class="indicators-content"></div>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button id="newTest" class="btn btn-primary">New Test</button>
+                    <button id="exportResults" class="btn btn-secondary">Export Results</button>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

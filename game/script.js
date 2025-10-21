@@ -1187,10 +1187,10 @@ function playAgain() {
     createCelebration();
 }
 
-// Back to Welcome
+// Back to Welcome / Navigate to Level 2
 function backToWelcome() {
-    elements.playerName.value = '';
-    showScreen('welcome-screen');
+    // Navigate to Level 2 folder
+    window.location.href = '../level 2/index.html';
 }
 
 // Add CSS for enhanced animations
