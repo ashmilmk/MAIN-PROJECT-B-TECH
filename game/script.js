@@ -60,221 +60,35 @@ function selectPreferredVoice(voices) {
     return englishVoices[0] || voices[0] || null;
 }
 
-// Age-appropriate challenge data with learning disorder focus
+// Age-appropriate challenge data replaced with provided 20-question set
 const challengesByAge = {
-    young: [
-        // Dyscalculia Challenges (Math difficulties)
-        {
-            id: 1,
-            title: "🔢 Number Recognition Challenge",
-            description: "Look at these numbers and tell me which one is the largest!",
-            type: "dyscalculia",
-            content: "Which number is the largest?\n\n🔢 7  🔢 12  🔢 5  🔢 9",
-            options: ["7", "12", "5", "9"],
-            correctAnswer: 1,
-            maxScore: 10,
-            typeLabel: "Dyscalculia Support"
-        },
-        {
-            id: 2,
-            title: "🧮 Simple Addition Puzzle",
-            description: "Count the objects and add them together!",
-            type: "dyscalculia",
-            content: "🍎🍎🍎 + 🍌🍌 = ?\n\nHow many fruits are there in total?",
-            options: ["3", "4", "5", "6"],
-            correctAnswer: 2,
-            maxScore: 10,
-            typeLabel: "Dyscalculia Support"
-        },
-        // Dysphasia Challenges (Language difficulties)
-        {
-            id: 3,
-            title: "🗣️ Word Association Game",
-            description: "Find the word that goes best with the picture!",
-            type: "dysphasia",
-            content: "🐕 What word best describes this animal?",
-            options: ["Cat", "Dog", "Bird", "Fish"],
-            correctAnswer: 1,
-            maxScore: 10,
-            typeLabel: "Dysphasia Support"
-        },
-        {
-            id: 4,
-            title: "📝 Sentence Completion",
-            description: "Complete the sentence with the right word!",
-            type: "dysphasia",
-            content: "The sky is _____ today.\n\nWhat color is the sky usually?",
-            options: ["Green", "Blue", "Red", "Yellow"],
-            correctAnswer: 1,
-            maxScore: 10,
-            typeLabel: "Dysphasia Support"
-        },
-        // Dysgraphia Challenges (Writing difficulties)
-        {
-            id: 5,
-            title: "✏️ Letter Recognition",
-            description: "Find the letter that matches the sound!",
-            type: "dysgraphia",
-            content: "Which letter makes the 'sss' sound?\n\n🔤 A  🔤 B  🔤 C  🔤 S",
-            options: ["A", "B", "C", "S"],
-            correctAnswer: 3,
-            maxScore: 10,
-            typeLabel: "Dysgraphia Support"
-        },
-        {
-            id: 6,
-            title: "📖 Word Building",
-            description: "Put the letters together to make a word!",
-            type: "dysgraphia",
-            content: "C + A + T = ?\n\nWhat word do these letters spell?",
-            options: ["Dog", "Cat", "Hat", "Bat"],
-            correctAnswer: 1,
-            maxScore: 10,
-            typeLabel: "Dysgraphia Support"
-        }
-    ],
-    middle: [
-        // Dyscalculia Challenges (Harder)
-        {
-            id: 1,
-            title: "🧮 Multi-Step Math Problem",
-            description: "Solve this step-by-step math problem!",
-            type: "dyscalculia",
-            content: "If you have 15 apples and give away 3, then buy 7 more, how many do you have?",
-            options: ["16", "19", "22", "25"],
-            correctAnswer: 1,
-            maxScore: 15,
-            typeLabel: "Dyscalculia Support"
-        },
-        {
-            id: 2,
-            title: "⏰ Time Calculation Challenge",
-            description: "Calculate the time difference!",
-            type: "dyscalculia",
-            content: "If it's 2:30 PM now, what time will it be in 2 hours and 45 minutes?",
-            options: ["4:15 PM", "5:15 PM", "5:30 PM", "6:15 PM"],
-            correctAnswer: 1,
-            maxScore: 15,
-            typeLabel: "Dyscalculia Support"
-        },
-        // Dysphasia Challenges (Harder)
-        {
-            id: 3,
-            title: "📚 Complex Word Meanings",
-            description: "Choose the word that means the opposite!",
-            type: "dysphasia",
-            content: "What is the opposite of 'happy'?",
-            options: ["Joyful", "Sad", "Excited", "Calm"],
-            correctAnswer: 1,
-            maxScore: 15,
-            typeLabel: "Dysphasia Support"
-        },
-        {
-            id: 4,
-            title: "🔤 Grammar Challenge",
-            description: "Complete the sentence with the correct grammar!",
-            type: "dysphasia",
-            content: "She _____ to the store yesterday.\n\nWhich word fits best?",
-            options: ["go", "goes", "went", "going"],
-            correctAnswer: 2,
-            maxScore: 15,
-            typeLabel: "Dysphasia Support"
-        },
-        // Dysgraphia Challenges (Harder)
-        {
-            id: 5,
-            title: "📝 Spelling Challenge",
-            description: "Choose the correctly spelled word!",
-            type: "dysgraphia",
-            content: "Which word is spelled correctly?",
-            options: ["Recieve", "Receive", "Receeve", "Receve"],
-            correctAnswer: 1,
-            maxScore: 15,
-            typeLabel: "Dysgraphia Support"
-        },
-        {
-            id: 6,
-            title: "🔤 Word Pattern Recognition",
-            description: "Find the word that follows the same pattern!",
-            type: "dysgraphia",
-            content: "If 'run' becomes 'running', what does 'jump' become?",
-            options: ["Jumping", "Jumpping", "Jumped", "Jumps"],
-            correctAnswer: 0,
-            maxScore: 15,
-            typeLabel: "Dysgraphia Support"
-        }
-    ],
-    older: [
-        // Dyscalculia Challenges (Advanced)
-        {
-            id: 1,
-            title: "🧮 Fraction and Decimal Challenge",
-            description: "Convert between fractions and decimals!",
-            type: "dyscalculia",
-            content: "What is 3/4 as a decimal?",
-            options: ["0.25", "0.5", "0.75", "0.8"],
-            correctAnswer: 2,
-            maxScore: 20,
-            typeLabel: "Dyscalculia Support"
-        },
-        {
-            id: 2,
-            title: "📊 Percentage Problem",
-            description: "Calculate the percentage!",
-            type: "dyscalculia",
-            content: "If 20% of a number is 40, what is the number?",
-            options: ["80", "100", "200", "400"],
-            correctAnswer: 2,
-            maxScore: 20,
-            typeLabel: "Dyscalculia Support"
-        },
-        // Dysphasia Challenges (Advanced)
-        {
-            id: 3,
-            title: "📖 Reading Comprehension",
-            description: "Read the passage and answer the question!",
-            type: "dysphasia",
-            content: "The weather was cold and rainy. Sarah decided to stay inside and read a book. She made hot chocolate and curled up on the couch.\n\nWhat did Sarah do because of the weather?",
-            options: ["Went outside", "Stayed inside", "Went shopping", "Called friends"],
-            correctAnswer: 1,
-            maxScore: 20,
-            typeLabel: "Dysphasia Support"
-        },
-        {
-            id: 4,
-            title: "🔤 Vocabulary Challenge",
-            description: "Choose the word that best fits the context!",
-            type: "dysphasia",
-            content: "The mountain was so _____ that it took hours to climb to the top.",
-            options: ["Small", "Steep", "Wide", "Short"],
-            correctAnswer: 1,
-            maxScore: 20,
-            typeLabel: "Dysphasia Support"
-        },
-        // Dysgraphia Challenges (Advanced)
-        {
-            id: 5,
-            title: "📝 Complex Spelling",
-            description: "Identify the misspelled word!",
-            type: "dysgraphia",
-            content: "Which word is misspelled?\n\nBeautiful, Neccessary, Important, Different",
-            options: ["Beautiful", "Neccessary", "Important", "Different"],
-            correctAnswer: 1,
-            maxScore: 20,
-            typeLabel: "Dysgraphia Support"
-        },
-        {
-            id: 6,
-            title: "🔤 Word Formation",
-            description: "Create a new word from the given letters!",
-            type: "dysgraphia",
-            content: "Using the letters in 'EDUCATION', can you make the word 'CAT'?",
-            options: ["Yes", "No", "Maybe", "I don't know"],
-            correctAnswer: 0,
-            maxScore: 20,
-            typeLabel: "Dysgraphia Support"
-        }
-    ]
+	young: [
+		// Section 1 – Reading & Comprehension (Q1–Q10)
+		{ id: 1, title: "📖 The Happy Butterfly", description: "Answer the question.", type: "dysphasia", content: "Who was flying from flower to flower in the story 'The Happy Butterfly'?", options: ["Bee", "Butterfly", "Bird", "Ladybug"], correctAnswer: 1, maxScore: 15, typeLabel: "Dysphasia Support" },
+		{ id: 2, title: "📖 The Happy Butterfly", description: "Answer the question.", type: "dysphasia", content: "Where was the butterfly?", options: ["In the forest", "In the garden", "In the house", "By the river"], correctAnswer: 1, maxScore: 15, typeLabel: "Dysphasia Support" },
+		{ id: 3, title: "📖 The Happy Butterfly", description: "Answer the question.", type: "dysphasia", content: "How did the butterfly feel?", options: ["Sad", "Scared", "Happy", "Angry"], correctAnswer: 2, maxScore: 15, typeLabel: "Dysphasia Support" },
+		{ id: 4, title: "🏞️ Fun at the Park", description: "Answer the question.", type: "dysphasia", content: "Who went to the park in 'Fun at the Park'?", options: ["Sarah and Tom", "Ben and Mia", "Lily and Jack", "Tom and Jake"], correctAnswer: 0, maxScore: 15, typeLabel: "Dysphasia Support" },
+		{ id: 5, title: "🏞️ Fun at the Park", description: "Answer the question.", type: "dysphasia", content: "What did they play on at the park?", options: ["Swings and slides", "Seesaw and sandbox", "Bikes and balls", "Kites and ropes"], correctAnswer: 0, maxScore: 15, typeLabel: "Dysphasia Support" },
+		{ id: 6, title: "🐟 My Pet Fish", description: "Answer the question.", type: "dysphasia", content: "What is the pet’s name in 'My Pet Fish'?", options: ["Goldy", "Bluey", "Bubbles", "Finny"], correctAnswer: 1, maxScore: 15, typeLabel: "Dysphasia Support" },
+		{ id: 7, title: "🐟 My Pet Fish", description: "Answer the question.", type: "dysphasia", content: "What color is Bluey?", options: ["Blue", "Red", "Green", "Yellow"], correctAnswer: 0, maxScore: 15, typeLabel: "Dysphasia Support" },
+		{ id: 8, title: "🐱 The Lost Kitten", description: "Answer the question.", type: "dysphasia", content: "Where did Sarah find the kitten in 'The Lost Kitten'?", options: ["In her backyard", "In the park", "On the road", "At school"], correctAnswer: 0, maxScore: 15, typeLabel: "Dysphasia Support" },
+		{ id: 9, title: "🐱 The Lost Kitten", description: "Answer the question.", type: "dysphasia", content: "What name did Sarah give the kitten?", options: ["Whiskers", "Snowy", "Fluffy", "Kitty"], correctAnswer: 2, maxScore: 15, typeLabel: "Dysphasia Support" },
+		{ id: 10, title: "🌳 The Oak Tree", description: "Answer the question.", type: "dysphasia", content: "What did Tommy and Lily find behind the oak tree?", options: ["A treasure chest", "A magical garden", "A secret door", "A pond"], correctAnswer: 1, maxScore: 15, typeLabel: "Dysphasia Support" },
+
+		// Section 2 – Mathematics & Logic (Q11–Q20)
+		{ id: 11, title: "🧮 Mathematics", description: "Solve the problem.", type: "dyscalculia", content: "7 + 2 = ?", options: ["8", "9", "10", "11"], correctAnswer: 1, maxScore: 15, typeLabel: "Dyscalculia Support" },
+		{ id: 12, title: "🧮 Mathematics", description: "Solve the problem.", type: "dyscalculia", content: "4 + 6 = ?", options: ["9", "10", "11", "8"], correctAnswer: 1, maxScore: 15, typeLabel: "Dyscalculia Support" },
+		{ id: 13, title: "🧮 Mathematics", description: "Solve the problem.", type: "dyscalculia", content: "9 + 1 = ?", options: ["9", "10", "11", "12"], correctAnswer: 1, maxScore: 15, typeLabel: "Dyscalculia Support" },
+		{ id: 14, title: "➖ Subtraction", description: "Solve the problem.", type: "dyscalculia", content: "10 – 4 = ?", options: ["5", "6", "7", "8"], correctAnswer: 1, maxScore: 15, typeLabel: "Dyscalculia Support" },
+		{ id: 15, title: "➖ Subtraction", description: "Solve the problem.", type: "dyscalculia", content: "8 – 5 = ?", options: ["2", "3", "4", "5"], correctAnswer: 1, maxScore: 15, typeLabel: "Dyscalculia Support" },
+		{ id: 16, title: "✖️ Multiplication", description: "Solve the problem.", type: "dyscalculia", content: "2 × 3 = ?", options: ["5", "6", "7", "8"], correctAnswer: 1, maxScore: 15, typeLabel: "Dyscalculia Support" },
+		{ id: 17, title: "✖️ Multiplication", description: "Solve the problem.", type: "dyscalculia", content: "4 × 2 = ?", options: ["6", "7", "8", "9"], correctAnswer: 2, maxScore: 15, typeLabel: "Dyscalculia Support" },
+		{ id: 18, title: "🧮 Word Problem", description: "Solve the problem.", type: "dyscalculia", content: "John has 5 apples and buys 3 more. How many now?", options: ["6 apples", "7 apples", "8 apples", "9 apples"], correctAnswer: 2, maxScore: 15, typeLabel: "Dyscalculia Support" },
+		{ id: 19, title: "🧮 Word Problem", description: "Solve the problem.", type: "dyscalculia", content: "There are 8 birds on a tree; 4 fly away. How many left?", options: ["3 birds", "4 birds", "5 birds", "6 birds"], correctAnswer: 1, maxScore: 15, typeLabel: "Dyscalculia Support" },
+		{ id: 20, title: "✖️ Word Problem", description: "Solve the problem.", type: "dyscalculia", content: "Sally has 2 bags with 5 candies each. Total candies = ?", options: ["8 candies", "9 candies", "10 candies", "12 candies"], correctAnswer: 2, maxScore: 15, typeLabel: "Dyscalculia Support" }
+	],
+	middle: [],
+	older: []
 };
 
 // DOM Elements
@@ -317,6 +131,7 @@ function initGame() {
     
     // Event Listeners
     elements.startGame.addEventListener('click', startGame);
+    document.getElementById('start-quiz').addEventListener('click', startQuiz);
     elements.nextChallenge.addEventListener('click', nextChallenge);
     elements.restartGame.addEventListener('click', restartGame);
     elements.playAgain.addEventListener('click', playAgain);
@@ -600,12 +415,18 @@ function startGame() {
     // Shuffle challenges for this session
     gameState.challenges = [...challengesByAge[gameState.ageGroup]].sort(() => Math.random() - 0.5);
     
-    showScreen('game-screen');
-    updateGameUI();
-    displayChallenge();
+    // Show passages screen first
+    showScreen('passages-screen');
     
     // Create celebration for starting
     createCelebration();
+}
+
+// Start Quiz (after reading passages)
+function startQuiz() {
+    showScreen('game-screen');
+    updateGameUI();
+    displayChallenge();
 }
 
 // Show Screen
