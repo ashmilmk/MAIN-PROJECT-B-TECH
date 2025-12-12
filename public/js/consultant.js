@@ -115,13 +115,13 @@ async function loadStudents(search = '') {
               </span>
             </td>
             <td>
-              <button class="action-btn btn-edit" onclick="editStudent('${student._id}')" title="Edit">
+              <button class="action-btn btn-edit" data-action="edit" data-id="${student._id}" title="Edit">
                 <i class="fas fa-edit"></i>
               </button>
-              <button class="action-btn btn-test" onclick="openTestModal('${student._id}', '${student.firstName} ${student.lastName}')" title="Assign Test">
+              <button class="action-btn btn-test" data-action="test" data-id="${student._id}" data-name="${student.firstName} ${student.lastName}" title="Start Game">
                 <i class="fas fa-clipboard-check"></i>
               </button>
-                <button class="action-btn btn-delete" onclick="deleteStudent('${student._id}', '${student.firstName} ${student.lastName}')" title="Deactivate">
+              <button class="action-btn btn-delete" data-action="delete" data-id="${student._id}" data-name="${student.firstName} ${student.lastName}" title="Deactivate">
                 <i class="fas fa-trash"></i>
               </button>
             </td>
@@ -322,4 +322,25 @@ window.onload = function () {
     if (navStudents) navStudents.addEventListener('click', () => {
         document.getElementById('studentsSection').scrollIntoView({ behavior: 'smooth' });
     });
+
+    // Event delegation for table actions
+    const tableBody = document.getElementById('studentTableBody');
+    if (tableBody) {
+        tableBody.addEventListener('click', (e) => {
+            const btn = e.target.closest('.action-btn');
+            if (!btn) return;
+
+            const action = btn.dataset.action;
+            const id = btn.dataset.id;
+            const name = btn.dataset.name;
+
+            if (action === 'edit') {
+                editStudent(id);
+            } else if (action === 'test') {
+                openTestModal(id, name);
+            } else if (action === 'delete') {
+                deleteStudent(id, name);
+            }
+        });
+    }
 };
