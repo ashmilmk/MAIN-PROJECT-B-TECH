@@ -48,10 +48,10 @@ app.get('/api/health', (_req, res) => {
   });
 });
 
-// Serve frontend (static HTML) from project root
-app.use(express.static(path.join(__dirname, '..')));
+// Serve frontend (static files) from public directory
+app.use(express.static(path.join(__dirname, '..', 'public')));
 app.get('*', (_req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'index.html'));
+  res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
 });
 
 // Global error handler
