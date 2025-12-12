@@ -65,33 +65,33 @@ function selectPreferredVoice(voices) {
 
 // Age-appropriate challenge data replaced with provided 20-question set
 const challengesByAge = {
-	young: [
-		// Section 1 – Reading & Comprehension (Q1–Q10)
-		{ id: 1, title: "📖 The Happy Butterfly", description: "Answer the question.", type: "dysphasia", content: "Who was flying from flower to flower in the story 'The Happy Butterfly'?", options: ["Bee", "Butterfly", "Bird", "Ladybug"], correctAnswer: 1, maxScore: 15, typeLabel: "Dysphasia Support" },
-		{ id: 2, title: "📖 The Happy Butterfly", description: "Answer the question.", type: "dysphasia", content: "Where was the butterfly?", options: ["In the forest", "In the garden", "In the house", "By the river"], correctAnswer: 1, maxScore: 15, typeLabel: "Dysphasia Support" },
-		{ id: 3, title: "📖 The Happy Butterfly", description: "Answer the question.", type: "dysphasia", content: "How did the butterfly feel?", options: ["Sad", "Scared", "Happy", "Angry"], correctAnswer: 2, maxScore: 15, typeLabel: "Dysphasia Support" },
-		{ id: 4, title: "🏞️ Fun at the Park", description: "Answer the question.", type: "dysphasia", content: "Who went to the park in 'Fun at the Park'?", options: ["Sarah and Tom", "Ben and Mia", "Lily and Jack", "Tom and Jake"], correctAnswer: 0, maxScore: 15, typeLabel: "Dysphasia Support" },
-		{ id: 5, title: "🏞️ Fun at the Park", description: "Answer the question.", type: "dysphasia", content: "What did they play on at the park?", options: ["Swings and slides", "Seesaw and sandbox", "Bikes and balls", "Kites and ropes"], correctAnswer: 0, maxScore: 15, typeLabel: "Dysphasia Support" },
-		{ id: 6, title: "🐟 My Pet Fish", description: "Answer the question.", type: "dysphasia", content: "What is the pet’s name in 'My Pet Fish'?", options: ["Goldy", "Bluey", "Bubbles", "Finny"], correctAnswer: 1, maxScore: 15, typeLabel: "Dysphasia Support" },
-		{ id: 7, title: "🐟 My Pet Fish", description: "Answer the question.", type: "dysphasia", content: "What color is Bluey?", options: ["Blue", "Red", "Green", "Yellow"], correctAnswer: 0, maxScore: 15, typeLabel: "Dysphasia Support" },
-		{ id: 8, title: "🐱 The Lost Kitten", description: "Answer the question.", type: "dysphasia", content: "Where did Sarah find the kitten in 'The Lost Kitten'?", options: ["In her backyard", "In the park", "On the road", "At school"], correctAnswer: 0, maxScore: 15, typeLabel: "Dysphasia Support" },
-		{ id: 9, title: "🐱 The Lost Kitten", description: "Answer the question.", type: "dysphasia", content: "What name did Sarah give the kitten?", options: ["Whiskers", "Snowy", "Fluffy", "Kitty"], correctAnswer: 2, maxScore: 15, typeLabel: "Dysphasia Support" },
-		{ id: 10, title: "🌳 The Oak Tree", description: "Answer the question.", type: "dysphasia", content: "What did Tommy and Lily find behind the oak tree?", options: ["A treasure chest", "A magical garden", "A secret door", "A pond"], correctAnswer: 1, maxScore: 15, typeLabel: "Dysphasia Support" },
+    young: [
+        // Section 1 – Reading & Comprehension (Q1–Q10)
+        { id: 1, title: "📖 The Happy Butterfly", description: "Answer the question.", type: "dysphasia", content: "Who was flying from flower to flower in the story 'The Happy Butterfly'?", options: ["Bee", "Butterfly", "Bird", "Ladybug"], correctAnswer: 1, maxScore: 15, typeLabel: "Dysphasia Support" },
+        { id: 2, title: "📖 The Happy Butterfly", description: "Answer the question.", type: "dysphasia", content: "Where was the butterfly?", options: ["In the forest", "In the garden", "In the house", "By the river"], correctAnswer: 1, maxScore: 15, typeLabel: "Dysphasia Support" },
+        { id: 3, title: "📖 The Happy Butterfly", description: "Answer the question.", type: "dysphasia", content: "How did the butterfly feel?", options: ["Sad", "Scared", "Happy", "Angry"], correctAnswer: 2, maxScore: 15, typeLabel: "Dysphasia Support" },
+        { id: 4, title: "🏞️ Fun at the Park", description: "Answer the question.", type: "dysphasia", content: "Who went to the park in 'Fun at the Park'?", options: ["Sarah and Tom", "Ben and Mia", "Lily and Jack", "Tom and Jake"], correctAnswer: 0, maxScore: 15, typeLabel: "Dysphasia Support" },
+        { id: 5, title: "🏞️ Fun at the Park", description: "Answer the question.", type: "dysphasia", content: "What did they play on at the park?", options: ["Swings and slides", "Seesaw and sandbox", "Bikes and balls", "Kites and ropes"], correctAnswer: 0, maxScore: 15, typeLabel: "Dysphasia Support" },
+        { id: 6, title: "🐟 My Pet Fish", description: "Answer the question.", type: "dysphasia", content: "What is the pet’s name in 'My Pet Fish'?", options: ["Goldy", "Bluey", "Bubbles", "Finny"], correctAnswer: 1, maxScore: 15, typeLabel: "Dysphasia Support" },
+        { id: 7, title: "🐟 My Pet Fish", description: "Answer the question.", type: "dysphasia", content: "What color is Bluey?", options: ["Blue", "Red", "Green", "Yellow"], correctAnswer: 0, maxScore: 15, typeLabel: "Dysphasia Support" },
+        { id: 8, title: "🐱 The Lost Kitten", description: "Answer the question.", type: "dysphasia", content: "Where did Sarah find the kitten in 'The Lost Kitten'?", options: ["In her backyard", "In the park", "On the road", "At school"], correctAnswer: 0, maxScore: 15, typeLabel: "Dysphasia Support" },
+        { id: 9, title: "🐱 The Lost Kitten", description: "Answer the question.", type: "dysphasia", content: "What name did Sarah give the kitten?", options: ["Whiskers", "Snowy", "Fluffy", "Kitty"], correctAnswer: 2, maxScore: 15, typeLabel: "Dysphasia Support" },
+        { id: 10, title: "🌳 The Oak Tree", description: "Answer the question.", type: "dysphasia", content: "What did Tommy and Lily find behind the oak tree?", options: ["A treasure chest", "A magical garden", "A secret door", "A pond"], correctAnswer: 1, maxScore: 15, typeLabel: "Dysphasia Support" },
 
-		// Section 2 – Mathematics & Logic (Q11–Q20)
-		{ id: 11, title: "🧮 Mathematics", description: "Solve the problem.", type: "dyscalculia", content: "7 + 2 = ?", options: ["8", "9", "10", "11"], correctAnswer: 1, maxScore: 15, typeLabel: "Dyscalculia Support" },
-		{ id: 12, title: "🧮 Mathematics", description: "Solve the problem.", type: "dyscalculia", content: "4 + 6 = ?", options: ["9", "10", "11", "8"], correctAnswer: 1, maxScore: 15, typeLabel: "Dyscalculia Support" },
-		{ id: 13, title: "🧮 Mathematics", description: "Solve the problem.", type: "dyscalculia", content: "9 + 1 = ?", options: ["9", "10", "11", "12"], correctAnswer: 1, maxScore: 15, typeLabel: "Dyscalculia Support" },
-		{ id: 14, title: "➖ Subtraction", description: "Solve the problem.", type: "dyscalculia", content: "10 – 4 = ?", options: ["5", "6", "7", "8"], correctAnswer: 1, maxScore: 15, typeLabel: "Dyscalculia Support" },
-		{ id: 15, title: "➖ Subtraction", description: "Solve the problem.", type: "dyscalculia", content: "8 – 5 = ?", options: ["2", "3", "4", "5"], correctAnswer: 1, maxScore: 15, typeLabel: "Dyscalculia Support" },
-		{ id: 16, title: "✖️ Multiplication", description: "Solve the problem.", type: "dyscalculia", content: "2 × 3 = ?", options: ["5", "6", "7", "8"], correctAnswer: 1, maxScore: 15, typeLabel: "Dyscalculia Support" },
-		{ id: 17, title: "✖️ Multiplication", description: "Solve the problem.", type: "dyscalculia", content: "4 × 2 = ?", options: ["6", "7", "8", "9"], correctAnswer: 2, maxScore: 15, typeLabel: "Dyscalculia Support" },
-		{ id: 18, title: "🧮 Word Problem", description: "Solve the problem.", type: "dyscalculia", content: "John has 5 apples and buys 3 more. How many now?", options: ["6 apples", "7 apples", "8 apples", "9 apples"], correctAnswer: 2, maxScore: 15, typeLabel: "Dyscalculia Support" },
-		{ id: 19, title: "🧮 Word Problem", description: "Solve the problem.", type: "dyscalculia", content: "There are 8 birds on a tree; 4 fly away. How many left?", options: ["3 birds", "4 birds", "5 birds", "6 birds"], correctAnswer: 1, maxScore: 15, typeLabel: "Dyscalculia Support" },
-		{ id: 20, title: "✖️ Word Problem", description: "Solve the problem.", type: "dyscalculia", content: "Sally has 2 bags with 5 candies each. Total candies = ?", options: ["8 candies", "9 candies", "10 candies", "12 candies"], correctAnswer: 2, maxScore: 15, typeLabel: "Dyscalculia Support" }
-	],
-	middle: [],
-	older: []
+        // Section 2 – Mathematics & Logic (Q11–Q20)
+        { id: 11, title: "🧮 Mathematics", description: "Solve the problem.", type: "dyscalculia", content: "7 + 2 = ?", options: ["8", "9", "10", "11"], correctAnswer: 1, maxScore: 15, typeLabel: "Dyscalculia Support" },
+        { id: 12, title: "🧮 Mathematics", description: "Solve the problem.", type: "dyscalculia", content: "4 + 6 = ?", options: ["9", "10", "11", "8"], correctAnswer: 1, maxScore: 15, typeLabel: "Dyscalculia Support" },
+        { id: 13, title: "🧮 Mathematics", description: "Solve the problem.", type: "dyscalculia", content: "9 + 1 = ?", options: ["9", "10", "11", "12"], correctAnswer: 1, maxScore: 15, typeLabel: "Dyscalculia Support" },
+        { id: 14, title: "➖ Subtraction", description: "Solve the problem.", type: "dyscalculia", content: "10 – 4 = ?", options: ["5", "6", "7", "8"], correctAnswer: 1, maxScore: 15, typeLabel: "Dyscalculia Support" },
+        { id: 15, title: "➖ Subtraction", description: "Solve the problem.", type: "dyscalculia", content: "8 – 5 = ?", options: ["2", "3", "4", "5"], correctAnswer: 1, maxScore: 15, typeLabel: "Dyscalculia Support" },
+        { id: 16, title: "✖️ Multiplication", description: "Solve the problem.", type: "dyscalculia", content: "2 × 3 = ?", options: ["5", "6", "7", "8"], correctAnswer: 1, maxScore: 15, typeLabel: "Dyscalculia Support" },
+        { id: 17, title: "✖️ Multiplication", description: "Solve the problem.", type: "dyscalculia", content: "4 × 2 = ?", options: ["6", "7", "8", "9"], correctAnswer: 2, maxScore: 15, typeLabel: "Dyscalculia Support" },
+        { id: 18, title: "🧮 Word Problem", description: "Solve the problem.", type: "dyscalculia", content: "John has 5 apples and buys 3 more. How many now?", options: ["6 apples", "7 apples", "8 apples", "9 apples"], correctAnswer: 2, maxScore: 15, typeLabel: "Dyscalculia Support" },
+        { id: 19, title: "🧮 Word Problem", description: "Solve the problem.", type: "dyscalculia", content: "There are 8 birds on a tree; 4 fly away. How many left?", options: ["3 birds", "4 birds", "5 birds", "6 birds"], correctAnswer: 1, maxScore: 15, typeLabel: "Dyscalculia Support" },
+        { id: 20, title: "✖️ Word Problem", description: "Solve the problem.", type: "dyscalculia", content: "Sally has 2 bags with 5 candies each. Total candies = ?", options: ["8 candies", "9 candies", "10 candies", "12 candies"], correctAnswer: 2, maxScore: 15, typeLabel: "Dyscalculia Support" }
+    ],
+    middle: [],
+    older: []
 };
 
 // DOM Elements
@@ -127,12 +127,21 @@ const elements = {
 
 // Initialize Game
 function initGame() {
+    // Check for URL parameters to pre-fill student name
+    const urlParams = new URLSearchParams(window.location.search);
+    const studentName = urlParams.get('name');
+    if (studentName) {
+        if (elements.playerName) {
+            elements.playerName.value = decodeURIComponent(studentName);
+        }
+    }
+
     // Initialize challenges based on default age group
     gameState.challenges = [...challengesByAge[gameState.ageGroup]].sort(() => Math.random() - 0.5);
-    
+
     // Initialize speech synthesis
     initSpeechSynthesis();
-    
+
     // Event Listeners
     elements.startGame.addEventListener('click', startGame);
     document.getElementById('start-quiz').addEventListener('click', startQuiz);
@@ -149,7 +158,7 @@ function initGame() {
             readActiveScreen();
         });
     }
-    
+
     // Age group selection
     document.querySelectorAll('.age-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
@@ -159,23 +168,23 @@ function initGame() {
             gameState.challenges = [...challengesByAge[gameState.ageGroup]].sort(() => Math.random() - 0.5);
         });
     });
-    
+
     // Accessibility controls
     elements.fontSizeToggle.addEventListener('click', toggleLargeFont);
     elements.highContrastToggle.addEventListener('click', toggleHighContrast);
     elements.dyslexiaFontToggle.addEventListener('click', toggleDyslexiaFont);
     elements.readingGuideToggle.addEventListener('click', toggleReadingGuide);
-    
+
     // Enter key for player name
     elements.playerName.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             startGame();
         }
     });
-    
+
     // Add student background animations
     addStudentBackgroundAnimations();
-    
+
     // Initialize accessibility features
     initAccessibility();
 }
@@ -322,7 +331,7 @@ function initAccessibility() {
 // Apply accessibility settings
 function applyAccessibilitySettings() {
     const body = document.body;
-    
+
     // Large font
     if (gameState.accessibility.largeFont) {
         body.classList.add('large-font');
@@ -331,7 +340,7 @@ function applyAccessibilitySettings() {
         body.classList.remove('large-font');
         elements.fontSizeToggle.classList.remove('active');
     }
-    
+
     // High contrast
     if (gameState.accessibility.highContrast) {
         body.classList.add('high-contrast');
@@ -340,7 +349,7 @@ function applyAccessibilitySettings() {
         body.classList.remove('high-contrast');
         elements.highContrastToggle.classList.remove('active');
     }
-    
+
     // Dyslexia font
     if (gameState.accessibility.dyslexiaFont) {
         body.classList.add('dyslexia-font');
@@ -349,7 +358,7 @@ function applyAccessibilitySettings() {
         body.classList.remove('dyslexia-font');
         elements.dyslexiaFontToggle.classList.remove('active');
     }
-    
+
     // Reading guide
     if (gameState.accessibility.readingGuide) {
         elements.readingGuide.classList.add('active');
@@ -358,7 +367,7 @@ function applyAccessibilitySettings() {
         elements.readingGuide.classList.remove('active');
         elements.readingGuideToggle.classList.remove('active');
     }
-    
+
     // Save preferences
     localStorage.setItem('studentGameAccessibility', JSON.stringify(gameState.accessibility));
 }
@@ -385,13 +394,13 @@ function toggleDyslexiaFont() {
 function toggleReadingGuide() {
     gameState.accessibility.readingGuide = !gameState.accessibility.readingGuide;
     applyAccessibilitySettings();
-    
+
     // If reading guide is activated, speak the current challenge
     if (gameState.accessibility.readingGuide && gameState.currentChallenge < gameState.challenges.length) {
         const challenge = gameState.challenges[gameState.currentChallenge];
         const textToSpeak = `${challenge.title}. ${challenge.description}. ${challenge.content}`;
         speakText(textToSpeak, 0.9, 1.1);
-        
+
         // Enable reading guide line with focus only (no mouse tracking)
         if (!readingGuideFocusHandler) {
             readingGuideFocusHandler = (e) => {
@@ -426,7 +435,7 @@ function toggleReadingGuide() {
 // Add student background animations
 function addStudentBackgroundAnimations() {
     const studentIcons = document.querySelectorAll('.floating-student-icon');
-    
+
     studentIcons.forEach((icon, index) => {
         icon.style.animationDelay = `${index * 0.5}s`;
     });
@@ -435,7 +444,7 @@ function addStudentBackgroundAnimations() {
 // Create celebration effect
 function createCelebration() {
     const colors = ['#2563eb', '#10b981', '#f59e0b', '#8b5cf6'];
-    
+
     for (let i = 0; i < 30; i++) {
         const confetti = document.createElement('div');
         confetti.style.cssText = `
@@ -452,7 +461,7 @@ function createCelebration() {
         `;
         confetti.style.animationDelay = `${Math.random() * 3}s`;
         document.body.appendChild(confetti);
-        
+
         setTimeout(() => {
             confetti.remove();
         }, 6000);
@@ -466,7 +475,7 @@ function startGame() {
         showMessage('Please enter your name to start your learning adventure!', 'warning');
         return;
     }
-    
+
     gameState.playerName = playerName;
     gameState.currentChallenge = 0;
     gameState.score = 0;
@@ -480,7 +489,7 @@ function startGame() {
         dysphasia: 0,
         dysgraphia: 0
     };
-    
+
     // Reset disorder assessment
     gameState.disorderAssessment = {
         dyscalculiaScore: 0,
@@ -490,13 +499,13 @@ function startGame() {
         totalDysphasiaChallenges: 0,
         totalDysgraphiaChallenges: 0
     };
-    
+
     // Shuffle challenges for this session
     gameState.challenges = [...challengesByAge[gameState.ageGroup]].sort(() => Math.random() - 0.5);
-    
+
     // Show passages screen first
     showScreen('passages-screen');
-    
+
     // Create celebration for starting
     createCelebration();
 }
@@ -514,7 +523,7 @@ function showScreen(screenId) {
     document.querySelectorAll('.screen').forEach(screen => {
         screen.classList.remove('active');
     });
-    
+
     // Show target screen
     document.getElementById(screenId).classList.add('active');
 }
@@ -523,7 +532,7 @@ function showScreen(screenId) {
 function updateGameUI() {
     elements.currentPlayer.textContent = gameState.playerName;
     elements.currentScore.textContent = gameState.score;
-    
+
     const progress = ((gameState.currentChallenge + 1) / gameState.challenges.length) * 100;
     elements.progressFill.style.width = progress + '%';
 }
@@ -534,17 +543,17 @@ function displayChallenge() {
         showResults();
         return;
     }
-    
+
     const challenge = gameState.challenges[gameState.currentChallenge];
-    
+
     elements.challengeTitle.textContent = challenge.title;
     elements.challengeDescription.textContent = challenge.description;
     elements.challengeContent.innerHTML = challenge.content;
     elements.challengeType.textContent = challenge.typeLabel;
-    
+
     // Clear previous options
     elements.challengeOptions.innerHTML = '';
-    
+
     if (challenge.options) {
         challenge.options.forEach((option, index) => {
             const button = document.createElement('button');
@@ -573,7 +582,7 @@ function displayChallenge() {
             color: var(--text-dark);
         `;
         elements.challengeOptions.appendChild(input);
-        
+
         const submitBtn = document.createElement('button');
         submitBtn.className = 'option-btn';
         submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Your Answer';
@@ -581,9 +590,9 @@ function displayChallenge() {
         submitBtn.addEventListener('click', () => submitCreativeAnswer(input.value));
         elements.challengeOptions.appendChild(submitBtn);
     }
-    
+
     updateGameUI();
-    
+
     // If reading guide is active, speak the challenge
     if (gameState.accessibility.readingGuide) {
         const textToSpeak = `${challenge.title}. ${challenge.description}. ${challenge.content}`;
@@ -595,10 +604,10 @@ function displayChallenge() {
 function selectAnswer(selectedIndex) {
     const challenge = gameState.challenges[gameState.currentChallenge];
     const buttons = elements.challengeOptions.querySelectorAll('.option-btn');
-    
+
     // Disable all buttons
     buttons.forEach(btn => btn.disabled = true);
-    
+
     // Track disorder-specific performance
     if (challenge.type === 'dyscalculia') {
         gameState.disorderAssessment.totalDyscalculiaChallenges++;
@@ -616,16 +625,16 @@ function selectAnswer(selectedIndex) {
             gameState.disorderAssessment.dysgraphiaScore += challenge.maxScore;
         }
     }
-    
+
     if (selectedIndex === challenge.correctAnswer) {
         buttons[selectedIndex].classList.add('correct');
         gameState.score += challenge.maxScore;
         gameState.talentScores[challenge.type] += challenge.maxScore;
-        
+
         // Show success message with celebration
         showMessage('🎉 Correct! Excellent work! 🎉', 'success');
         createCelebration();
-        
+
         // Speak success message
         if (gameState.accessibility.readingGuide) {
             speakText('Correct! Excellent work!', 0.8, 1.2);
@@ -633,16 +642,16 @@ function selectAnswer(selectedIndex) {
     } else {
         buttons[selectedIndex].classList.add('incorrect');
         buttons[challenge.correctAnswer].classList.add('correct');
-        
+
         // Show encouraging feedback
         showMessage('💡 Great try! The correct answer was highlighted. Keep going! 💪', 'info');
-        
+
         // Speak feedback
         if (gameState.accessibility.readingGuide) {
             speakText('Great try! The correct answer was highlighted. Keep going!', 0.8, 1);
         }
     }
-    
+
     // Enable next challenge button
     elements.nextChallenge.disabled = false;
 }
@@ -650,30 +659,30 @@ function selectAnswer(selectedIndex) {
 // Submit Creative Answer
 function submitCreativeAnswer(answer) {
     const challenge = gameState.challenges[gameState.currentChallenge];
-    
+
     if (answer.trim()) {
         // For creativity challenges, give points for participation and effort
         const score = Math.min(challenge.maxScore, Math.floor(answer.length / 10) + 5);
         gameState.score += score;
         gameState.talentScores[challenge.type] += score;
-        
+
         showMessage(`🎨 Creative answer! You earned ${score} points! ✨`, 'success');
         createCelebration();
-        
+
         // Speak success message
         if (gameState.accessibility.readingGuide) {
             speakText(`Creative answer! You earned ${score} points!`, 0.8, 1.2);
         }
     } else {
         showMessage('Please write something creative and thoughtful!', 'warning');
-        
+
         // Speak warning
         if (gameState.accessibility.readingGuide) {
             speakText('Please write something creative and thoughtful!', 0.8, 1);
         }
         return;
     }
-    
+
     elements.nextChallenge.disabled = false;
 }
 
@@ -697,7 +706,7 @@ function showMessage(message, type) {
         line-height: 1.4;
         letter-spacing: 0.02em;
     `;
-    
+
     switch (type) {
         case 'success':
             messageDiv.style.background = 'linear-gradient(45deg, var(--accent-green), var(--accent-purple))';
@@ -709,10 +718,10 @@ function showMessage(message, type) {
             messageDiv.style.background = 'linear-gradient(45deg, var(--accent-orange), #f97316)';
             break;
     }
-    
+
     messageDiv.textContent = message;
     document.body.appendChild(messageDiv);
-    
+
     setTimeout(() => {
         messageDiv.style.animation = 'slideOutRight 0.6s ease';
         setTimeout(() => {
@@ -732,17 +741,17 @@ function nextChallenge() {
 function assessLearningDisorders() {
     const assessment = gameState.disorderAssessment;
     const disorders = [];
-    
+
     // Calculate percentages for each disorder type
-    const dyscalculiaPercentage = assessment.totalDyscalculiaChallenges > 0 ? 
+    const dyscalculiaPercentage = assessment.totalDyscalculiaChallenges > 0 ?
         (assessment.dyscalculiaScore / (assessment.totalDyscalculiaChallenges * 15)) * 100 : 0;
-    
-    const dysphasiaPercentage = assessment.totalDysphasiaChallenges > 0 ? 
+
+    const dysphasiaPercentage = assessment.totalDysphasiaChallenges > 0 ?
         (assessment.dysphasiaScore / (assessment.totalDysphasiaChallenges * 15)) * 100 : 0;
-    
-    const dysgraphiaPercentage = assessment.totalDysgraphiaChallenges > 0 ? 
+
+    const dysgraphiaPercentage = assessment.totalDysgraphiaChallenges > 0 ?
         (assessment.dysgraphiaScore / (assessment.totalDysgraphiaChallenges * 15)) * 100 : 0;
-    
+
     // Determine potential disorders based on performance thresholds
     if (dyscalculiaPercentage < 60 && assessment.totalDyscalculiaChallenges >= 2) {
         disorders.push({
@@ -753,7 +762,7 @@ function assessLearningDisorders() {
             icon: '🔢'
         });
     }
-    
+
     if (dysphasiaPercentage < 60 && assessment.totalDysphasiaChallenges >= 2) {
         disorders.push({
             name: 'Dysphasia',
@@ -763,7 +772,7 @@ function assessLearningDisorders() {
             icon: '🗣️'
         });
     }
-    
+
     if (dysgraphiaPercentage < 60 && assessment.totalDysgraphiaChallenges >= 2) {
         disorders.push({
             name: 'Dysgraphia',
@@ -773,7 +782,7 @@ function assessLearningDisorders() {
             icon: '✏️'
         });
     }
-    
+
     return disorders;
 }
 
@@ -781,33 +790,33 @@ function assessLearningDisorders() {
 function showResults() {
     const totalPossible = gameState.challenges.length * 15; // Average score across new difficulties
     const percentage = Math.round((gameState.score / totalPossible) * 100);
-    
+
     // Create celebration effect
     createCelebration();
-    
+
     elements.finalScore.textContent = `Final Score: ${gameState.score}/${totalPossible} (${percentage}%)`;
-    
+
     // Display talent breakdown
     elements.talentResults.innerHTML = '';
     Object.entries(gameState.talentScores).forEach(([talent, score]) => {
         if (score > 0) { // Only show categories with scores
             const talentItem = document.createElement('div');
             talentItem.className = 'talent-item';
-            
+
             const talentName = document.createElement('span');
             talentName.className = 'talent-name';
             talentName.textContent = getTalentDisplayName(talent);
-            
+
             const talentScore = document.createElement('span');
             talentScore.className = 'talent-score';
             talentScore.textContent = `${score} points`;
-            
+
             talentItem.appendChild(talentName);
             talentItem.appendChild(talentScore);
             elements.talentResults.appendChild(talentItem);
         }
     });
-    
+
     // Add learning disorder assessment
     const disorders = assessLearningDisorders();
     if (disorders.length > 0) {
@@ -820,7 +829,7 @@ function showResults() {
             border-radius: 20px;
             border: 2px solid #f59e0b;
         `;
-        
+
         const disorderTitle = document.createElement('h3');
         disorderTitle.textContent = '🎯 Learning Assessment Results';
         disorderTitle.style.cssText = `
@@ -830,7 +839,7 @@ function showResults() {
             text-align: center;
         `;
         disorderSection.appendChild(disorderTitle);
-        
+
         const disorderDescription = document.createElement('p');
         disorderDescription.textContent = 'Based on your performance, you may benefit from additional support in these areas:';
         disorderDescription.style.cssText = `
@@ -840,7 +849,7 @@ function showResults() {
             font-size: 1.1rem;
         `;
         disorderSection.appendChild(disorderDescription);
-        
+
         disorders.forEach(disorder => {
             const disorderCard = document.createElement('div');
             disorderCard.style.cssText = `
@@ -851,7 +860,7 @@ function showResults() {
                 border: 2px solid #f59e0b;
                 box-shadow: 0 5px 15px rgba(245, 158, 11, 0.2);
             `;
-            
+
             const disorderHeader = document.createElement('div');
             disorderHeader.style.cssText = `
                 display: flex;
@@ -859,11 +868,11 @@ function showResults() {
                 gap: 15px;
                 margin-bottom: 10px;
             `;
-            
+
             const disorderIcon = document.createElement('span');
             disorderIcon.textContent = disorder.icon;
             disorderIcon.style.fontSize = '2rem';
-            
+
             const disorderName = document.createElement('h4');
             disorderName.textContent = disorder.name;
             disorderName.style.cssText = `
@@ -871,7 +880,7 @@ function showResults() {
                 font-size: 1.3rem;
                 margin: 0;
             `;
-            
+
             const severityBadge = document.createElement('span');
             severityBadge.textContent = disorder.severity;
             severityBadge.style.cssText = `
@@ -883,12 +892,12 @@ function showResults() {
                 font-weight: 600;
                 margin-left: auto;
             `;
-            
+
             disorderHeader.appendChild(disorderIcon);
             disorderHeader.appendChild(disorderName);
             disorderHeader.appendChild(severityBadge);
             disorderCard.appendChild(disorderHeader);
-            
+
             const disorderDesc = document.createElement('p');
             disorderDesc.textContent = disorder.description;
             disorderDesc.style.cssText = `
@@ -897,7 +906,7 @@ function showResults() {
                 font-size: 1rem;
             `;
             disorderCard.appendChild(disorderDesc);
-            
+
             const performanceBar = document.createElement('div');
             performanceBar.style.cssText = `
                 background: #e5e7eb;
@@ -906,7 +915,7 @@ function showResults() {
                 overflow: hidden;
                 margin: 10px 0;
             `;
-            
+
             const performanceFill = document.createElement('div');
             performanceFill.style.cssText = `
                 background: linear-gradient(45deg, #f59e0b, #ef4444);
@@ -914,10 +923,10 @@ function showResults() {
                 width: ${disorder.percentage}%;
                 transition: width 1s ease;
             `;
-            
+
             performanceBar.appendChild(performanceFill);
             disorderCard.appendChild(performanceBar);
-            
+
             const performanceText = document.createElement('p');
             performanceText.textContent = `Performance: ${disorder.percentage}%`;
             performanceText.style.cssText = `
@@ -927,10 +936,10 @@ function showResults() {
                 font-size: 0.9rem;
             `;
             disorderCard.appendChild(performanceText);
-            
+
             disorderSection.appendChild(disorderCard);
         });
-        
+
         const recommendation = document.createElement('div');
         recommendation.style.cssText = `
             background: white;
@@ -939,7 +948,7 @@ function showResults() {
             margin-top: 20px;
             border: 2px solid #10b981;
         `;
-        
+
         const recommendationText = document.createElement('p');
         recommendationText.innerHTML = `<strong>💡 Recommendation:</strong> Consider consulting with an educational specialist for a comprehensive assessment. This game is designed for educational purposes and should not replace professional diagnosis.`;
         recommendationText.style.cssText = `
@@ -948,26 +957,26 @@ function showResults() {
             font-size: 0.9rem;
             line-height: 1.4;
         `;
-        
+
         recommendation.appendChild(recommendationText);
         disorderSection.appendChild(recommendation);
-        
+
         elements.talentResults.appendChild(disorderSection);
     }
-    
+
     // Save game results automatically
     saveGameResults(totalPossible, percentage, disorders);
-    
+
     showScreen('results-screen');
-    
+
     // Speak results if reading guide is active
     if (gameState.accessibility.readingGuide) {
         let resultsText = `Congratulations! You completed your learning adventure with a score of ${gameState.score} out of ${totalPossible}. That's ${percentage} percent!`;
-        
+
         if (disorders.length > 0) {
             resultsText += ` Based on your performance, you may benefit from additional support in ${disorders.length} area${disorders.length > 1 ? 's' : ''}. Please consult with an educational specialist for a comprehensive assessment.`;
         }
-        
+
         speakText(resultsText, 0.7, 1);
     }
 }
@@ -987,21 +996,21 @@ function saveGameResults(totalPossible, percentage, disorders) {
         challengesCompleted: gameState.challenges.length,
         accessibility: { ...gameState.accessibility }
     };
-    
+
     // Get existing results or create new array
     const existingResults = JSON.parse(localStorage.getItem('gameResults') || '[]');
-    
+
     // Add new result
     existingResults.push(gameResult);
-    
+
     // Keep only last 50 results to prevent localStorage overflow
     if (existingResults.length > 50) {
         existingResults.splice(0, existingResults.length - 50);
     }
-    
+
     // Save back to localStorage
     localStorage.setItem('gameResults', JSON.stringify(existingResults));
-    
+
     console.log('Game results saved:', gameResult);
 }
 
@@ -1035,7 +1044,7 @@ function restartGame() {
             dysphasia: 0,
             dysgraphia: 0
         };
-        
+
         // Reset disorder assessment
         gameState.disorderAssessment = {
             dyscalculiaScore: 0,
@@ -1045,7 +1054,7 @@ function restartGame() {
             totalDysphasiaChallenges: 0,
             totalDysgraphiaChallenges: 0
         };
-        
+
         updateGameUI();
         displayChallenge();
     }
@@ -1065,7 +1074,7 @@ function playAgain() {
         dysphasia: 0,
         dysgraphia: 0
     };
-    
+
     // Reset disorder assessment
     gameState.disorderAssessment = {
         dyscalculiaScore: 0,
@@ -1075,14 +1084,14 @@ function playAgain() {
         totalDysphasiaChallenges: 0,
         totalDysgraphiaChallenges: 0
     };
-    
+
     // Shuffle challenges again
     gameState.challenges = [...challengesByAge[gameState.ageGroup]].sort(() => Math.random() - 0.5);
-    
+
     showScreen('game-screen');
     updateGameUI();
     displayChallenge();
-    
+
     // Create celebration for new game
     createCelebration();
 }
