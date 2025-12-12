@@ -1,4 +1,4 @@
-// Teacher Dashboard JavaScript
+// Consultant Dashboard JavaScript
 const API_BASE = '';
 
 // API Helper
@@ -29,7 +29,7 @@ function showToast(message, type = 'success') {
 
 // Get user info
 function getUserInfo() {
-    const userName = localStorage.getItem('userName') || 'Teacher';
+    const userName = localStorage.getItem('userName') || 'Consultant';
     const userRole = localStorage.getItem('userRole') || 'teacher';
 
     const nameEl = document.getElementById('userName');

@@ -2,180 +2,203 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description"
-    content="Dyslexia Detection Learning Platform - Login to access interactive learning tools designed for students with learning differences." />
-  <title>Login - Dyslexia Detection Learning Platform</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="DysLearn - Dyslexia Detection Platform for Consultants">
+  <title>DysLearn - Consultant Login</title>
 
-  <!-- External Stylesheets -->
-  <link rel="stylesheet" href="css/common.css" />
-  <link rel="stylesheet" href="css/login.css" />
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <link rel="stylesheet" href="css/login.css">
 </head>
 
 <body>
+  <div class="login-container">
+    <!-- Left Side - Branding -->
+    <div class="login-branding">
+      <div class="brand-content">
+        <div class="brand-logo">
+          <i class="fas fa-brain"></i>
+          <span>DysLearn</span>
+        </div>
+        <h1>Empowering Learning<br>Through Detection</h1>
+        <p>Advanced dyslexia screening and learning support platform designed for educational consultants.</p>
 
-  <div class="container">
-    <div class="left">
-      <section class="stage" aria-hidden="true">
-        <div class="hud">
-          <div class="brand">Animated <span class="accent">Login</span></div>
-          <div style="opacity:.85;font-size:12px">for students</div>
+        <div class="brand-features">
+          <div class="feature-item">
+            <div class="feature-icon">
+              <i class="fas fa-clipboard-check"></i>
+            </div>
+            <div class="feature-text">
+              <h4>Smart Screening</h4>
+              <p>AI-powered assessments</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">
+              <i class="fas fa-chart-line"></i>
+            </div>
+            <div class="feature-text">
+              <h4>Progress Tracking</h4>
+              <p>Real-time analytics</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">
+              <i class="fas fa-user-graduate"></i>
+            </div>
+            <div class="feature-text">
+              <h4>Student Management</h4>
+              <p>Complete profiles</p>
+            </div>
+          </div>
         </div>
-        <div class="bubble">
-          <span></span><span></span><span></span><span></span>
-        </div>
-        <div class="scene">
-          <div class="floor"></div>
-          <div class="character" title="Welcome">🧑‍🎓</div>
-          <div class="suitcase" title="Ready to learn?">💼</div>
-        </div>
-      </section>
+      </div>
+
+      <div class="brand-decoration">
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
+        <div class="circle circle-3"></div>
+      </div>
     </div>
 
-    <div class="right">
-      <div class="toggle-buttons">
-        <button id="studentBtn" class="active" data-role="student">Student</button>
-        <button id="teacherBtn" data-role="teacher">Teacher</button>
-      </div>
+    <!-- Right Side - Login Form -->
+    <div class="login-form-section">
+      <div class="form-container">
+        <div class="form-header">
+          <h2 id="formTitle">Welcome Back</h2>
+          <p id="formSubtitle">Sign in to your consultant account</p>
+        </div>
 
-      <!-- Student Login -->
-      <div id="studentForm" class="login-box active">
-        <h2>Student Login</h2>
-        <form id="studentLoginForm">
-          <label>Email Address</label>
-          <input type="email" id="studentEmail" placeholder="Enter email" value="student@example.com" required />
-          <div class="error-message" id="studentEmailError"></div>
-
-          <label>Password</label>
-          <div class="password-wrapper">
-            <input type="password" id="studentPassword" value="password123" required />
-            <span data-toggle-password="studentPassword" class="toggle-eye">👁️</span>
+        <!-- Login Form -->
+        <form id="loginForm" class="auth-form active">
+          <div class="form-group">
+            <label for="loginEmail">Email Address</label>
+            <div class="input-wrapper">
+              <i class="fas fa-envelope"></i>
+              <input type="email" id="loginEmail" placeholder="consultant@example.com" required>
+            </div>
           </div>
-          <div class="error-message" id="studentPasswordError"></div>
 
-          <a href="#">Forgot Password?</a>
-          <button type="submit" class="login-btn">Log in</button>
+          <div class="form-group">
+            <label for="loginPassword">Password</label>
+            <div class="input-wrapper">
+              <i class="fas fa-lock"></i>
+              <input type="password" id="loginPassword" placeholder="Enter your password" required>
+              <button type="button" class="toggle-password" data-target="loginPassword">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-options">
+            <label class="checkbox-label">
+              <input type="checkbox" id="rememberMe">
+              <span>Remember me</span>
+            </label>
+            <a href="#" class="forgot-link">Forgot password?</a>
+          </div>
+
+          <button type="submit" class="btn-submit">
+            <span>Sign In</span>
+            <i class="fas fa-arrow-right"></i>
+          </button>
         </form>
 
-        <div class="switch-form">
-          <a id="studentRegisterLink" data-role="student">Don't have an account? Create new user</a>
-        </div>
-      </div>
-
-      <!-- Student Registration -->
-      <div id="studentRegisterForm" class="register-box">
-        <h2>Student Registration</h2>
-        <form id="studentRegisterFormSubmit">
+        <!-- Registration Form -->
+        <form id="registerForm" class="auth-form">
           <div class="form-row">
-            <div>
-              <label>First Name</label>
-              <input type="text" id="studentFirstName" placeholder="First name" required />
+            <div class="form-group">
+              <label for="firstName">First Name</label>
+              <div class="input-wrapper">
+                <i class="fas fa-user"></i>
+                <input type="text" id="firstName" placeholder="John" required>
+              </div>
             </div>
-            <div>
-              <label>Last Name</label>
-              <input type="text" id="studentLastName" placeholder="Last name" required />
+            <div class="form-group">
+              <label for="lastName">Last Name</label>
+              <div class="input-wrapper">
+                <i class="fas fa-user"></i>
+                <input type="text" id="lastName" placeholder="Doe" required>
+              </div>
             </div>
           </div>
 
-          <label>Email Address</label>
-          <input type="email" id="studentRegEmail" placeholder="Enter email" required />
-
-          <label>Student ID</label>
-          <input type="text" id="studentId" placeholder="Enter student ID" required />
-
-          <label>Password</label>
-          <div class="password-wrapper">
-            <input type="password" id="studentRegPassword" placeholder="Enter password" required />
-            <span data-toggle-password="studentRegPassword" class="toggle-eye">👁️</span>
+          <div class="form-group">
+            <label for="regEmail">Email Address</label>
+            <div class="input-wrapper">
+              <i class="fas fa-envelope"></i>
+              <input type="email" id="regEmail" placeholder="consultant@example.com" required>
+            </div>
           </div>
 
-          <label>Confirm Password</label>
-          <div class="password-wrapper">
-            <input type="password" id="studentConfirmPassword" placeholder="Confirm password" required />
-            <span data-toggle-password="studentConfirmPassword" class="toggle-eye">👁️</span>
-          </div>
-
-          <button type="submit" class="register-btn">Create Account</button>
-        </form>
-
-        <div class="switch-form">
-          <a id="studentLoginLink" data-role="student">Already have an account? Login</a>
-        </div>
-      </div>
-
-      <!-- Teacher Login -->
-      <div id="teacherForm" class="login-box">
-        <h2>Teacher Login</h2>
-        <form id="teacherLoginForm">
-          <label>Email Address</label>
-          <input type="email" id="teacherEmail" placeholder="Enter email" value="teacher@example.com" required />
-
-          <label>Password</label>
-          <div class="password-wrapper">
-            <input type="password" id="teacherPassword" value="teachme123" required />
-            <span data-toggle-password="teacherPassword" class="toggle-eye">👁️</span>
-          </div>
-
-          <a href="#">Forgot Password?</a>
-          <button type="submit" class="login-btn">Log in</button>
-        </form>
-
-        <div class="switch-form">
-          <a id="teacherRegisterLink" data-role="teacher">Don't have an account? Create new user</a>
-        </div>
-      </div>
-
-      <!-- Teacher Registration -->
-      <div id="teacherRegisterForm" class="register-box">
-        <h2>Teacher Registration</h2>
-        <form id="teacherRegisterFormSubmit">
           <div class="form-row">
-            <div>
-              <label>First Name</label>
-              <input type="text" id="teacherFirstName" placeholder="First name" required />
+            <div class="form-group">
+              <label for="department">Department</label>
+              <div class="input-wrapper">
+                <i class="fas fa-building"></i>
+                <input type="text" id="department" placeholder="Special Education">
+              </div>
             </div>
-            <div>
-              <label>Last Name</label>
-              <input type="text" id="teacherLastName" placeholder="Last name" required />
+            <div class="form-group">
+              <label for="employeeId">Employee ID</label>
+              <div class="input-wrapper">
+                <i class="fas fa-id-badge"></i>
+                <input type="text" id="employeeId" placeholder="EMP001">
+              </div>
             </div>
           </div>
 
-          <label>Email Address</label>
-          <input type="email" id="teacherRegEmail" placeholder="Enter email" required />
-
-          <label>Department</label>
-          <input type="text" id="teacherDepartment" placeholder="Enter department" required />
-
-          <label>Employee ID</label>
-          <input type="text" id="teacherEmployeeId" placeholder="Enter employee ID" required />
-
-          <label>Password</label>
-          <div class="password-wrapper">
-            <input type="password" id="teacherRegPassword" placeholder="Enter password" required />
-            <span data-toggle-password="teacherRegPassword" class="toggle-eye">👁️</span>
+          <div class="form-group">
+            <label for="regPassword">Password</label>
+            <div class="input-wrapper">
+              <i class="fas fa-lock"></i>
+              <input type="password" id="regPassword" placeholder="Min. 8 characters" required>
+              <button type="button" class="toggle-password" data-target="regPassword">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
           </div>
 
-          <label>Confirm Password</label>
-          <div class="password-wrapper">
-            <input type="password" id="teacherConfirmPassword" placeholder="Confirm password" required />
-            <span data-toggle-password="teacherConfirmPassword" class="toggle-eye">👁️</span>
+          <div class="form-group">
+            <label for="confirmPassword">Confirm Password</label>
+            <div class="input-wrapper">
+              <i class="fas fa-lock"></i>
+              <input type="password" id="confirmPassword" placeholder="Confirm password" required>
+              <button type="button" class="toggle-password" data-target="confirmPassword">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
           </div>
 
-          <button type="submit" class="register-btn">Create Account</button>
+          <button type="submit" class="btn-submit">
+            <span>Create Account</span>
+            <i class="fas fa-arrow-right"></i>
+          </button>
         </form>
 
-        <div class="switch-form">
-          <a id="teacherLoginLink" data-role="teacher">Already have an account? Login</a>
+        <!-- Success Message -->
+        <div class="success-message" id="successMessage">
+          <i class="fas fa-check-circle"></i>
+          <span></span>
+        </div>
+
+        <!-- Toggle Between Login/Register -->
+        <div class="form-switch">
+          <p id="switchText">Don't have an account?</p>
+          <button type="button" id="switchBtn" class="switch-link">Create Account</button>
         </div>
       </div>
-
-      <div class="success-message" id="successMessage"></div>
     </div>
   </div>
 
   <script src="js/login.js"></script>
-
 </body>
 
 </html>
