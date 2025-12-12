@@ -1,0 +1,1101 @@
+/* ===== DYSLEXIA-FRIENDLY STUDENT LEARNING ADVENTURE ===== */
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Dyslexia-friendly color palette */
+    --primary-blue: #2563eb;
+    --secondary-blue: #3b82f6;
+    --accent-green: #10b981;
+    --accent-orange: #f59e0b;
+    --accent-purple: #8b5cf6;
+    --text-dark: #1f2937;
+    --text-light: #6b7280;
+    --bg-light: #f9fafb;
+    --bg-white: #ffffff;
+    --border-light: #e5e7eb;
+    --shadow-light: rgba(0, 0, 0, 0.1);
+    --shadow-medium: rgba(0, 0, 0, 0.15);
+    
+    /* Typography */
+    --font-primary: 'Open Sans', sans-serif;
+    --font-dyslexia: 'Comic Neue', sans-serif;
+    --font-size-base: 18px;
+    --line-height-base: 1.6;
+    --letter-spacing-base: 0.05em;
+    --word-spacing-base: 0.1em;
+}
+
+body {
+    font-family: var(--font-primary);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-base);
+    letter-spacing: var(--letter-spacing-base);
+    word-spacing: var(--word-spacing-base);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+    color: var(--text-dark);
+}
+
+/* Student Background Elements */
+.student-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.floating-student-icon {
+    position: absolute;
+    font-size: 2.5rem;
+    opacity: 0.1;
+    animation: floatStudent 8s ease-in-out infinite;
+}
+
+.floating-student-icon:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+.floating-student-icon:nth-child(2) { top: 20%; right: 15%; animation-delay: 1s; }
+.floating-student-icon:nth-child(3) { bottom: 30%; left: 20%; animation-delay: 2s; }
+.floating-student-icon:nth-child(4) { bottom: 20%; right: 10%; animation-delay: 3s; }
+.floating-student-icon:nth-child(5) { top: 50%; left: 5%; animation-delay: 4s; }
+.floating-student-icon:nth-child(6) { top: 60%; right: 5%; animation-delay: 5s; }
+.floating-student-icon:nth-child(7) { top: 30%; left: 50%; animation-delay: 6s; }
+.floating-student-icon:nth-child(8) { bottom: 10%; left: 50%; animation-delay: 7s; }
+
+@keyframes floatStudent {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-30px) rotate(180deg); }
+}
+
+/* Accessibility Panel */
+.accessibility-panel {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px var(--shadow-medium);
+    backdrop-filter: blur(10px);
+}
+
+.accessibility-btn {
+    width: 50px;
+    height: 50px;
+    border: none;
+    border-radius: 12px;
+    background: var(--primary-blue);
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.accessibility-btn:hover {
+    background: var(--secondary-blue);
+    transform: scale(1.1);
+}
+
+.accessibility-btn.active {
+    background: var(--accent-green);
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+}
+
+/* Reading Guide */
+.reading-guide {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-orange), var(--accent-purple));
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.reading-guide.active {
+    opacity: 1;
+}
+
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+/* Screen Management */
+.screen {
+    display: none;
+    width: 100%;
+    max-width: 1000px;
+    background: var(--bg-white);
+    border-radius: 25px;
+    padding: 40px;
+    box-shadow: 0 25px 50px var(--shadow-medium);
+    backdrop-filter: blur(15px);
+    border: 2px solid var(--border-light);
+    animation: slideIn 0.8s ease-out;
+    position: relative;
+    overflow: hidden;
+}
+
+.screen::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-blue), var(--accent-green), var(--accent-orange), var(--accent-purple));
+    animation: rainbow 3s linear infinite;
+}
+
+@keyframes rainbow {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+}
+
+.screen.active {
+    display: block;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(50px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Welcome Screen */
+.welcome-content {
+    text-align: center;
+    position: relative;
+}
+
+.logo-section {
+    margin-bottom: 50px;
+}
+
+.logo-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+.title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    background: linear-gradient(45deg, var(--primary-blue), var(--accent-green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 20px;
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+}
+
+.subtitle {
+    font-size: 1.5rem;
+    color: var(--text-light);
+    margin-bottom: 30px;
+    font-weight: 400;
+}
+
+.accessibility-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(45deg, var(--accent-green), var(--accent-purple));
+    color: white;
+    padding: 12px 20px;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-top: 20px;
+}
+
+/* Student Setup */
+.student-setup {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    align-items: center;
+    margin-bottom: 50px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.input-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.input-label i {
+    color: var(--primary-blue);
+}
+
+#player-name {
+    padding: 20px 25px;
+    font-size: 1.3rem;
+    border: 3px solid var(--border-light);
+    border-radius: 15px;
+    outline: none;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    background: var(--bg-light);
+    line-height: 1.4;
+    letter-spacing: 0.02em;
+}
+
+#player-name:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 20px rgba(37, 99, 235, 0.2);
+    background: white;
+}
+
+/* Age Group Selection */
+.age-group-selection {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.age-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.age-btn {
+    padding: 15px 20px;
+    border: 2px solid var(--border-light);
+    border-radius: 12px;
+    background: var(--bg-light);
+    color: var(--text-dark);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex: 1;
+}
+
+.age-btn:hover {
+    border-color: var(--primary-blue);
+    background: white;
+}
+
+.age-btn.active {
+    background: var(--primary-blue);
+    color: white;
+    border-color: var(--primary-blue);
+}
+
+/* Buttons */
+.btn {
+    padding: 20px 30px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    line-height: 1.3;
+    letter-spacing: 0.02em;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 25px var(--shadow-light);
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px var(--shadow-medium);
+}
+
+.btn:active {
+    transform: translateY(-1px);
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, var(--primary-blue), var(--secondary-blue));
+    color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: linear-gradient(45deg, var(--secondary-blue), var(--primary-blue));
+}
+
+.btn-secondary {
+    background: linear-gradient(45deg, var(--accent-green), var(--accent-purple));
+    color: white;
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background: linear-gradient(45deg, var(--accent-purple), var(--accent-green));
+}
+
+/* Features Preview */
+.features-preview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin-top: 50px;
+}
+
+.feature-card {
+    background: var(--bg-light);
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    border: 2px solid var(--border-light);
+    transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px var(--shadow-medium);
+    border-color: var(--primary-blue);
+}
+
+.feature-card i {
+    font-size: 3rem;
+    color: var(--primary-blue);
+    margin-bottom: 20px;
+}
+
+.feature-card h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 15px;
+}
+
+.feature-card p {
+    color: var(--text-light);
+    line-height: 1.5;
+}
+
+/* Game Screen */
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    padding: 25px;
+    background: var(--bg-light);
+    border-radius: 20px;
+    border: 2px solid var(--border-light);
+}
+
+.player-info {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.player-avatar {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(45deg, var(--primary-blue), var(--accent-green));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.player-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#current-player {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.progress-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.progress-label {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    font-weight: 500;
+}
+
+.progress-bar {
+    width: 200px;
+    height: 12px;
+    background: var(--border-light);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+#progress-fill {
+    height: 100%;
+    background: linear-gradient(45deg, var(--accent-green), var(--accent-purple));
+    transition: width 0.8s ease;
+    border-radius: 6px;
+    position: relative;
+}
+
+#progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.score-display {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--accent-orange);
+    background: white;
+    padding: 15px 20px;
+    border-radius: 15px;
+    border: 2px solid var(--accent-orange);
+    box-shadow: 0 5px 15px rgba(245, 158, 11, 0.2);
+}
+
+.score-display i {
+    color: var(--accent-orange);
+}
+
+/* Game Content */
+.game-content {
+    margin: 40px 0;
+}
+
+#challenge-container {
+    background: var(--bg-light);
+    padding: 40px;
+    border-radius: 20px;
+    border: 2px solid var(--border-light);
+}
+
+.challenge-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+#challenge-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+}
+
+.challenge-type-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(45deg, var(--accent-green), var(--accent-purple));
+    color: white;
+    padding: 10px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.challenge-description {
+    font-size: 1.3rem;
+    color: var(--text-light);
+    margin-bottom: 30px;
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+}
+
+.challenge-content {
+    margin: 30px 0;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    background: white;
+    border-radius: 15px;
+    border: 2px solid var(--border-light);
+    padding: 30px;
+    line-height: 1.4;
+    letter-spacing: 0.02em;
+}
+
+.challenge-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.option-btn {
+    padding: 25px 30px;
+    font-size: 1.2rem;
+    background: linear-gradient(45deg, var(--accent-green), var(--accent-purple));
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    font-weight: 600;
+    box-shadow: 0 5px 15px var(--shadow-light);
+    line-height: 1.3;
+    letter-spacing: 0.02em;
+    position: relative;
+    overflow: hidden;
+}
+
+.option-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
+}
+
+.option-btn:hover::before {
+    left: 100%;
+}
+
+.option-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px var(--shadow-medium);
+}
+
+.option-btn.correct {
+    background: linear-gradient(45deg, var(--accent-green), #059669);
+    animation: correctAnswer 0.8s ease;
+    box-shadow: 0 0 30px rgba(16, 185, 129, 0.5);
+}
+
+.option-btn.incorrect {
+    background: linear-gradient(45deg, #ef4444, #dc2626);
+    animation: incorrectAnswer 0.8s ease;
+    box-shadow: 0 0 30px rgba(239, 68, 68, 0.5);
+}
+
+@keyframes correctAnswer {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes incorrectAnswer {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(0.95); }
+}
+
+.game-controls {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+/* Results Screen */
+.results-content {
+    text-align: center;
+}
+
+.results-header {
+    margin-bottom: 40px;
+}
+
+.celebration-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    animation: bounce 2s infinite;
+}
+
+.results-content h2 {
+    font-size: 3rem;
+    font-weight: 700;
+    background: linear-gradient(45deg, var(--primary-blue), var(--accent-green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 15px;
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+}
+
+.results-subtitle {
+    font-size: 1.3rem;
+    color: var(--text-light);
+    line-height: 1.4;
+}
+
+.score-summary {
+    margin-bottom: 40px;
+}
+
+.final-score-card {
+    display: inline-flex;
+    align-items: center;
+    gap: 15px;
+    background: linear-gradient(45deg, var(--accent-orange), var(--accent-purple));
+    color: white;
+    padding: 25px 30px;
+    border-radius: 20px;
+    font-size: 1.5rem;
+    font-weight: 600;
+    box-shadow: 0 10px 30px var(--shadow-medium);
+}
+
+.final-score-card i {
+    font-size: 2rem;
+}
+
+.talent-results {
+    margin: 40px 0;
+    padding: 30px;
+    background: var(--bg-light);
+    border-radius: 20px;
+    border: 2px solid var(--border-light);
+}
+
+.talent-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    margin: 15px 0;
+    background: white;
+    border-radius: 15px;
+    border: 2px solid var(--border-light);
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px var(--shadow-light);
+}
+
+.talent-item:hover {
+    transform: translateX(10px);
+    box-shadow: 0 10px 25px var(--shadow-medium);
+    border-color: var(--primary-blue);
+}
+
+.talent-name {
+    font-weight: 600;
+    color: var(--text-dark);
+    font-size: 1.3rem;
+    line-height: 1.3;
+}
+
+.talent-score {
+    font-weight: 600;
+    color: var(--accent-orange);
+    font-size: 1.3rem;
+    line-height: 1.3;
+}
+
+.results-actions {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    
+    .screen {
+        padding: 25px;
+        margin: 10px;
+    }
+    
+    .title {
+        font-size: 2.5rem;
+    }
+    
+    .subtitle {
+        font-size: 1.2rem;
+    }
+    
+    .game-header {
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .challenge-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    
+    #challenge-title {
+        font-size: 2rem;
+    }
+    
+    .game-controls {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .results-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .features-preview {
+        grid-template-columns: 1fr;
+    }
+    
+    .accessibility-panel {
+        top: 10px;
+        right: 10px;
+        padding: 10px;
+        gap: 5px;
+    }
+    
+    .accessibility-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+}
+
+/* Dyslexia-friendly font class */
+.dyslexia-font {
+    font-family: var(--font-dyslexia) !important;
+    line-height: 1.8 !important;
+    letter-spacing: 0.1em !important;
+    word-spacing: 0.2em !important;
+}
+
+/* High contrast mode */
+.high-contrast {
+    background: #000 !important;
+    color: #fff !important;
+}
+
+.high-contrast .screen {
+    background: #000 !important;
+    color: #fff !important;
+    border: 3px solid #fff !important;
+}
+
+.high-contrast .btn {
+    background: #fff !important;
+    color: #000 !important;
+    border: 2px solid #fff !important;
+}
+
+/* Large font mode */
+.large-font {
+    font-size: 24px !important;
+}
+
+.large-font .title {
+    font-size: 4.5rem !important;
+}
+
+.large-font .btn {
+    font-size: 1.5rem !important;
+    padding: 25px 35px !important;
+}
+
+/* Focus styles for accessibility */
+*:focus {
+    outline: 3px solid var(--accent-orange) !important;
+    outline-offset: 2px !important;
+}
+
+/* Reading Passages Screen Styles */
+.passages-content {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: var(--bg-white);
+    border-radius: 20px;
+    box-shadow: var(--shadow-medium);
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.passages-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.passages-header h2 {
+    font-size: 2.5rem;
+    color: var(--primary-blue);
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.passages-subtitle {
+    font-size: 1.2rem;
+    color: var(--text-light);
+    margin-bottom: 2rem;
+}
+
+.passages-container {
+    display: grid;
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.passage-card {
+    background: var(--bg-light);
+    border: 2px solid var(--border-light);
+    border-radius: 15px;
+    padding: 2rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.passage-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-blue), var(--accent-green));
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.passage-card:hover::before {
+    transform: scaleX(1);
+}
+
+.passage-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-medium);
+    border-color: var(--primary-blue);
+}
+
+.passage-card h3 {
+    font-size: 1.5rem;
+    color: var(--primary-blue);
+    margin-bottom: 1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.passage-card h3::before {
+    content: '📖';
+    font-size: 1.2rem;
+}
+
+.passage-text {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--text-dark);
+    text-align: justify;
+    padding: 1rem;
+    background: var(--bg-white);
+    border-radius: 10px;
+    border-left: 4px solid var(--accent-green);
+    position: relative;
+}
+
+.passage-text::before {
+    content: '"';
+    font-size: 3rem;
+    color: var(--accent-green);
+    position: absolute;
+    top: -10px;
+    left: 10px;
+    opacity: 0.3;
+    font-family: serif;
+}
+
+.passage-text::after {
+    content: '"';
+    font-size: 3rem;
+    color: var(--accent-green);
+    position: absolute;
+    bottom: -20px;
+    right: 10px;
+    opacity: 0.3;
+    font-family: serif;
+}
+
+.passages-actions {
+    text-align: center;
+    padding: 2rem 0;
+}
+
+.passages-actions .btn {
+    font-size: 1.2rem;
+    padding: 1rem 2rem;
+    border-radius: 15px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.passages-actions .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-medium);
+}
+
+/* Dyslexia-friendly font for passages */
+.dyslexia-font .passage-text {
+    font-family: var(--font-dyslexia);
+    font-size: 1.2rem;
+    line-height: 1.9;
+    letter-spacing: 0.1em;
+}
+
+/* Large font for passages */
+.large-font .passage-text {
+    font-size: 1.3rem;
+    line-height: 1.9;
+}
+
+.large-font .passage-card h3 {
+    font-size: 1.7rem;
+}
+
+/* High contrast for passages */
+.high-contrast .passage-card {
+    background: #000;
+    color: #fff;
+    border-color: #fff;
+}
+
+.high-contrast .passage-text {
+    background: #000;
+    color: #fff;
+    border-left-color: #fff;
+}
+
+.high-contrast .passage-card h3 {
+    color: #fff;
+}
+
+/* Responsive design for passages */
+@media (max-width: 768px) {
+    .passages-content {
+        padding: 1rem;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .passages-header h2 {
+        font-size: 2rem;
+    }
+    
+    .passage-card {
+        padding: 1.5rem;
+    }
+    
+    .passage-card h3 {
+        font-size: 1.3rem;
+    }
+    
+    .passage-text {
+        font-size: 1rem;
+        padding: 0.8rem;
+    }
+}
+
+/* Reduced motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+} 

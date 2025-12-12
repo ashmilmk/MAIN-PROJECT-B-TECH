@@ -1,0 +1,72 @@
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const helmet = require('helmet');
+const morgan = require('morgan');
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, 'config.env') });
+
+const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/users');
+const progressRoutes = require('./routes/progress');
+
+const app = express();
+
+// Basic hardening
+app.use(helmet());
+app.use(cors({
+  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  credentials: true,
+}));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true }));
+
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
+
+// Connect to MongoDB
+const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/dyslexia_detection';
+mongoose.connect(mongoUri, {
+}).then(() => {
+  console.log('✅ Connected to MongoDB');
+}).catch((err) => {
+  console.error('❌ MongoDB connection error:', err.message);
+  process.exit(1);
+});
+
+// API routes
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/progress', progressRoutes);
+
+// Health check
+app.get('/api/health', (_req, res) => {
+  res.json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+  });
+});
+
+// Serve frontend (static HTML) from project root
+app.use(express.static(path.join(__dirname, '..')));
+app.get('*', (_req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'index.html'));
+});
+
+// Global error handler
+app.use((err, _req, res, _next) => {
+  console.error(err);
+  res.status(err.status || 500).json({
+    status: 'error',
+    message: process.env.NODE_ENV === 'production' ? 'Internal Server Error' : err.message,
+  });
+});
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
+});
+
+module.exports = app;
+

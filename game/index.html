@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎓 Student Learning Adventure - Comprehensive Learning Support</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Student Background Elements -->
+    <div class="student-background">
+        <div class="floating-student-icon">🎓</div>
+        <div class="floating-student-icon">📚</div>
+        <div class="floating-student-icon">✏️</div>
+        <div class="floating-student-icon">🔬</div>
+        <div class="floating-student-icon">🎨</div>
+        <div class="floating-student-icon">🧮</div>
+        <div class="floating-student-icon">🌍</div>
+        <div class="floating-student-icon">💻</div>
+    </div>
+
+    <!-- Accessibility Controls -->
+    <div class="accessibility-panel">
+        <button id="font-size-toggle" class="accessibility-btn" title="Increase Font Size">
+            <i class="fas fa-text-height"></i>
+        </button>
+        <button id="high-contrast-toggle" class="accessibility-btn" title="High Contrast Mode">
+            <i class="fas fa-adjust"></i>
+        </button>
+        <button id="dyslexia-font-toggle" class="accessibility-btn" title="Dyslexia-Friendly Font">
+            <i class="fas fa-font"></i>
+        </button>
+        <button id="reading-guide-toggle" class="accessibility-btn" title="Reading Guide with Text-to-Speech">
+            <i class="fas fa-highlighter"></i>
+        </button>
+        <button id="read-aloud" class="accessibility-btn" title="Read Aloud (Text-to-Speech)">
+            <i class="fas fa-volume-high"></i>
+        </button>
+    </div>
+
+    <!-- Reading Guide Line -->
+    <div id="reading-guide" class="reading-guide"></div>
+
+    <div class="container">
+        <!-- Welcome Screen -->
+        <div id="welcome-screen" class="screen active">
+            <div class="welcome-content">
+                <div class="logo-section">
+                    <div class="logo-icon">🎓</div>
+                    <h1 class="title">Student Learning Adventure</h1>
+                    <p class="subtitle">Comprehensive Learning Support for All Students</p>
+                    <div class="accessibility-badge">
+                        <i class="fas fa-universal-access"></i>
+                        Dyslexia, Dyscalculia, Dysphasia & Dysgraphia Support
+                    </div>
+                </div>
+                
+                <div class="student-setup">
+                    <div class="input-group">
+                        <label for="player-name" class="input-label">
+                            <i class="fas fa-user-graduate"></i>
+                            Enter Your Name
+                        </label>
+                        <input type="text" id="player-name" placeholder="Type your name here..." maxlength="25">
+                    </div>
+                    
+                    <div class="age-group-selection">
+                        <label class="input-label">
+                            <i class="fas fa-users"></i>
+                            Choose Your Age Group
+                        </label>
+                        <div class="age-buttons">
+                            <button class="age-btn active" data-age="young">Ages 6-8</button>
+                            <button class="age-btn" data-age="middle">Ages 9-11</button>
+                            <button class="age-btn" data-age="older">Ages 12+</button>
+                        </div>
+                    </div>
+                    
+                    <button id="start-game" class="btn btn-primary">
+                        <i class="fas fa-rocket"></i>
+                        Start Your Learning Adventure!
+                    </button>
+                </div>
+                
+                <div class="features-preview">
+                    <div class="feature-card">
+                        <i class="fas fa-brain"></i>
+                        <h3>Brain Training</h3>
+                        <p>Fun challenges to boost your thinking skills</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-calculator"></i>
+                        <h3>Dyscalculia Support</h3>
+                        <p>Math challenges designed for number difficulties</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-comments"></i>
+                        <h3>Dysphasia Support</h3>
+                        <p>Language and communication exercises</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-pen-fancy"></i>
+                        <h3>Dysgraphia Support</h3>
+                        <p>Writing and spelling assistance</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-volume-up"></i>
+                        <h3>Text-to-Speech</h3>
+                        <p>Audio support for reading challenges</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-trophy"></i>
+                        <h3>Progress Tracking</h3>
+                        <p>Monitor your learning journey</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reading Passages Screen -->
+        <div id="passages-screen" class="screen">
+            <div class="passages-content">
+                <div class="passages-header">
+                    <h2>📖 Reading Passages</h2>
+                    <p class="passages-subtitle">Read these stories carefully before answering the questions</p>
+                </div>
+                
+                <div class="passages-container">
+                    <div class="passage-card">
+                        <h3>Passage 1: The Happy Butterfly</h3>
+                        <div class="passage-text">
+                            Once there was a colorful butterfly. It flew from flower to flower in the garden, drinking nectar and enjoying the warm sunshine. The butterfly was very happy as it danced around the bright flowers. Every day, it fluttered joyfully, spreading beauty wherever it went.
+                        </div>
+                    </div>
+                    
+                    <div class="passage-card">
+                        <h3>Passage 2: Fun at the Park</h3>
+                        <div class="passage-text">
+                            Sarah and Tom went to the park one sunny afternoon. They swung on the swings and slid down the slides. They laughed together as they played on the green grass and watched other children running around. It was a fun and joyful day for Sarah and Tom at the park.
+                        </div>
+                    </div>
+                    
+                    <div class="passage-card">
+                        <h3>Passage 3: My Pet Fish</h3>
+                        <div class="passage-text">
+                            I have a pet fish named Bluey. Bluey swims around happily in a small glass tank in my room. Every morning, I feed Bluey some tiny food flakes and watch him swim quickly from side to side. He shines brightly under the water, and I love spending time watching him move.
+                        </div>
+                    </div>
+                    
+                    <div class="passage-card">
+                        <h3>Passage 4: The Lost Kitten</h3>
+                        <div class="passage-text">
+                            One sunny day, Sarah found a lost kitten in her backyard. The kitten was meowing softly and looked scared. Sarah carefully picked it up and gave it some milk. She petted its soft fur until it felt safe and warm. Sarah named her new friend Fluffy and promised to take care of her always.
+                        </div>
+                    </div>
+                    
+                    <div class="passage-card">
+                        <h3>Passage 5: The Magic Garden</h3>
+                        <div class="passage-text">
+                            In a small town, there was a big oak tree that hid something special behind it. One afternoon, Tommy and Lily discovered a magical garden filled with colorful flowers that sparkled in the sunlight. They saw butterflies fluttering and birds singing sweet songs. It was the most wonderful place they had ever seen, and they promised to visit again.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="passages-actions">
+                    <button id="start-quiz" class="btn btn-primary">
+                        <i class="fas fa-question-circle"></i>
+                        Start Quiz
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="screen">
+            <div class="game-header">
+                <div class="player-info">
+                    <div class="player-avatar">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <div class="player-details">
+                        <span id="current-player">Student</span>
+                        <div class="progress-container">
+                            <label class="progress-label">Progress</label>
+                            <div class="progress-bar">
+                                <div id="progress-fill"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="score-display">
+                    <i class="fas fa-star"></i>
+                    <span>Score: <span id="current-score">0</span></span>
+                </div>
+            </div>
+
+            <div class="game-content">
+                <div id="challenge-container">
+                    <div class="challenge-header">
+                        <h2 id="challenge-title">Ready to start your adventure?</h2>
+                        <div class="challenge-type-badge">
+                            <i class="fas fa-lightbulb"></i>
+                            <span id="challenge-type">Learning</span>
+                        </div>
+                    </div>
+                    
+                    <div id="challenge-description" class="challenge-description"></div>
+                    
+                    <div id="challenge-content" class="challenge-content"></div>
+                    
+                    <div id="challenge-options" class="challenge-options"></div>
+                </div>
+            </div>
+
+            <div class="game-controls">
+                <button id="next-challenge" class="btn btn-secondary" disabled>
+                    <i class="fas fa-arrow-right"></i>
+                    Next Challenge
+                </button>
+                <button id="restart-game" class="btn btn-secondary">
+                    <i class="fas fa-redo"></i>
+                    Restart
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="results-screen" class="screen">
+            <div class="results-content">
+                <div class="results-header">
+                    <div class="celebration-icon">🎉</div>
+                    <h2>Congratulations, Champion!</h2>
+                    <p class="results-subtitle">You've completed your learning adventure!</p>
+                </div>
+                
+                <div class="score-summary">
+                    <div class="final-score-card">
+                        <i class="fas fa-trophy"></i>
+                        <p id="final-score">Final Score: 0/100</p>
+                    </div>
+                </div>
+                
+                <div id="talent-results" class="talent-results"></div>
+                
+                <div class="results-actions">
+                    <button id="play-again" class="btn btn-primary">
+                        <i class="fas fa-play"></i>
+                        Play Again
+                    </button>
+                    <button id="back-to-welcome" class="btn btn-secondary">
+                        <i class="fas fa-home"></i>
+                        Level 2
+                    </button>
+                     <button id="view-progress" class="btn btn-secondary">
+                         <i class="fas fa-chart-line"></i>
+                         View Progress
+                     </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 

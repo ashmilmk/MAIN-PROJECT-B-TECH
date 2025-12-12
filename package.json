@@ -1,0 +1,13 @@
+{
+    "name": "dyslexia-detection-project",
+    "version": "1.0.0",
+    "description": "Root package file to manage backend scripts",
+    "scripts": {
+        "start": "cd backend && npm start",
+        "install-deps": "cd backend && npm install",
+        "dev": "cd backend && npm run dev"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
+}
