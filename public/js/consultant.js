@@ -344,4 +344,113 @@ window.onload = function () {
             }
         });
     }
+
+    /* Support Request Logic */
+    const navSupport = document.getElementById('navSupport');
+    const supportSection = document.getElementById('supportSection');
+    const studentsSection = document.getElementById('studentsSection');
+    const refreshSupportBtn = document.getElementById('refreshSupportBtn');
+
+    if (navSupport) {
+        navSupport.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Toggle visibility
+            studentsSection.style.display = 'none';
+            supportSection.style.display = 'block';
+
+            // Update active nav
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            navSupport.classList.add('active');
+
+            loadSupportRequests();
+        });
+    }
+
+    if (refreshSupportBtn) {
+        refreshSupportBtn.addEventListener('click', loadSupportRequests);
+    }
+
+    // Reuse navStudents to go back
+    if (navStudents) {
+        navStudents.addEventListener('click', () => {
+            // ... existing click handler usually just scrolls, but let's make sure we show the section
+            studentsSection.style.display = 'block';
+            supportSection.style.display = 'none';
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            navStudents.classList.add('active');
+        });
+    }
+
+    async function loadSupportRequests() {
+        try {
+            const data = await apiRequest('/chat/admin/flagged');
+            const requests = data.data || [];
+
+            const tbody = document.getElementById('supportTableBody');
+            const emptyState = document.getElementById('supportEmptyState');
+            const tableContainer = document.getElementById('supportTableContainer');
+
+            if (requests.length === 0) {
+                if (emptyState) emptyState.style.display = 'block';
+                if (tableContainer) tableContainer.style.display = 'none';
+            } else {
+                if (emptyState) emptyState.style.display = 'none';
+                if (tableContainer) tableContainer.style.display = 'block';
+
+                tbody.innerHTML = requests.map(req => `
+                    <tr>
+                        <td>
+                            <div class="student-name">
+                                <span>${req.userId ? (req.userId.firstName + ' ' + req.userId.lastName) : 'Unknown'}</span>
+                                <small style="display:block; color:#64748b; font-size: 0.8em">${req.userId ? req.userId.email : ''}</small>
+                            </div>
+                        </td>
+                        <td>${req.message}</td>
+                        <td>${new Date(req.createdAt).toLocaleString()}</td>
+                        <td><span class="badge badge-warning">Flagged</span></td>
+                        <td>
+                             <button class="action-btn" title="Mark Resolved" onclick="alert('Feature coming soon')">
+                                <i class="fas fa-check"></i>
+                            </button>
+                        </td>
+                    </tr>
+                 `).join('');
+            }
+
+        } catch (err) {
+            console.error('Failed to load support requests', err);
+            // Show exact error from server if possible
+            showToast(err.message || 'Failed to load support requests', 'error');
+        }
+    }
+
+    // Polling for realtime updates (every 10 seconds)
+    let supportPollInterval;
+
+    if (navSupport) {
+        navSupport.addEventListener('click', (e) => {
+            e.preventDefault();
+            // ... existing toggle logic ...
+            studentsSection.style.display = 'none';
+            supportSection.style.display = 'block';
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            navSupport.classList.add('active');
+
+            loadSupportRequests();
+            // Start polling
+            clearInterval(supportPollInterval);
+            supportPollInterval = setInterval(loadSupportRequests, 10000);
+        });
+    }
+
+    // Stop polling when leaving section
+    if (navStudents) {
+        navStudents.addEventListener('click', () => {
+            studentsSection.style.display = 'block';
+            supportSection.style.display = 'none';
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            navStudents.classList.add('active');
+            clearInterval(supportPollInterval);
+        });
+    }
 };

@@ -45,13 +45,17 @@
                     <i class="fas fa-chart-line"></i>
                     <span>Analytics</span>
                 </a>
-                <a class="nav-item" href="#">
+                <a class="nav-item" href="#" id="navResources">
                     <i class="fas fa-book-open"></i>
                     <span>Resources</span>
                 </a>
                 <a class="nav-item" href="#">
                     <i class="fas fa-cog"></i>
                     <span>Settings</span>
+                </a>
+                <a class="nav-item" href="#" id="navSupport">
+                    <i class="fas fa-headset"></i>
+                    <span>Support</span>
                 </a>
             </nav>
 
@@ -160,6 +164,129 @@
                         <div class="empty-state" id="emptyState" style="display: none;">
                             <i class="fas fa-user-graduate"></i>
                             <p>No students yet. Add your first student!</p>
+                        </div>
+                    </div>
+
+                    <!-- Support Requests Section (Hidden by default) -->
+                    <div class="table-card" id="supportSection" style="display: none;">
+                        <div class="card-header">
+                            <h2>Support Requests</h2>
+                            <button class="btn-add" id="refreshSupportBtn"
+                                style="background: white; color: #6b7280; border: 1px solid #e5e7eb;">
+                                <i class="fas fa-sync-alt"></i> Refresh
+                            </button>
+                        </div>
+
+                        <div id="supportEmptyState" class="empty-state">
+                            <i class="fas fa-inbox"></i>
+                            <p>No new support requests</p>
+                        </div>
+
+                        <div id="supportTableContainer" style="display: none; overflow-x: auto;">
+                            <table class="student-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 25%;">Student</th>
+                                        <th style="width: 40%;">Message</th>
+                                        <th style="width: 15%;">Time</th>
+                                        <th style="width: 10%;">Status</th>
+                                        <th style="width: 10%; text-align: center;">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="supportTableBody">
+                                    <!-- Populated via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Resources Section (Hidden by default) -->
+                    <div id="resourcesSection" style="display: none;">
+                        <div class="content-header">
+                            <h2>Dyslexia Resources & Study Materials</h2>
+                            <p class="text-gray">Curated tools and guides to support your learning journey.</p>
+                        </div>
+
+                        <div class="resources-grid"
+                            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+
+                            <!-- Reading Tools -->
+                            <div class="resource-card"
+                                style="background: white; padding: 1.5rem; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
+                                <div class="resource-icon"
+                                    style="width: 50px; height: 50px; background: rgba(124, 58, 237, 0.1); color: #7c3aed; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1rem;">
+                                    <i class="fas fa-book-reader"></i>
+                                </div>
+                                <h3 style="margin-bottom: 0.5rem; color: #1a1d29;">Reading Assistants</h3>
+                                <p style="color: #6b7280; font-size: 0.9rem; margin-bottom: 1rem;">Tools to help with
+                                    text decoding and comprehension.</p>
+                                <ul style="list-style: none; padding: 0;">
+                                    <li style="margin-bottom: 0.5rem;"><a href="#"
+                                            style="color: #7c3aed; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;"><i
+                                                class="fas fa-external-link-alt" style="font-size: 0.8rem;"></i>
+                                            OpenDyslexic Font</a></li>
+                                    <li style="margin-bottom: 0.5rem;"><a href="#"
+                                            style="color: #7c3aed; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;"><i
+                                                class="fas fa-external-link-alt" style="font-size: 0.8rem;"></i>
+                                            Speechify (Text-to-Speech)</a></li>
+                                    <li><a href="#"
+                                            style="color: #7c3aed; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;"><i
+                                                class="fas fa-file-pdf" style="font-size: 0.8rem;"></i> Reading
+                                            Strategies PDF</a></li>
+                                </ul>
+                            </div>
+
+                            <!-- Writing Aids -->
+                            <div class="resource-card"
+                                style="background: white; padding: 1.5rem; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
+                                <div class="resource-icon"
+                                    style="width: 50px; height: 50px; background: rgba(239, 68, 68, 0.1); color: #ef4444; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1rem;">
+                                    <i class="fas fa-pen-nib"></i>
+                                </div>
+                                <h3 style="margin-bottom: 0.5rem; color: #1a1d29;">Writing Aids</h3>
+                                <p style="color: #6b7280; font-size: 0.9rem; margin-bottom: 1rem;">Helpers for spelling,
+                                    grammar, and organizing thoughts.</p>
+                                <ul style="list-style: none; padding: 0;">
+                                    <li style="margin-bottom: 0.5rem;"><a href="#"
+                                            style="color: #ef4444; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;"><i
+                                                class="fas fa-external-link-alt" style="font-size: 0.8rem;"></i>
+                                            Grammarly</a></li>
+                                    <li style="margin-bottom: 0.5rem;"><a href="#"
+                                            style="color: #ef4444; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;"><i
+                                                class="fas fa-external-link-alt" style="font-size: 0.8rem;"></i>
+                                            MindMeister (Mind Mapping)</a></li>
+                                    <li><a href="#"
+                                            style="color: #ef4444; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;"><i
+                                                class="fas fa-file-word" style="font-size: 0.8rem;"></i> Writing
+                                            Templates</a></li>
+                                </ul>
+                            </div>
+
+                            <!-- Memory & Focus -->
+                            <div class="resource-card"
+                                style="background: white; padding: 1.5rem; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
+                                <div class="resource-icon"
+                                    style="width: 50px; height: 50px; background: rgba(59, 130, 246, 0.1); color: #3b82f6; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1rem;">
+                                    <i class="fas fa-brain"></i>
+                                </div>
+                                <h3 style="margin-bottom: 0.5rem; color: #1a1d29;">Memory & Focus</h3>
+                                <p style="color: #6b7280; font-size: 0.9rem; margin-bottom: 1rem;">Techniques to improve
+                                    retention and concentration.</p>
+                                <ul style="list-style: none; padding: 0;">
+                                    <li style="margin-bottom: 0.5rem;"><a href="#"
+                                            style="color: #3b82f6; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;"><i
+                                                class="fas fa-gamepad" style="font-size: 0.8rem;"></i> Memory Games</a>
+                                    </li>
+                                    <li style="margin-bottom: 0.5rem;"><a href="#"
+                                            style="color: #3b82f6; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;"><i
+                                                class="fas fa-clock" style="font-size: 0.8rem;"></i> Pomodoro Timer</a>
+                                    </li>
+                                    <li><a href="#"
+                                            style="color: #3b82f6; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;"><i
+                                                class="fas fa-file-alt" style="font-size: 0.8rem;"></i> Focus Guides</a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
 

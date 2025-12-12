@@ -9,6 +9,7 @@ require('dotenv').config({ path: path.join(__dirname, 'config.env') });
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 const progressRoutes = require('./routes/progress');
+const chatRoutes = require('./routes/chat');
 
 const app = express();
 
@@ -39,6 +40,7 @@ mongoose.connect(mongoUri, {
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/progress', progressRoutes);
+app.use('/api/chat', chatRoutes);
 
 // Health check
 app.get('/api/health', (_req, res) => {
