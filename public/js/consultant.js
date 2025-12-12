@@ -337,7 +337,8 @@ window.onload = function () {
             if (action === 'edit') {
                 editStudent(id);
             } else if (action === 'test') {
-                openTestModal(id, name);
+                // Direct redirect to game as requested
+                window.location.href = `game/index.html?student=${id}&name=${encodeURIComponent(name)}`;
             } else if (action === 'delete') {
                 deleteStudent(id, name);
             }
