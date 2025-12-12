@@ -121,7 +121,7 @@ async function loadStudents(search = '') {
               <button class="action-btn btn-test" onclick="openTestModal('${student._id}', '${student.firstName} ${student.lastName}')" title="Assign Test">
                 <i class="fas fa-clipboard-check"></i>
               </button>
-              <button class="action-btn btn-delete" onclick="deleteStudent('${student._id}')" title="Deactivate">
+                <button class="action-btn btn-delete" onclick="deleteStudent('${student._id}', '${student.firstName} ${student.lastName}')" title="Deactivate">
                 <i class="fas fa-trash"></i>
               </button>
             </td>
@@ -226,8 +226,8 @@ async function submitStudentForm(e) {
 }
 
 // Delete (deactivate) student
-async function deleteStudent(id) {
-    if (!confirm('Are you sure you want to deactivate this student?')) return;
+async function deleteStudent(id, name) {
+    if (!confirm(`Are you sure you want to deactivate student ${name || 'ID: ' + id}?`)) return;
 
     try {
         await apiRequest(`/users/students/${id}`, 'DELETE');
