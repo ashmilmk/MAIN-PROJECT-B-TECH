@@ -258,8 +258,13 @@ async function submitTestForm(e) {
 
     try {
         await apiRequest(`/users/students/${studentId}/assign-test`, 'POST', { testType });
-        showToast('Test assigned successfully');
+        showToast('Test assigned! Starting game...');
         closeTestModal();
+
+        // Redirect to game with params
+        setTimeout(() => {
+            window.location.href = `game/index.html?student=${studentId}&task=${testType}`;
+        }, 1000);
     } catch (error) {
         showToast(error.message || 'Failed to assign test', 'error');
     }
