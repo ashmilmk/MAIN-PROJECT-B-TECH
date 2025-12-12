@@ -175,11 +175,11 @@ function logout() {
   localStorage.removeItem('userRole');
   localStorage.removeItem('userEmail');
   localStorage.removeItem('userName');
-  window.location.href = 'Login.html';
+  window.location.href = 'index.html';
 }
 
 // Initialize page
-window.onload = function() {
+window.onload = function () {
   // Hide loading screen
   setTimeout(() => {
     const loading = document.getElementById('loading');
@@ -189,5 +189,10 @@ window.onload = function() {
   initParticles();
   const userRole = getUserInfo();
   generateDashboardCards(userRole);
-};
 
+  // Attach logout event listener (CSP-compliant)
+  const logoutBtn = document.getElementById('logoutBtn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', logout);
+  }
+};

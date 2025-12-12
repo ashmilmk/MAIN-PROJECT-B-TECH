@@ -49,22 +49,22 @@ function showForm(role) {
 function switchToRegister(role) {
   currentRole = role;
   currentMode = 'register';
-  
+
   document.querySelectorAll('.login-box, .register-box').forEach(form => {
     form.classList.remove('active');
   });
-  
+
   document.getElementById(role + 'RegisterForm').classList.add('active');
 }
 
 function switchToLogin(role) {
   currentRole = role;
   currentMode = 'login';
-  
+
   document.querySelectorAll('.login-box, .register-box').forEach(form => {
     form.classList.remove('active');
   });
-  
+
   document.getElementById(role + 'Form').classList.add('active');
 }
 
@@ -93,7 +93,7 @@ function validateEmail(email) {
 }
 
 // Student Login Form Handler
-document.getElementById('studentLoginForm').addEventListener('submit', async function(e) {
+document.getElementById('studentLoginForm').addEventListener('submit', async function (e) {
   e.preventDefault();
   const email = document.getElementById('studentEmail').value;
   const password = document.getElementById('studentPassword').value;
@@ -101,14 +101,14 @@ document.getElementById('studentLoginForm').addEventListener('submit', async fun
     const data = await apiRequest('/auth/login', 'POST', { email, password });
     persistUserSession(data);
     showSuccessMessage('Student login successful!');
-    setTimeout(() => (window.location.href = 'index.html'), 800);
+    setTimeout(() => (window.location.href = 'dashboard.html'), 800);
   } catch (err) {
     alert(err.message || 'Login failed');
   }
 });
 
 // Teacher Login Form Handler
-document.getElementById('teacherLoginForm').addEventListener('submit', async function(e) {
+document.getElementById('teacherLoginForm').addEventListener('submit', async function (e) {
   e.preventDefault();
   const email = document.getElementById('teacherEmail').value;
   const password = document.getElementById('teacherPassword').value;
@@ -116,16 +116,16 @@ document.getElementById('teacherLoginForm').addEventListener('submit', async fun
     const data = await apiRequest('/auth/login', 'POST', { email, password });
     persistUserSession(data);
     showSuccessMessage('Teacher login successful!');
-    setTimeout(() => (window.location.href = 'index.html'), 800);
+    setTimeout(() => (window.location.href = 'dashboard.html'), 800);
   } catch (err) {
     alert(err.message || 'Login failed');
   }
 });
 
 // Student Registration Form Handler
-document.getElementById('studentRegisterFormSubmit').addEventListener('submit', async function(e) {
+document.getElementById('studentRegisterFormSubmit').addEventListener('submit', async function (e) {
   e.preventDefault();
-  
+
   const firstName = document.getElementById('studentFirstName').value;
   const lastName = document.getElementById('studentLastName').value;
   const email = document.getElementById('studentRegEmail').value;
@@ -158,16 +158,16 @@ document.getElementById('studentRegisterFormSubmit').addEventListener('submit', 
     showSuccessMessage('Student account created successfully!');
     document.getElementById('studentRegisterFormSubmit').reset();
     persistUserSession(data);
-    setTimeout(() => (window.location.href = 'index.html'), 800);
+    setTimeout(() => (window.location.href = 'dashboard.html'), 800);
   } catch (err) {
     alert(err.message || 'Registration failed');
   }
 });
 
 // Teacher Registration Form Handler
-document.getElementById('teacherRegisterFormSubmit').addEventListener('submit', async function(e) {
+document.getElementById('teacherRegisterFormSubmit').addEventListener('submit', async function (e) {
   e.preventDefault();
-  
+
   const firstName = document.getElementById('teacherFirstName').value;
   const lastName = document.getElementById('teacherLastName').value;
   const email = document.getElementById('teacherRegEmail').value;
@@ -202,7 +202,7 @@ document.getElementById('teacherRegisterFormSubmit').addEventListener('submit', 
     showSuccessMessage('Teacher account created successfully!');
     document.getElementById('teacherRegisterFormSubmit').reset();
     persistUserSession(data);
-    setTimeout(() => (window.location.href = 'index.html'), 800);
+    setTimeout(() => (window.location.href = 'dashboard.html'), 800);
   } catch (err) {
     alert(err.message || 'Registration failed');
   }
@@ -228,5 +228,13 @@ function attachSwitchers() {
 // Ensure handlers are attached after DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
   attachSwitchers();
+
+  // Attach password toggle event listeners (CSP-compliant)
+  document.querySelectorAll('[data-toggle-password]').forEach(toggleBtn => {
+    toggleBtn.addEventListener('click', function () {
+      const fieldId = this.getAttribute('data-toggle-password');
+      togglePassword(fieldId);
+    });
+  });
 });
 
