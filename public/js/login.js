@@ -101,7 +101,8 @@ document.getElementById('studentLoginForm').addEventListener('submit', async fun
     const data = await apiRequest('/auth/login', 'POST', { email, password });
     persistUserSession(data);
     showSuccessMessage('Student login successful!');
-    setTimeout(() => (window.location.href = 'dashboard.html'), 800);
+    const redirect = data.user.role === 'teacher' ? 'teacher-dashboard.html' : 'dashboard.html';
+    setTimeout(() => (window.location.href = redirect), 800);
   } catch (err) {
     alert(err.message || 'Login failed');
   }
@@ -116,7 +117,7 @@ document.getElementById('teacherLoginForm').addEventListener('submit', async fun
     const data = await apiRequest('/auth/login', 'POST', { email, password });
     persistUserSession(data);
     showSuccessMessage('Teacher login successful!');
-    setTimeout(() => (window.location.href = 'dashboard.html'), 800);
+    setTimeout(() => (window.location.href = 'teacher-dashboard.html'), 800);
   } catch (err) {
     alert(err.message || 'Login failed');
   }
@@ -202,7 +203,7 @@ document.getElementById('teacherRegisterFormSubmit').addEventListener('submit', 
     showSuccessMessage('Teacher account created successfully!');
     document.getElementById('teacherRegisterFormSubmit').reset();
     persistUserSession(data);
-    setTimeout(() => (window.location.href = 'dashboard.html'), 800);
+    setTimeout(() => (window.location.href = 'teacher-dashboard.html'), 800);
   } catch (err) {
     alert(err.message || 'Registration failed');
   }

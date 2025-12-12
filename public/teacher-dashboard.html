@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Teacher Dashboard - Manage students and dyslexia assessments">
+    <title>Teacher Dashboard - Dyslexia Detection Platform</title>
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- External Stylesheets -->
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/teacher.css">
+</head>
+
+<body>
+    <!-- Loading Screen -->
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Animated Background -->
+    <div class="animated-bg">
+        <div class="floating-particles" id="particles"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <span>Teacher Dashboard</span>
+            </div>
+            <div class="user-info">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-details">
+                    <div class="user-name" id="userName">Welcome, Teacher!</div>
+                    <div class="user-role" id="userRole">Teacher</div>
+                </div>
+                <button class="logout-btn" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Stats Cards -->
+        <div class="teacher-stats" id="statsContainer">
+            <div class="stat-card">
+                <div class="stat-number" id="totalStudents">0</div>
+                <div class="stat-label">Total Students</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="activeStudents">0</div>
+                <div class="stat-label">Active This Week</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="needingSupport">0</div>
+                <div class="stat-label">Needing Support</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="testsAssigned">0</div>
+                <div class="stat-label">Tests Assigned</div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="dashboard-grid">
+            <div class="dashboard-card" id="addStudentCard">
+                <div class="card-icon">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <h3 class="card-title">Add New Student</h3>
+                <p class="card-description">
+                    Create a new student account and set up their learning profile with
+                    dyslexia type and severity assessment.
+                </p>
+                <button class="card-btn" id="openAddStudentModal">
+                    <i class="fas fa-plus"></i>
+                    Add Student
+                </button>
+            </div>
+
+            <div class="dashboard-card" id="viewStudentsCard">
+                <div class="card-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3 class="card-title">Manage Students</h3>
+                <p class="card-description">
+                    View all students, update their learning profiles, assign dyslexia
+                    assessments, and track their progress.
+                </p>
+                <button class="card-btn" id="scrollToStudents">
+                    <i class="fas fa-list"></i>
+                    View Students
+                </button>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="card-icon">
+                    <i class="fas fa-chart-pie"></i>
+                </div>
+                <h3 class="card-title">Analytics & Reports</h3>
+                <p class="card-description">
+                    View detailed analytics on student performance, dyslexia type
+                    distribution, and learning progress reports.
+                </p>
+                <button class="card-btn" id="viewAnalytics">
+                    <i class="fas fa-chart-bar"></i>
+                    View Analytics
+                </button>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="card-icon">
+                    <i class="fas fa-file-medical"></i>
+                </div>
+                <h3 class="card-title">Dyslexia Screening</h3>
+                <p class="card-description">
+                    Assign screening tests to students, view results, and get
+                    recommendations for personalized learning paths.
+                </p>
+                <button class="card-btn" id="assignTests">
+                    <i class="fas fa-clipboard-check"></i>
+                    Assign Tests
+                </button>
+            </div>
+        </div>
+
+        <!-- Student Table -->
+        <div class="student-table-container" id="studentsSection">
+            <div class="table-header">
+                <h2 class="table-title">Student List</h2>
+                <div style="display: flex; gap: 1rem; align-items: center;">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchInput" placeholder="Search students...">
+                    </div>
+                    <button class="add-student-btn" id="addStudentBtn">
+                        <i class="fas fa-plus"></i>
+                        Add Student
+                    </button>
+                </div>
+            </div>
+
+            <div id="studentTableContainer">
+                <table class="student-table">
+                    <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Student ID</th>
+                            <th>Email</th>
+                            <th>Dyslexia Type</th>
+                            <th>Severity</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentTableBody">
+                        <!-- Students will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <i class="fas fa-user-graduate"></i>
+                <p>No students found. Add your first student to get started!</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add/Edit Student Modal -->
+    <div class="modal-overlay" id="studentModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Add New Student</h3>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <form id="studentForm">
+                <input type="hidden" id="studentIdHidden">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name *</label>
+                        <input type="text" id="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name *</label>
+                        <input type="text" id="lastName" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="studentIdInput">Student ID *</label>
+                        <input type="text" id="studentIdInput" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="grade">Grade/Class</label>
+                        <input type="text" id="grade" placeholder="e.g., Grade 5">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dyslexiaType">Dyslexia Type</label>
+                        <select id="dyslexiaType">
+                            <option value="none">None Detected</option>
+                            <option value="dyslexia">Dyslexia</option>
+                            <option value="dyscalculia">Dyscalculia</option>
+                            <option value="dysgraphia">Dysgraphia</option>
+                            <option value="dysphasia">Dysphasia</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="severity">Severity</label>
+                        <select id="severity">
+                            <option value="mild">Mild</option>
+                            <option value="moderate">Moderate</option>
+                            <option value="severe">Severe</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" id="cancelModal">Cancel</button>
+                    <button type="submit" class="btn-submit" id="submitBtn">Add Student</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Assign Test Modal -->
+    <div class="modal-overlay" id="testModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Assign Dyslexia Test</h3>
+                <button class="modal-close" id="closeTestModal">&times;</button>
+            </div>
+            <form id="testForm">
+                <input type="hidden" id="testStudentId">
+                <div class="form-group">
+                    <label>Student: <strong id="testStudentName"></strong></label>
+                </div>
+                <div class="form-group">
+                    <label for="testType">Test Type *</label>
+                    <select id="testType" required>
+                        <option value="screening">Initial Screening</option>
+                        <option value="full-assessment">Full Assessment</option>
+                        <option value="progress-check">Progress Check</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" id="cancelTestModal">Cancel</button>
+                    <button type="submit" class="btn-submit">Assign Test</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/teacher.js"></script>
+</body>
+
+</html>
