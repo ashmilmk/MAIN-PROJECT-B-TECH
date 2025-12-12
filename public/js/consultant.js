@@ -308,6 +308,8 @@ window.onload = function () {
     const navStudents = document.getElementById('navStudents');
 
     if (logoutBtn) logoutBtn.addEventListener('click', logout);
+    const headerLogoutBtn = document.getElementById('headerLogoutBtn');
+    if (headerLogoutBtn) headerLogoutBtn.addEventListener('click', logout);
     if (addStudentBtn) addStudentBtn.addEventListener('click', openAddStudentModal);
     if (quickAddStudent) quickAddStudent.addEventListener('click', openAddStudentModal);
     if (closeModal) closeModal.addEventListener('click', closeStudentModal);
