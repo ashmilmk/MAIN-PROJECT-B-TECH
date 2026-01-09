@@ -17,6 +17,9 @@
 
     <!-- External Stylesheets -->
     <link rel="stylesheet" href="css/consultant.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 
 <body>
@@ -29,7 +32,7 @@
             </div>
 
             <nav class="sidebar-nav">
-                <a class="nav-item active" href="#">
+                <a class="nav-item active" href="#" id="navDashboard">
                     <i class="fas fa-th-large"></i>
                     <span>Dashboard</span>
                 </a>
@@ -37,11 +40,11 @@
                     <i class="fas fa-user-graduate"></i>
                     <span>Students</span>
                 </a>
-                <a class="nav-item" href="#">
+                <a class="nav-item" href="game/index.html">
                     <i class="fas fa-clipboard-check"></i>
                     <span>Assessments</span>
                 </a>
-                <a class="nav-item" href="#">
+                <a class="nav-item" href="#" id="navAnalytics">
                     <i class="fas fa-chart-line"></i>
                     <span>Analytics</span>
                 </a>
@@ -90,42 +93,229 @@
                     </div>
                 </div>
 
-                <!-- Stats Row -->
-                <div class="stats-row">
-                    <div class="stat-card">
-                        <div class="stat-icon purple">
-                            <i class="fas fa-user-graduate"></i>
+                <!-- Dashboard Main Section -->
+                <div id="dashboardMainSection">
+                    <!-- Enhanced Stats Row -->
+                    <div class="stats-row-enhanced">
+                        <div class="stat-card-enhanced"
+                            style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <div class="stat-card-background-icon">
+                                <i class="fas fa-user-graduate"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-label">Total Students</div>
+                                <div class="stat-value" id="totalStudents">0</div>
+                                <div class="stat-change positive" id="totalStudentsChange">
+                                    <i class="fas fa-arrow-up"></i> <span>+12%</span>
+                                </div>
+                            </div>
+                            <div class="stat-icon-wrapper">
+                                <i class="fas fa-user-graduate"></i>
+                            </div>
                         </div>
-                        <div class="stat-info">
-                            <h3 id="totalStudents">0 <span class="stat-badge positive">+12</span></h3>
-                            <p>Total Students</p>
+                        <div class="stat-card-enhanced"
+                            style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                            <div class="stat-card-background-icon">
+                                <i class="fas fa-heartbeat"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-label">Need Support</div>
+                                <div class="stat-value" id="needingSupport">0</div>
+                                <div class="stat-change warning" id="needingSupportChange">
+                                    <i class="fas fa-exclamation-circle"></i> <span>Requires attention</span>
+                                </div>
+                            </div>
+                            <div class="stat-icon-wrapper">
+                                <i class="fas fa-heartbeat"></i>
+                            </div>
+                        </div>
+                        <div class="stat-card-enhanced"
+                            style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                            <div class="stat-card-background-icon">
+                                <i class="fas fa-clipboard-check"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-label">Tests Completed</div>
+                                <div class="stat-value" id="testsCompleted">0</div>
+                                <div class="stat-change positive" id="testsCompletedChange">
+                                    <i class="fas fa-arrow-up"></i> <span>+8 this week</span>
+                                </div>
+                            </div>
+                            <div class="stat-icon-wrapper">
+                                <i class="fas fa-clipboard-check"></i>
+                            </div>
+                        </div>
+                        <div class="stat-card-enhanced"
+                            style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                            <div class="stat-card-background-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-label">Active This Week</div>
+                                <div class="stat-value" id="activeStudents">0</div>
+                                <div class="stat-change positive" id="activeStudentsChange">
+                                    <i class="fas fa-arrow-up"></i> <span>+5%</span>
+                                </div>
+                            </div>
+                            <div class="stat-icon-wrapper">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                        </div>
+                        <div class="stat-card-enhanced"
+                            style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                            <div class="stat-card-background-icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-label">Avg Performance</div>
+                                <div class="stat-value" id="avgPerformance">0%</div>
+                                <div class="stat-change positive" id="avgPerformanceChange">
+                                    <i class="fas fa-arrow-up"></i> <span>+2.5%</span>
+                                </div>
+                            </div>
+                            <div class="stat-icon-wrapper">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                        </div>
+                        <div class="stat-card-enhanced"
+                            style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);">
+                            <div class="stat-card-background-icon">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-label">Improving Students</div>
+                                <div class="stat-value" id="improvingStudents">0</div>
+                                <div class="stat-change positive" id="improvingStudentsChange">
+                                    <i class="fas fa-check-circle"></i> <span>Great progress</span>
+                                </div>
+                            </div>
+                            <div class="stat-icon-wrapper">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
                         </div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-icon pink">
-                            <i class="fas fa-heartbeat"></i>
+
+                    <!-- Dashboard Content Grid -->
+                    <div class="dashboard-content-grid">
+                        <!-- Performance Trends Chart -->
+                        <div class="dashboard-widget large">
+                            <div class="widget-header">
+                                <div>
+                                    <h3>Performance Trends</h3>
+                                    <p class="widget-subtitle">Student performance over the last 30 days</p>
+                                </div>
+                                <select class="time-filter" id="performanceTimeFilter">
+                                    <option value="7">Last 7 days</option>
+                                    <option value="30" selected>Last 30 days</option>
+                                    <option value="90">Last 3 months</option>
+                                </select>
+                            </div>
+                            <div class="widget-content">
+                                <canvas id="performanceTrendChart" style="max-height: 300px;"></canvas>
+                            </div>
                         </div>
-                        <div class="stat-info">
-                            <h3 id="needingSupport">0</h3>
-                            <p>Need Support</p>
+
+                        <!-- Dyslexia Distribution -->
+                        <div class="dashboard-widget">
+                            <div class="widget-header">
+                                <div>
+                                    <h3>Dyslexia Types</h3>
+                                    <p class="widget-subtitle">Distribution overview</p>
+                                </div>
+                            </div>
+                            <div class="widget-content">
+                                <canvas id="dashboardDyslexiaChart" style="max-height: 250px;"></canvas>
+                            </div>
                         </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon blue">
-                            <i class="fas fa-clipboard-list"></i>
+
+                        <!-- Recent Activity Timeline -->
+                        <div class="dashboard-widget">
+                            <div class="widget-header">
+                                <div>
+                                    <h3>Recent Activity</h3>
+                                    <p class="widget-subtitle">Latest updates</p>
+                                </div>
+                                <button class="icon-btn" id="refreshActivity">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                            </div>
+                            <div class="widget-content">
+                                <div class="activity-timeline" id="activityTimeline">
+                                    <!-- Populated via JS -->
+                                </div>
+                            </div>
                         </div>
-                        <div class="stat-info">
-                            <h3 id="testsAssigned">0</h3>
-                            <p>Tests Assigned</p>
+
+                        <!-- Top Performing Students -->
+                        <div class="dashboard-widget">
+                            <div class="widget-header">
+                                <div>
+                                    <h3>Top Performers</h3>
+                                    <p class="widget-subtitle">Best scoring students</p>
+                                </div>
+                            </div>
+                            <div class="widget-content">
+                                <div class="top-performers-list" id="topPerformersList">
+                                    <!-- Populated via JS -->
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon green">
-                            <i class="fas fa-chart-line"></i>
+
+                        <!-- Quick Actions -->
+                        <div class="dashboard-widget">
+                            <div class="widget-header">
+                                <div>
+                                    <h3>Quick Actions</h3>
+                                    <p class="widget-subtitle">Frequently used tasks</p>
+                                </div>
+                            </div>
+                            <div class="widget-content">
+                                <div class="quick-actions-grid">
+                                    <button class="quick-action-btn" id="quickActionAddStudent">
+                                        <div class="quick-action-icon"
+                                            style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                            <i class="fas fa-user-plus"></i>
+                                        </div>
+                                        <span>Add Student</span>
+                                    </button>
+                                    <button class="quick-action-btn" id="quickActionViewAnalytics">
+                                        <div class="quick-action-icon"
+                                            style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                                            <i class="fas fa-chart-bar"></i>
+                                        </div>
+                                        <span>View Analytics</span>
+                                    </button>
+                                    <button class="quick-action-btn" id="quickActionStartAssessment">
+                                        <div class="quick-action-icon"
+                                            style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                                            <i class="fas fa-gamepad"></i>
+                                        </div>
+                                        <span>Start Assessment</span>
+                                    </button>
+                                    <button class="quick-action-btn" id="quickActionSupportRequests">
+                                        <div class="quick-action-icon"
+                                            style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                                            <i class="fas fa-headset"></i>
+                                        </div>
+                                        <span>Support Requests</span>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="stat-info">
-                            <h3 id="activeStudents">0</h3>
-                            <p>Active This Week</p>
+
+                        <!-- Students Needing Attention -->
+                        <div class="dashboard-widget large">
+                            <div class="widget-header">
+                                <div>
+                                    <h3>Students Needing Attention</h3>
+                                    <p class="widget-subtitle">Require immediate support</p>
+                                </div>
+                            </div>
+                            <div class="widget-content">
+                                <div class="attention-students-list" id="attentionStudentsList">
+                                    <!-- Populated via JS -->
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -197,6 +387,281 @@
                                     <!-- Populated via JS -->
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+
+                    <!-- Analytics Section (Hidden by default) -->
+                    <div id="analyticsSection" style="display: none;">
+                        <div class="content-header">
+                            <h2>Student Analytics & Insights</h2>
+                            <p class="text-gray">Comprehensive view of student performance, dyslexia assessment, and
+                                game results</p>
+                        </div>
+
+                        <!-- Student Selector -->
+                        <div
+                            style="background: white; padding: 1.5rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); margin-bottom: 1.5rem;">
+                            <label for="analyticsStudentSelect"
+                                style="display: block; margin-bottom: 0.75rem; font-weight: 600; color: #1a1d29;">Select
+                                Student to View Detailed Analytics:</label>
+                            <select id="analyticsStudentSelect"
+                                style="width: 100%; padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 1rem; background: white;">
+                                <option value="">-- Select a Student --</option>
+                            </select>
+                        </div>
+
+                        <!-- Student Profile Card (shown when student selected) -->
+                        <div id="studentProfileCard" style="display: none;">
+                            <!-- Student Header -->
+                            <div
+                                style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 16px; color: white; margin-bottom: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+                                <div style="display: flex; align-items: center; gap: 1.5rem;">
+                                    <div id="profileAvatar"
+                                        style="width: 80px; height: 80px; border-radius: 16px; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 700;">
+                                        <!-- Avatar initials -->
+                                    </div>
+                                    <div style="flex: 1;">
+                                        <h2 id="profileName" style="font-size: 1.75rem; margin-bottom: 0.5rem;">Student
+                                            Name</h2>
+                                        <div style="display: flex; gap: 2rem; font-size: 0.95rem; opacity: 0.9;">
+                                            <div><i class="fas fa-id-card"></i> ID: <span
+                                                    id="profileStudentId">--</span></div>
+                                            <div><i class="fas fa-graduation-cap"></i> Grade: <span
+                                                    id="profileGrade">--</span></div>
+                                            <div><i class="fas fa-envelope"></i> <span id="profileEmail">--</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Dyslexia Assessment Results -->
+                            <div
+                                style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); margin-bottom: 1.5rem;">
+                                <h3
+                                    style="margin-bottom: 1.5rem; color: #1a1d29; font-size: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
+                                    <i class="fas fa-brain" style="color: #7c3aed;"></i>
+                                    Dyslexia Assessment
+                                </h3>
+                                <div
+                                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                                    <div
+                                        style="padding: 1.25rem; background: #f9fafb; border-radius: 12px; border-left: 4px solid #7c3aed;">
+                                        <div style="font-size: 0.85rem; color: #6b7280; margin-bottom: 0.5rem;">Dyslexia
+                                            Type</div>
+                                        <div id="profileDyslexiaType"
+                                            style="font-size: 1.25rem; font-weight: 600; color: #1a1d29;">--</div>
+                                    </div>
+                                    <div
+                                        style="padding: 1.25rem; background: #f9fafb; border-radius: 12px; border-left: 4px solid #ef4444;">
+                                        <div style="font-size: 0.85rem; color: #6b7280; margin-bottom: 0.5rem;">Severity
+                                            Level</div>
+                                        <div id="profileSeverity"
+                                            style="font-size: 1.25rem; font-weight: 600; color: #1a1d29;">--</div>
+                                    </div>
+                                    <div
+                                        style="padding: 1.25rem; background: #f9fafb; border-radius: 12px; border-left: 4px solid #3b82f6;">
+                                        <div style="font-size: 0.85rem; color: #6b7280; margin-bottom: 0.5rem;">Dyslexia
+                                            Probability</div>
+                                        <div id="profileProbability"
+                                            style="font-size: 1.25rem; font-weight: 600; color: #1a1d29;">--</div>
+                                    </div>
+                                    <div
+                                        style="padding: 1.25rem; background: #f9fafb; border-radius: 12px; border-left: 4px solid #10b981;">
+                                        <div style="font-size: 0.85rem; color: #6b7280; margin-bottom: 0.5rem;">Overall
+                                            Score</div>
+                                        <div id="profileAvgScore"
+                                            style="font-size: 1.25rem; font-weight: 600; color: #1a1d29;">--</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Game Results Section -->
+                            <div
+                                style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                                <!-- Game 1: Visual Pattern Recognition -->
+                                <div
+                                    style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
+                                    <h3
+                                        style="margin-bottom: 1rem; color: #1a1d29; font-size: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
+                                        <i class="fas fa-gamepad" style="color: #7c3aed;"></i>
+                                        Game 1: Visual Pattern Recognition
+                                    </h3>
+                                    <div style="margin-bottom: 1.5rem;">
+                                        <div
+                                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                            <span style="color: #6b7280; font-size: 0.9rem;">Score</span>
+                                            <span id="game1Score"
+                                                style="font-size: 1.5rem; font-weight: 700; color: #7c3aed;">--</span>
+                                        </div>
+                                        <div id="game1ProgressBar"
+                                            style="width: 100%; height: 8px; background: #e5e7eb; border-radius: 4px; overflow: hidden;">
+                                            <div
+                                                style="height: 100%; background: linear-gradient(90deg, #7c3aed, #a78bfa); width: 0%; transition: width 0.5s;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div
+                                        style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
+                                        <div
+                                            style="padding: 0.75rem; background: #f9fafb; border-radius: 8px; text-align: center;">
+                                            <div style="font-size: 0.75rem; color: #6b7280;">Accuracy</div>
+                                            <div id="game1Accuracy"
+                                                style="font-size: 1.1rem; font-weight: 600; color: #1a1d29;">--</div>
+                                        </div>
+                                        <div
+                                            style="padding: 0.75rem; background: #f9fafb; border-radius: 8px; text-align: center;">
+                                            <div style="font-size: 0.75rem; color: #6b7280;">Time</div>
+                                            <div id="game1Time"
+                                                style="font-size: 1.1rem; font-weight: 600; color: #1a1d29;">--</div>
+                                        </div>
+                                    </div>
+                                    <div
+                                        style="padding: 1rem; background: rgba(124, 58, 237, 0.05); border-radius: 8px; border-left: 3px solid #7c3aed;">
+                                        <div style="font-size: 0.85rem; color: #6b7280; margin-bottom: 0.25rem;">
+                                            Sessions Completed</div>
+                                        <div id="game1Sessions"
+                                            style="font-size: 1.25rem; font-weight: 600; color: #7c3aed;">0</div>
+                                    </div>
+                                </div>
+
+                                <!-- Game 2: Word Recognition & Reading -->
+                                <div
+                                    style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
+                                    <h3
+                                        style="margin-bottom: 1rem; color: #1a1d29; font-size: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
+                                        <i class="fas fa-book-reader" style="color: #3b82f6;"></i>
+                                        Game 2: Word Recognition & Reading
+                                    </h3>
+                                    <div style="margin-bottom: 1.5rem;">
+                                        <div
+                                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                            <span style="color: #6b7280; font-size: 0.9rem;">Score</span>
+                                            <span id="game2Score"
+                                                style="font-size: 1.5rem; font-weight: 700; color: #3b82f6;">--</span>
+                                        </div>
+                                        <div id="game2ProgressBar"
+                                            style="width: 100%; height: 8px; background: #e5e7eb; border-radius: 4px; overflow: hidden;">
+                                            <div
+                                                style="height: 100%; background: linear-gradient(90deg, #3b82f6, #60a5fa); width: 0%; transition: width 0.5s;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div
+                                        style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
+                                        <div
+                                            style="padding: 0.75rem; background: #f9fafb; border-radius: 8px; text-align: center;">
+                                            <div style="font-size: 0.75rem; color: #6b7280;">Accuracy</div>
+                                            <div id="game2Accuracy"
+                                                style="font-size: 1.1rem; font-weight: 600; color: #1a1d29;">--</div>
+                                        </div>
+                                        <div
+                                            style="padding: 0.75rem; background: #f9fafb; border-radius: 8px; text-align: center;">
+                                            <div style="font-size: 0.75rem; color: #6b7280;">Time</div>
+                                            <div id="game2Time"
+                                                style="font-size: 1.1rem; font-weight: 600; color: #1a1d29;">--</div>
+                                        </div>
+                                    </div>
+                                    <div
+                                        style="padding: 1rem; background: rgba(59, 130, 246, 0.05); border-radius: 8px; border-left: 3px solid #3b82f6;">
+                                        <div style="font-size: 0.85rem; color: #6b7280; margin-bottom: 0.25rem;">
+                                            Sessions Completed</div>
+                                        <div id="game2Sessions"
+                                            style="font-size: 1.25rem; font-weight: 600; color: #3b82f6;">0</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Performance History Chart -->
+                            <div
+                                style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); margin-bottom: 1.5rem;">
+                                <h3 style="margin-bottom: 1.5rem; color: #1a1d29; font-size: 1.25rem;">
+                                    <i class="fas fa-chart-line" style="color: #10b981;"></i>
+                                    Performance Progress Over Time
+                                </h3>
+                                <canvas id="studentProgressChart" style="max-height: 300px;"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Overview Stats -->
+                        <div class="analytics-stats-grid"
+                            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
+                            <div class="stat-card-analytics"
+                                style="background: white; padding: 1.5rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
+                                <div style="font-size: 2rem; font-weight: 700; color: #7c3aed;"
+                                    id="analyticsTotalStudents">0</div>
+                                <div style="color: #6b7280; margin-top: 0.5rem;">Total Students</div>
+                            </div>
+                            <div class="stat-card-analytics"
+                                style="background: white; padding: 1.5rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
+                                <div style="font-size: 2rem; font-weight: 700; color: #ef4444;"
+                                    id="analyticsNeedingSupport">0</div>
+                                <div style="color: #6b7280; margin-top: 0.5rem;">Need Support</div>
+                            </div>
+                            <div class="stat-card-analytics"
+                                style="background: white; padding: 1.5rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
+                                <div style="font-size: 2rem; font-weight: 700; color: #10b981;"
+                                    id="analyticsActiveStudents">0</div>
+                                <div style="color: #6b7280; margin-top: 0.5rem;">Active Students</div>
+                            </div>
+                            <div class="stat-card-analytics"
+                                style="background: white; padding: 1.5rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
+                                <div style="font-size: 2rem; font-weight: 700; color: #3b82f6;" id="analyticsAvgScore">
+                                    0%</div>
+                                <div style="color: #6b7280; margin-top: 0.5rem;">Avg Score</div>
+                            </div>
+                        </div>
+
+                        <!-- Charts Row -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0;">
+                            <!-- Dyslexia Type Distribution -->
+                            <div class="chart-card"
+                                style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
+                                <h3 style="margin-bottom: 1.5rem; color: #1a1d29; font-size: 1.25rem;">Dyslexia Type
+                                    Distribution</h3>
+                                <canvas id="dyslexiaTypeChart" style="max-height: 300px;"></canvas>
+                            </div>
+
+                            <!-- Severity Distribution -->
+                            <div class="chart-card"
+                                style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
+                                <h3 style="margin-bottom: 1.5rem; color: #1a1d29; font-size: 1.25rem;">Severity
+                                    Distribution</h3>
+                                <canvas id="severityChart" style="max-height: 300px;"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Dyslexia Chances Chart -->
+                        <div
+                            style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); margin: 1.5rem 0;">
+                            <h3 style="margin-bottom: 1.5rem; color: #1a1d29; font-size: 1.25rem;">Dyslexia Assessment
+                                Probabilities</h3>
+                            <canvas id="dyslexiaChancesChart" style="max-height: 250px;"></canvas>
+                        </div>
+
+                        <!-- Student Details Table -->
+                        <div class="table-card"
+                            style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); margin: 1.5rem 0;">
+                            <h3 style="margin-bottom: 1.5rem; color: #1a1d29; font-size: 1.25rem;">All Students Overview
+                            </h3>
+                            <div style="overflow-x: auto;">
+                                <table class="student-table" id="analyticsStudentTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Student</th>
+                                            <th>ID</th>
+                                            <th>Dyslexia Type</th>
+                                            <th>Severity</th>
+                                            <th>Avg Score</th>
+                                            <th>Accuracy</th>
+                                            <th>Sessions</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="analyticsStudentTableBody">
+                                        <!-- Populated via JS -->
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
 
@@ -472,6 +937,7 @@
         </div>
     </div>
 
+    <script src="js/student-profile.js"></script>
     <script src="js/consultant.js"></script>
 </body>
 

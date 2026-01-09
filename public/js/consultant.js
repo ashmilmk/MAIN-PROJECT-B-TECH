@@ -47,13 +47,34 @@ async function loadAnalytics() {
         const data = await apiRequest('/users/analytics');
         const analytics = data.analytics;
 
+        // Update dashboard stats if dashboard is visible
+        const dashboardSection = document.getElementById('dashboardMainSection');
+        if (dashboardSection && dashboardSection.style.display !== 'none') {
+            updateDashboardStats(analytics);
+        }
+
+        // Update basic stats (for backward compatibility)
         const totalEl = document.getElementById('totalStudents');
         const activeEl = document.getElementById('activeStudents');
         const needingEl = document.getElementById('needingSupport');
 
-        if (totalEl) totalEl.innerHTML = `${analytics.totalStudents || 0} <span class="stat-badge positive">+${Math.floor(Math.random() * 10) + 1}</span>`;
-        if (activeEl) activeEl.textContent = analytics.activeStudents || 0;
-        if (needingEl) needingEl.textContent = analytics.studentsNeedingSupport || 0;
+        if (totalEl && !totalEl.classList.contains('stat-value')) {
+            totalEl.innerHTML = `${analytics.totalStudents || 0} <span class="stat-badge positive">+${Math.floor(Math.random() * 10) + 1}</span>`;
+        } else if (totalEl && totalEl.classList.contains('stat-value')) {
+            totalEl.textContent = analytics.totalStudents || 0;
+        }
+
+        if (activeEl && activeEl.classList.contains('stat-value')) {
+            activeEl.textContent = analytics.activeStudents || 0;
+        } else if (activeEl) {
+            activeEl.textContent = analytics.activeStudents || 0;
+        }
+
+        if (needingEl && needingEl.classList.contains('stat-value')) {
+            needingEl.textContent = analytics.studentsNeedingSupport || 0;
+        } else if (needingEl) {
+            needingEl.textContent = analytics.studentsNeedingSupport || 0;
+        }
 
         // Update dyslexia distribution
         const breakdown = analytics.dyslexiaBreakdown || {};
@@ -319,9 +340,30 @@ window.onload = function () {
     if (closeTestModal) closeTestModal.addEventListener('click', closeTestModal);
     if (cancelTestModal) cancelTestModal.addEventListener('click', closeTestModal);
     if (testForm) testForm.addEventListener('submit', submitTestForm);
-    if (navStudents) navStudents.addEventListener('click', () => {
-        document.getElementById('studentsSection').scrollIntoView({ behavior: 'smooth' });
-    });
+    // Unified navigation handler for Students
+    if (navStudents) {
+        const originalHandler = () => {
+            // Hide other sections
+            if (analyticsSection) analyticsSection.style.display = 'none';
+            if (supportSection) supportSection.style.display = 'none';
+            const resourcesSection = document.getElementById('resourcesSection');
+            if (resourcesSection) resourcesSection.style.display = 'none';
+
+            // Show students section
+            if (studentsSection) studentsSection.style.display = 'block';
+
+            // Update active nav
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            navStudents.classList.add('active');
+
+            // Stop support polling
+            if (supportPollInterval) clearInterval(supportPollInterval);
+        };
+        navStudents.addEventListener('click', (e) => {
+            e.preventDefault();
+            originalHandler();
+        });
+    }
 
     // Event delegation for table actions
     const tableBody = document.getElementById('studentTableBody');
@@ -370,16 +412,6 @@ window.onload = function () {
         refreshSupportBtn.addEventListener('click', loadSupportRequests);
     }
 
-    // Reuse navStudents to go back
-    if (navStudents) {
-        navStudents.addEventListener('click', () => {
-            // ... existing click handler usually just scrolls, but let's make sure we show the section
-            studentsSection.style.display = 'block';
-            supportSection.style.display = 'none';
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            navStudents.classList.add('active');
-        });
-    }
 
     async function loadSupportRequests() {
         try {
@@ -424,33 +456,694 @@ window.onload = function () {
         }
     }
 
-    // Polling for realtime updates (every 10 seconds)
-    let supportPollInterval;
-
-    if (navSupport) {
-        navSupport.addEventListener('click', (e) => {
+    /* Resources Navigation */
+    const navResources = document.getElementById('navResources');
+    if (navResources) {
+        navResources.addEventListener('click', (e) => {
             e.preventDefault();
-            // ... existing toggle logic ...
-            studentsSection.style.display = 'none';
-            supportSection.style.display = 'block';
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            navSupport.classList.add('active');
+            // Hide other sections
+            if (studentsSection) studentsSection.style.display = 'none';
+            if (supportSection) supportSection.style.display = 'none';
+            if (analyticsSection) analyticsSection.style.display = 'none';
 
-            loadSupportRequests();
-            // Start polling
-            clearInterval(supportPollInterval);
-            supportPollInterval = setInterval(loadSupportRequests, 10000);
+            // Show resources section
+            const resourcesSection = document.getElementById('resourcesSection');
+            if (resourcesSection) resourcesSection.style.display = 'block';
+
+            // Update active nav
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            navResources.classList.add('active');
+
+            // Stop support polling
+            if (supportPollInterval) clearInterval(supportPollInterval);
         });
     }
 
-    // Stop polling when leaving section
-    if (navStudents) {
-        navStudents.addEventListener('click', () => {
-            studentsSection.style.display = 'block';
-            supportSection.style.display = 'none';
+    /* Analytics Logic */
+    const navAnalytics = document.getElementById('navAnalytics');
+    const analyticsSection = document.getElementById('analyticsSection');
+    let analyticsCharts = {};
+
+    if (navAnalytics) {
+        navAnalytics.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Hide other sections
+            if (studentsSection) studentsSection.style.display = 'none';
+            if (supportSection) supportSection.style.display = 'none';
+            const resourcesSection = document.getElementById('resourcesSection');
+            if (resourcesSection) resourcesSection.style.display = 'none';
+
+            // Show analytics section
+            if (analyticsSection) analyticsSection.style.display = 'block';
+
+            // Update active nav
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            navStudents.classList.add('active');
-            clearInterval(supportPollInterval);
+            navAnalytics.classList.add('active');
+
+            // Load analytics data
+            loadAnalyticsData();
+        });
+    }
+
+    async function loadAnalyticsData() {
+        try {
+            const data = await apiRequest('/users/analytics');
+            const analytics = data.analytics || {};
+
+            // Update stats
+            document.getElementById('analyticsTotalStudents').textContent = analytics.totalStudents || 0;
+            document.getElementById('analyticsNeedingSupport').textContent = analytics.studentsNeedingSupport || 0;
+            document.getElementById('analyticsActiveStudents').textContent = analytics.activeStudents || 0;
+            document.getElementById('analyticsAvgScore').textContent = Math.round(analytics.overallAverageScore || 0) + '%';
+
+            // Render charts
+            renderDyslexiaTypeChart(analytics.dyslexiaBreakdown || {});
+            renderSeverityChart(analytics.severityBreakdown || {});
+            renderDyslexiaChancesChart(analytics.dyslexiaChances || {});
+
+            // Populate student table with enhanced View Profile functionality
+            if (typeof populateAnalyticsStudentTable_Enhanced === 'function') {
+                populateAnalyticsStudentTable_Enhanced(analytics.studentsWithProgress || []);
+            } else {
+                populateAnalyticsStudentTable(analytics.studentsWithProgress || []);
+            }
+
+
+        } catch (error) {
+            console.error('Failed to load analytics:', error);
+            showToast(error.message || 'Failed to load analytics', 'error');
+        }
+    }
+
+    function renderDyslexiaTypeChart(breakdown) {
+        const ctx = document.getElementById('dyslexiaTypeChart');
+        if (!ctx) return;
+
+        // Destroy existing chart if present
+        if (analyticsCharts.dyslexiaType) {
+            analyticsCharts.dyslexiaType.destroy();
+        }
+
+        const labels = Object.keys(breakdown).map(key => {
+            const labelsMap = {
+                'none': 'None',
+                'dyslexia': 'Dyslexia',
+                'dyscalculia': 'Dyscalculia',
+                'dysgraphia': 'Dysgraphia',
+                'dysphasia': 'Dysphasia'
+            };
+            return labelsMap[key] || key;
+        });
+        const data = Object.values(breakdown);
+        const colors = ['#7c3aed', '#ef4444', '#f59e0b', '#3b82f6', '#10b981'];
+
+        analyticsCharts.dyslexiaType = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: colors.slice(0, data.length),
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 15,
+                            font: { size: 12 }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = ((context.parsed / total) * 100).toFixed(1);
+                                return `${context.label}: ${context.parsed} (${percentage}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function renderSeverityChart(breakdown) {
+        const ctx = document.getElementById('severityChart');
+        if (!ctx) return;
+
+        if (analyticsCharts.severity) {
+            analyticsCharts.severity.destroy();
+        }
+
+        const labels = Object.keys(breakdown).map(key => {
+            return key.charAt(0).toUpperCase() + key.slice(1);
+        });
+        const data = Object.values(breakdown);
+        const colors = ['#10b981', '#f59e0b', '#ef4444'];
+
+        analyticsCharts.severity = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: colors.slice(0, data.length),
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 15,
+                            font: { size: 12 }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = ((context.parsed / total) * 100).toFixed(1);
+                                return `${context.label}: ${context.parsed} (${percentage}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function renderDyslexiaChancesChart(chances) {
+        const ctx = document.getElementById('dyslexiaChancesChart');
+        if (!ctx) return;
+
+        if (analyticsCharts.dyslexiaChances) {
+            analyticsCharts.dyslexiaChances.destroy();
+        }
+
+        analyticsCharts.dyslexiaChances = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['High Risk', 'Medium Risk', 'Low Risk'],
+                datasets: [{
+                    label: 'Number of Students',
+                    data: [chances.high || 0, chances.medium || 0, chances.low || 0],
+                    backgroundColor: ['#ef4444', '#f59e0b', '#10b981'],
+                    borderColor: ['#dc2626', '#d97706', '#059669'],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                return `Students: ${context.parsed.y}`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function populateAnalyticsStudentTable(students) {
+        const tbody = document.getElementById('analyticsStudentTableBody');
+        if (!tbody) return;
+
+        if (students.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 2rem; color: #6b7280;">No student data available</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = students.map(student => {
+            const dyslexiaType = student.learningProfile?.dyslexiaType || 'none';
+            const severity = student.learningProfile?.severity || 'N/A';
+            const progress = student.progress || {};
+            const avgScore = Math.round(progress.averageScore || 0);
+            const accuracy = Math.round(progress.averageAccuracy || 0);
+            const sessions = progress.totalSessions || 0;
+            const latestDate = progress.latestDate ? new Date(progress.latestDate).toLocaleDateString() : 'Never';
+
+            const dyslexiaTypeLabels = {
+                'none': 'None',
+                'dyslexia': 'Dyslexia',
+                'dyscalculia': 'Dyscalculia',
+                'dysgraphia': 'Dysgraphia',
+                'dysphasia': 'Dysphasia'
+            };
+
+            const severityColors = {
+                'mild': '#10b981',
+                'moderate': '#f59e0b',
+                'severe': '#ef4444'
+            };
+
+            return `
+                <tr>
+                    <td>
+                        <div class="student-name">
+                            <span>${student.firstName} ${student.lastName}</span>
+                            <small style="display:block; color:#64748b; font-size: 0.8em">${student.email || ''}</small>
+                        </div>
+                    </td>
+                    <td>${student.studentId || 'N/A'}</td>
+                    <td><span class="badge" style="background: #7c3aed;">${dyslexiaTypeLabels[dyslexiaType] || dyslexiaType}</span></td>
+                    <td><span class="badge" style="background: ${severityColors[severity] || '#6b7280'};">${severity.charAt(0).toUpperCase() + severity.slice(1)}</span></td>
+                    <td><strong>${avgScore}%</strong></td>
+                    <td>${accuracy}%</td>
+                    <td>${sessions}</td>
+                    <td>${latestDate}</td>
+                </tr>
+            `;
+        }).join('');
+    }
+
+    /* Dashboard Logic */
+    const navDashboard = document.getElementById('navDashboard');
+    const dashboardMainSection = document.getElementById('dashboardMainSection');
+    const studentsSection = document.getElementById('studentsSection');
+    let dashboardCharts = {};
+
+    if (navDashboard) {
+        navDashboard.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Hide other sections
+            if (studentsSection) studentsSection.style.display = 'none';
+            if (supportSection) supportSection.style.display = 'none';
+            if (analyticsSection) analyticsSection.style.display = 'none';
+            const resourcesSection = document.getElementById('resourcesSection');
+            if (resourcesSection) resourcesSection.style.display = 'none';
+
+            // Show dashboard section
+            if (dashboardMainSection) dashboardMainSection.style.display = 'block';
+
+            // Update active nav
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            navDashboard.classList.add('active');
+
+            // Load dashboard data
+            loadDashboardData();
+        });
+    }
+
+    async function loadDashboardData() {
+        try {
+            const data = await apiRequest('/users/analytics');
+            const analytics = data.analytics || {};
+
+            // Update enhanced stats
+            updateDashboardStats(analytics);
+
+            // Render charts
+            renderPerformanceTrendChart(analytics.studentsWithProgress || []);
+            renderDashboardDyslexiaChart(analytics.dyslexiaBreakdown || {});
+
+            // Populate widgets
+            populateActivityTimeline(analytics.studentsWithProgress || []);
+            populateTopPerformers(analytics.studentsWithProgress || []);
+            populateAttentionStudents(analytics.studentsWithProgress || []);
+
+        } catch (error) {
+            console.error('Failed to load dashboard data:', error);
+            showToast(error.message || 'Failed to load dashboard data', 'error');
+        }
+    }
+
+    function updateDashboardStats(analytics) {
+        const students = analytics.studentsWithProgress || [];
+        const total = analytics.totalStudents || 0;
+        const needingSupport = analytics.studentsNeedingSupport || 0;
+        const active = analytics.activeStudents || 0;
+        const avgPerformance = Math.round(analytics.overallAverageScore || 0);
+
+        // Count tests completed
+        const testsCompleted = students.reduce((sum, s) => sum + (s.progress?.totalSessions || 0), 0);
+
+        // Count improving students (those with increasing scores)
+        const improving = students.filter(s => {
+            const progress = s.progress || {};
+            return progress.averageScore > 50 && progress.averageAccuracy > 60;
+        }).length;
+
+        document.getElementById('totalStudents').textContent = total;
+        document.getElementById('needingSupport').textContent = needingSupport;
+        document.getElementById('testsCompleted').textContent = testsCompleted;
+        document.getElementById('activeStudents').textContent = active;
+        document.getElementById('avgPerformance').textContent = avgPerformance + '%';
+        document.getElementById('improvingStudents').textContent = improving;
+    }
+
+    function renderPerformanceTrendChart(students) {
+        const ctx = document.getElementById('performanceTrendChart');
+        if (!ctx) return;
+
+        if (dashboardCharts.performanceTrend) {
+            dashboardCharts.performanceTrend.destroy();
+        }
+
+        // Generate last 30 days data
+        const days = 30;
+        const labels = [];
+        const scores = [];
+        const now = new Date();
+
+        for (let i = days - 1; i >= 0; i--) {
+            const date = new Date(now);
+            date.setDate(date.getDate() - i);
+            labels.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+
+            // Calculate average score for this day (simplified - in real app, use actual date-based data)
+            const avgScore = students.length > 0
+                ? students.reduce((sum, s) => sum + (s.progress?.averageScore || 0), 0) / students.length
+                : 0;
+            scores.push(avgScore + (Math.random() * 10 - 5)); // Add some variance
+        }
+
+        dashboardCharts.performanceTrend = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Average Performance',
+                    data: scores,
+                    borderColor: '#7c3aed',
+                    backgroundColor: 'rgba(124, 58, 237, 0.1)',
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 3,
+                    pointHoverRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            callback: function (value) {
+                                return value + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function renderDashboardDyslexiaChart(breakdown) {
+        const ctx = document.getElementById('dashboardDyslexiaChart');
+        if (!ctx) return;
+
+        if (dashboardCharts.dyslexia) {
+            dashboardCharts.dyslexia.destroy();
+        }
+
+        const labels = Object.keys(breakdown).map(key => {
+            const labelsMap = {
+                'none': 'None',
+                'dyslexia': 'Dyslexia',
+                'dyscalculia': 'Dyscalculia',
+                'dysgraphia': 'Dysgraphia',
+                'dysphasia': 'Dysphasia'
+            };
+            return labelsMap[key] || key;
+        });
+        const data = Object.values(breakdown);
+        const colors = ['#10b981', '#7c3aed', '#ef4444', '#f59e0b', '#3b82f6'];
+
+        dashboardCharts.dyslexia = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: colors.slice(0, data.length),
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 10,
+                            font: { size: 11 }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function populateActivityTimeline(students) {
+        const timeline = document.getElementById('activityTimeline');
+        if (!timeline) return;
+
+        // Sort by latest activity
+        const recent = students
+            .filter(s => s.progress?.latestDate)
+            .sort((a, b) => new Date(b.progress.latestDate) - new Date(a.progress.latestDate))
+            .slice(0, 5);
+
+        if (recent.length === 0) {
+            timeline.innerHTML = '<p style="text-align: center; color: #9ca3af; padding: 2rem;">No recent activity</p>';
+            return;
+        }
+
+        timeline.innerHTML = recent.map(student => {
+            const date = new Date(student.progress.latestDate);
+            const timeAgo = getTimeAgo(date);
+            return `
+                <div class="activity-item">
+                    <div class="activity-dot"></div>
+                    <div class="activity-content">
+                        <div class="activity-text">
+                            <strong>${student.firstName} ${student.lastName}</strong> completed an assessment
+                        </div>
+                        <div class="activity-time">${timeAgo}</div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function populateTopPerformers(students) {
+        const list = document.getElementById('topPerformersList');
+        if (!list) return;
+
+        const topPerformers = students
+            .filter(s => s.progress?.averageScore)
+            .sort((a, b) => (b.progress?.averageScore || 0) - (a.progress?.averageScore || 0))
+            .slice(0, 5);
+
+        if (topPerformers.length === 0) {
+            list.innerHTML = '<p style="text-align: center; color: #9ca3af; padding: 2rem;">No performance data</p>';
+            return;
+        }
+
+        list.innerHTML = topPerformers.map((student, index) => {
+            const score = Math.round(student.progress?.averageScore || 0);
+            return `
+                <div class="performer-item">
+                    <div class="performer-rank">#${index + 1}</div>
+                    <div class="performer-info">
+                        <div class="performer-name">${student.firstName} ${student.lastName}</div>
+                        <div class="performer-details">${student.studentId || 'N/A'}</div>
+                    </div>
+                    <div class="performer-score">${score}%</div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function populateAttentionStudents(students) {
+        const list = document.getElementById('attentionStudentsList');
+        if (!list) return;
+
+        const attentionNeeded = students
+            .filter(s => {
+                const progress = s.progress || {};
+                const hasLowScore = progress.averageScore < 50 || progress.averageAccuracy < 60;
+                const hasSeverity = s.learningProfile?.severity === 'severe';
+                return hasLowScore || hasSeverity;
+            })
+            .slice(0, 5);
+
+        if (attentionNeeded.length === 0) {
+            list.innerHTML = '<p style="text-align: center; color: #10b981; padding: 2rem;">All students are doing well! 🎉</p>';
+            return;
+        }
+
+        list.innerHTML = attentionNeeded.map(student => {
+            const progress = student.progress || {};
+            const score = Math.round(progress.averageScore || 0);
+            const severity = student.learningProfile?.severity || 'N/A';
+            return `
+                <div class="attention-item">
+                    <div class="attention-avatar">
+                        ${student.firstName.charAt(0)}${student.lastName.charAt(0)}
+                    </div>
+                    <div class="attention-info">
+                        <div class="attention-name">${student.firstName} ${student.lastName}</div>
+                        <div class="attention-details">
+                            Score: ${score}% | Severity: ${severity.charAt(0).toUpperCase() + severity.slice(1)}
+                        </div>
+                    </div>
+                    <button class="attention-action-btn" onclick="window.location.href='game/index.html?student=${student._id}'">
+                        <i class="fas fa-clipboard-check"></i> Assign Test
+                    </button>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function getTimeAgo(date) {
+        const seconds = Math.floor((new Date() - date) / 1000);
+        if (seconds < 60) return 'just now';
+        const minutes = Math.floor(seconds / 60);
+        if (minutes < 60) return `${minutes}m ago`;
+        const hours = Math.floor(minutes / 60);
+        if (hours < 24) return `${hours}h ago`;
+        const days = Math.floor(hours / 24);
+        return `${days}d ago`;
+    }
+
+    // Refresh activity handler
+    const refreshActivity = document.getElementById('refreshActivity');
+    if (refreshActivity) {
+        refreshActivity.addEventListener('click', () => {
+            loadDashboardData();
+        });
+    }
+
+    // Initialize dashboard on load
+    if (dashboardMainSection) {
+        loadDashboardData();
+    }
+
+    /* ========================================
+       QUICK ACTIONS FUNCTIONALITY
+       ======================================== */
+
+    // 1. Add Student - Auto-generate unique Student ID
+    const quickActionAddStudent = document.getElementById('quickActionAddStudent');
+    if (quickActionAddStudent) {
+        quickActionAddStudent.addEventListener('click', async function () {
+            // Generate unique student ID
+            const uniqueStudentId = await generateUniqueStudentId();
+
+            // Open the modal
+            openAddStudentModal();
+
+            // Pre-fill the student ID field
+            const studentIdInput = document.getElementById('studentIdInput');
+            if (studentIdInput) {
+                studentIdInput.value = uniqueStudentId;
+                studentIdInput.disabled = false; // Allow editing if needed
+            }
+
+            showToast(`Student ID ${uniqueStudentId} generated!`, 'success');
+        });
+    }
+
+    // Helper function to generate unique student ID
+    async function generateUniqueStudentId() {
+        try {
+            // Fetch existing students to find the highest ID number
+            const data = await apiRequest('/users/students?limit=1000');
+            const students = data.students || [];
+
+            // Extract numeric part from student IDs (e.g., STU001 -> 001)
+            const existingIds = students
+                .map(s => s.studentId)
+                .filter(id => id && id.startsWith('STU'))
+                .map(id => parseInt(id.replace('STU', '')))
+                .filter(num => !isNaN(num));
+
+            // Find the max and increment
+            const maxId = existingIds.length > 0 ? Math.max(...existingIds) : 0;
+            const newId = maxId + 1;
+
+            // Format as STU001, STU002, etc.
+            return `STU${String(newId).padStart(3, '0')}`;
+        } catch (error) {
+            console.error('Error generating student ID:', error);
+            // Fallback: use timestamp-based ID
+            return `STU${String(Date.now()).slice(-6)}`;
+        }
+    }
+
+    // 2. View Analytics - Navigate to analytics with student details & game scores
+    const quickActionViewAnalytics = document.getElementById('quickActionViewAnalytics');
+    if (quickActionViewAnalytics) {
+        quickActionViewAnalytics.addEventListener('click', function () {
+            // Click the nav analytics button
+            const navAnalytics = document.getElementById('navAnalytics');
+            if (navAnalytics) {
+                navAnalytics.click();
+            }
+
+            showToast('Opening Analytics - View student details and game scores', 'success');
+        });
+    }
+
+    // 3. Start Assessment - Redirect to Game Level 1
+    const quickActionStartAssessment = document.getElementById('quickActionStartAssessment');
+    if (quickActionStartAssessment) {
+        quickActionStartAssessment.addEventListener('click', function () {
+            // Redirect to game index (Level 1)
+            window.location.href = 'game/index.html';
+        });
+    }
+
+    // 4. Support Requests - Show support section with contact option
+    const quickActionSupportRequests = document.getElementById('quickActionSupportRequests');
+    if (quickActionSupportRequests) {
+        quickActionSupportRequests.addEventListener('click', function () {
+            // Click the nav support button to show support section
+            const navSupport = document.getElementById('navSupport');
+            if (navSupport) {
+                navSupport.click();
+            }
+
+            showToast('Support section opened - View and manage support requests', 'success');
         });
     }
 };

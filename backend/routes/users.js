@@ -515,12 +515,19 @@ router.delete('/students/:id', [auth, authorize('teacher', 'admin')], async (req
 });
 
 // @route   GET /api/users/analytics
-// @desc    Get teacher dashboard analytics
+// @desc    Get teacher dashboard analytics with detailed student data
 // @access  Private (Teachers only)
 router.get('/analytics', [auth, authorize('teacher', 'admin')], async (req, res) => {
   try {
+    const Progress = require('../models/Progress');
+
+    // Get all students with details
+    const allStudents = await User.find({ role: 'student', isActive: true })
+      .select('-password')
+      .sort({ createdAt: -1 });
+
     // Get student counts
-    const totalStudents = await User.countDocuments({ role: 'student', isActive: true });
+    const totalStudents = allStudents.length;
 
     // Get students by dyslexia type
     const dyslexiaStats = await User.aggregate([
@@ -555,6 +562,66 @@ router.get('/analytics', [auth, authorize('teacher', 'admin')], async (req, res)
       severityBreakdown[stat._id || 'unknown'] = stat.count;
     });
 
+    // Get progress data for all students
+    const studentIds = allStudents.map(s => s._id);
+    const progressData = await Progress.aggregate([
+      { $match: { userId: { $in: studentIds } } },
+      {
+        $group: {
+          _id: '$userId',
+          totalSessions: { $sum: 1 },
+          averageScore: { $avg: '$score' },
+          highestScore: { $max: '$score' },
+          latestScore: { $last: '$score' },
+          latestDate: { $max: '$createdAt' },
+          exerciseTypes: { $addToSet: '$exerciseType' },
+          totalTimeSpent: { $sum: '$timeSpent' },
+          averageAccuracy: { $avg: '$performance.accuracy' }
+        }
+      }
+    ]);
+
+    // Create a map of student progress
+    const progressMap = {};
+    progressData.forEach(p => {
+      progressMap[p._id.toString()] = p;
+    });
+
+    // Enhance students with progress data
+    const studentsWithProgress = allStudents.map(student => {
+      const studentProgress = progressMap[student._id.toString()] || {
+        totalSessions: 0,
+        averageScore: 0,
+        highestScore: 0,
+        latestScore: 0,
+        latestDate: null,
+        exerciseTypes: [],
+        totalTimeSpent: 0,
+        averageAccuracy: 0
+      };
+
+      return {
+        ...student.toObject(),
+        progress: studentProgress
+      };
+    });
+
+    // Calculate dyslexia chances (based on progress patterns)
+    const dyslexiaChances = {
+      high: studentsWithProgress.filter(s => 
+        s.learningProfile.dyslexiaType !== 'none' && 
+        (s.progress.averageAccuracy < 60 || s.progress.averageScore < 50)
+      ).length,
+      medium: studentsWithProgress.filter(s => 
+        s.learningProfile.dyslexiaType !== 'none' && 
+        s.progress.averageAccuracy >= 60 && s.progress.averageAccuracy < 75
+      ).length,
+      low: studentsWithProgress.filter(s => 
+        s.learningProfile.dyslexiaType === 'none' || 
+        (s.learningProfile.dyslexiaType !== 'none' && s.progress.averageAccuracy >= 75)
+      ).length
+    };
+
     res.json({
       status: 'success',
       analytics: {
@@ -562,7 +629,12 @@ router.get('/analytics', [auth, authorize('teacher', 'admin')], async (req, res)
         activeStudents,
         dyslexiaBreakdown,
         severityBreakdown,
-        studentsNeedingSupport: totalStudents - (dyslexiaBreakdown.none || 0)
+        studentsNeedingSupport: totalStudents - (dyslexiaBreakdown.none || 0),
+        studentsWithProgress,
+        dyslexiaChances,
+        overallAverageScore: progressData.length > 0 
+          ? progressData.reduce((sum, p) => sum + (p.averageScore || 0), 0) / progressData.length 
+          : 0
       }
     });
   } catch (error) {
